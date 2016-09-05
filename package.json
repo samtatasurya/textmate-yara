@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "main": "./yara/src/yara",
+    "main": "src/yara",
     "publisher": "infosec-intern",
     "version": "1.1.1",
     "galleryBanner": {
@@ -43,7 +43,7 @@
             {
                 "language": "yara",
                 "scopeName": "source.yara",
-                "path": "yara/syntaxes/yara.tmLanguage"
+                "path": "syntaxes/yara.tmLanguage"
             }
         ],
         "languages": [
@@ -60,13 +60,13 @@
                     ".yara",
                     ".yar"
                 ],
-                "configuration": "yara/yara.configuration.json"
+                "configuration": "yara.configuration.json"
             }
         ],
         "snippets": [
             {
                 "language": "yara",
-                "path": "yara/snippets/yara.json"
+                "path": "snippets/yara.json"
             }
         ]
     }
