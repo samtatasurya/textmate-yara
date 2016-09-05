@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "main": "./yara/src/yara.js",
+    "main": "./yara/src/yara",
     "publisher": "infosec-intern",
     "version": "1.1.1",
     "galleryBanner": {
