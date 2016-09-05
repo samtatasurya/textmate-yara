@@ -2,10 +2,12 @@
     "name": "yara",
     "displayName": "YARA",
     "description": "Syntax highlighting and snippets support for the YARA pattern matching language",
-    "version": "1.1.1",
+    "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
-    "publisher": "infosec-intern",
     "license": "SEE LICENSE IN LICENSE.md",
+    "main": "./src/yara",
+    "publisher": "infosec-intern",
+    "version": "1.1.1",
     "galleryBanner": {
         "color": "#A4A4A4",
         "theme": "dark"
@@ -33,6 +35,17 @@
         "onLanguage:yara"
     ],
     "contributes": {
+        "commands": [{
+            "command": "yara.runRule",
+            "title": "Run YARA rule against a file"
+        }],
+        "grammars": [
+            {
+                "language": "yara",
+                "scopeName": "source.yara",
+                "path": "yara/syntaxes/yara.tmLanguage"
+            }
+        ],
         "languages": [
             {
                 "id": "yara",
@@ -48,13 +61,6 @@
                     ".yar"
                 ],
                 "configuration": "yara/yara.configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "yara",
-                "scopeName": "source.yara",
-                "path": "yara/syntaxes/yara.tmLanguage"
             }
         ],
         "snippets": [
