@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "main": "./src/yara",
+    "main": "./yara/src/yara.js",
     "publisher": "infosec-intern",
     "version": "1.1.1",
     "galleryBanner": {
@@ -37,7 +37,7 @@
     "contributes": {
         "commands": [{
             "command": "yara.runRule",
-            "title": "Run YARA rule against a file"
+            "title": "YARA: Run rule against a file"
         }],
         "grammars": [
             {
