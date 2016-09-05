@@ -4,12 +4,17 @@
     "description": "Syntax highlighting and snippets support for the YARA pattern matching language",
     "version": "1.1.1",
     "icon": "images/logo.png",
+    "publisher": "infosec-intern",
+    "license": "SEE LICENSE IN LICENSE.md",
     "galleryBanner": {
         "color": "#A4A4A4",
         "theme": "dark"
     },
-    "publisher": "infosec-intern",
-    "license": "MIT License - full document in LICENSE.md",
+    "keywords": [
+        "yara",
+        "malware",
+        "pattern"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/infosec-intern/textmate-yara"
@@ -23,6 +28,9 @@
     "categories": [
         "Languages",
         "Snippets"
+    ],
+    "activationEvents": [
+        "onLanguage:yara"
     ],
     "contributes": {
         "languages": [
