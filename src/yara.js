@@ -1,8 +1,9 @@
 // extension entry point
-function main(event) {
-
+function activate() {
+    console.log("inside yara.activate()");
 }
 
-function runRule() {
-    console.log("inside yara.runRule()");
+// extension exit point
+function deactivate() {
+    console.log("inside yara.deactivate()");
 }
