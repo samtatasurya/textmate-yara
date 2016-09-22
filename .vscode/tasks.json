@@ -1,0 +1,37 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "isShellCommand": true,
+    "echoCommand": true,
+    "showOutput": "always",
+    // workaround for one task per tasks.json is to invoke the OS shell
+    "windows": {
+        "command": "cmd",
+        "args": ["/C"],
+        "tasks": [
+            {
+                "taskName": "yara-help",
+                "suppressTaskName": true,
+                "args": ["yara64.exe", "--help"]
+            },
+            {
+                "taskName": "yara-version",
+                "suppressTaskName": true,
+                "args": ["yara64.exe", "--version"]
+            }
+        ]
+    },
+    "linux": {
+        "command": "sh",
+        "args": ["-c"],
+        "tasks": [
+            {
+                "taskName": "yara-help",
+                "showOutput": "always",
+                "suppressTaskName": true,
+                "args": ["yara", "--help"]
+            }
+        ]
+    }
+}
