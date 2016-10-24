@@ -36,11 +36,21 @@
         "onCommand:yara.ShowMessage"
     ],
     "contributes": {                    // lists what the extension will do
+        "configuration": {
+            "properties": {
+                "yara.installPath": {
+                    "type": ["string", "null"],
+                    "default": "null",
+                    "description": "The folder path to your yara.exe and yara64.exe binaries. If this is 'null', some commands will not work"
+                }
+            },
+            "title": "YARA Settings"
+        },
         "commands": [
-        {
-            "command": "yara.ShowMessage",
-            "title": "YARA: Simple rule to display a message box"
-        }
+            {
+                "command": "yara.ShowMessage",
+                "title": "YARA: Simple rule to display a message box"
+            }
         ],
         "grammars": [
             {
