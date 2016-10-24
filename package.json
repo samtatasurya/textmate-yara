@@ -31,14 +31,17 @@
         "Languages",
         "Snippets"
     ],
-    "activationEvents": [
-        "onLanguage:yara"
+    "activationEvents": [               // covers when to load this extension (e.g. YARA file opened or command 'showMessage')
+        "onLanguage:yara",
+        "onCommand:yara.ShowMessage"
     ],
-    "contributes": {
-        "commands": [{
-            "command": "yara.runRule",
-            "title": "YARA: Run rule against a file"
-        }],
+    "contributes": {                    // lists what the extension will do
+        "commands": [
+        {
+            "command": "yara.ShowMessage",
+            "title": "YARA: Simple rule to display a message box"
+        }
+        ],
         "grammars": [
             {
                 "language": "yara",
