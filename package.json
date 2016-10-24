@@ -63,7 +63,6 @@
             {
                 "id": "yara",
                 "aliases": [
-                    "yara",
                     "yara-syntax",
                     "yaralang",
                     "YARA",
@@ -73,7 +72,7 @@
                     ".yara",
                     ".yar"
                 ],
-                "configuration": "yara.configuration.json"
+                "configuration": "./yara-language-configuration.json"
             }
         ],
         "snippets": [
