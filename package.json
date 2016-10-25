@@ -42,6 +42,16 @@
                     "type": ["string", "null"],
                     "default": "null",
                     "description": "The folder path to your yara.exe and yara64.exe binaries. If this is 'null', some commands will not work"
+                },
+                "yara.testFile": {
+                    "type": ["string"],
+                    "default": ".\\examples\\test.yara",
+                    "description": "The file path to run YARA rules against when using the TestRule command."
+                },
+                "yara.testSeconds": {
+                    "type": ["integer"],
+                    "default": 30,
+                    "description": "Number of seconds to abort after a YARA scan starts"
                 }
             },
             "title": "YARA Settings"
