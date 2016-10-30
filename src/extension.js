@@ -6,25 +6,28 @@ var config = vscode.workspace.getConfiguration("yara");
 
 function cmd_compile_rule () {
     var yaracPath = config.installPath + "\\yarac64.exe";
-    console.log("Compiling " + "${currentFile}" + " with " + yaracPath);
+    var currentFile = vscode.workspace.textDocuments[0].filename;
+    console.log("Compiling " + currentFile + " with " + yaracPath);
     // yarac64.exe ${RULES_FILE} ${OUTPUT_FILE}
-    args = [".\test.yara"];
-    yaracProcess = cmd.spawn(yaracPath, args);
+    var args = [".\test.yara"];
+    console.log("[**] yaracProcess = cmd.spawn('" + yaracPath + "', '" + args + "');");
+    var yaracProcess = cmd.spawn(yaracPath, args);
 }
 
 function cmd_test_rule () {
     var yaraPath = config.installPath + "\\yara64.exe";
-    console.log("Invoking " + yaraPath + " against " + "${currentFile}");
+    var currentFile = vscode.workspace.textDocuments[0].filename;
+    console.log("Invoking " + yaraPath + " against " + currentFile);
     // yara64.exe --timeout=${timeout} ${RULES_FILE} ${testFile}
-    args = ["--timeout", config.timeout, config.testFile];
-    yaraProcess = cmd.spawn(yaraPath, args);
+    var args = ["--timeout", config.timeout, config.testFile];
+    console.log("[**] yaraProcess = cmd.spawn('" + yaraPath + "', '" + args + "');");
+    var yaraProcess = cmd.spawn(yaraPath, args);
 }
 
 // extension entry point - must be reachable by VSCode
 function activate(context) {
     console.log("[*] Installing YARA extension's commands");
-    console.log("currentFile: " + JSON.stringify(vscode.workspace.textDocuments));
-    var currentFile = vscode.workspace.textDocuments[0].fileName;
+//    console.log("currentFile: " + JSON.stringify(vscode.workspace.textDocuments));
     if (config.installPath != null) {
         vscode.commands.registerCommand("yara.CompileRule", cmd_compile_rule);
         vscode.commands.registerCommand("yara.TestRule", cmd_test_rule);
