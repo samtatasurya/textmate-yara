@@ -48,7 +48,7 @@
                     "default": ".\\examples\\test.yara",
                     "description": "The file path to run YARA rules against when using the TestRule command."
                 },
-                "yara.testSeconds": {
+                "yara.timeout": {
                     "type": ["integer"],
                     "default": 30,
                     "description": "Number of seconds to abort after a YARA scan starts"
