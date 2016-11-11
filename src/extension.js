@@ -1,40 +1,39 @@
 "use strict";
 
-const cmd = require("child_process");
+const exec = require("child_process").exec;
 const vscode = require("vscode");
-var config = vscode.workspace.getConfiguration("yara");
+const config = vscode.workspace.getConfiguration("yara");
 
-function cmd_compile_rule () {
+function cmd_compileRule () {
     var yaracPath = config.installPath + "\\yarac64.exe";
     var currentFile = vscode.workspace.textDocuments[0].filename;
     console.log("Compiling " + currentFile + " with " + yaracPath);
-    // yarac64.exe ${RULES_FILE} ${OUTPUT_FILE}
-    var args = [".\test.yara"];
-    console.log("[**] yaracProcess = cmd.spawn('" + yaracPath + "', '" + args + "');");
-    var yaracProcess = cmd.spawn(yaracPath, args);
+    var args = ["C:\\Users\\Thomas\\Documents\\GitHub\\textmate-yara\\examples\\test.yara"];
+    exec(yaracPath, args);
 }
 
-function cmd_test_rule () {
+function cmd_testRule () {
     var yaraPath = config.installPath + "\\yara64.exe";
     var currentFile = vscode.workspace.textDocuments[0].filename;
     console.log("Invoking " + yaraPath + " against " + currentFile);
-    // yara64.exe --timeout=${timeout} ${RULES_FILE} ${testFile}
     var args = ["--timeout", config.timeout, config.testFile];
-    console.log("[**] yaraProcess = cmd.spawn('" + yaraPath + "', '" + args + "');");
-    var yaraProcess = cmd.spawn(yaraPath, args);
+    exec(yaraPath, args);
 }
 
 // extension entry point - must be reachable by VSCode
 function activate(context) {
     console.log("[*] Installing YARA extension's commands");
-//    console.log("currentFile: " + JSON.stringify(vscode.workspace.textDocuments));
     if (config.installPath != null) {
-        vscode.commands.registerCommand("yara.CompileRule", cmd_compile_rule);
-        vscode.commands.registerCommand("yara.TestRule", cmd_test_rule);
+        var compileRule = vscode.commands.registerCommand("yara.CompileRule", cmd_compileRule);
+        var testRule = vscode.commands.registerCommand("yara.TestRule", cmd_testRule);
+//        vscode.workspace.OnDidSaveTextDocument(cmd_compileRule);
+        context.subscriptions.push(compileRule);
+        context.subscriptions.push(testRule);
     }
     else {
         console.log("[*] No YARA install found!");
         var disposable = vscode.window.showErrorMessage("No YARA installation folder specified!");
+        context.subscriptions.push(disposable);
     }
 }
 exports.activate = activate;
