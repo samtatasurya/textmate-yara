@@ -37,6 +37,7 @@
     ],
     "contributes": {                    // lists what the extension will do
         "configuration": {
+            "title": "YARA Settings",
             "properties": {
                 "yara.installPath": {
                     "type": ["string", "null"],
@@ -53,8 +54,7 @@
                     "default": 30,
                     "description": "Number of seconds to abort after a YARA scan starts"
                 }
-            },
-            "title": "YARA Settings"
+            }
         },
         "commands": [
             {
