@@ -27,11 +27,39 @@
 			"strings:",
 			"\t${string(s)}"
 		],
-		"description": "Generate a 'strings' section"
+		"description": "Generate a 'strings' section where the strings that will be part of the rule are defined"
+	},
+	"Condition": {
+		"prefix": "condition",
+		"body": [
+			"condition:",
+			"\t${condition(s)}"
+		],
+		"description": "Generate a 'condition' section where the logic of the rule resides"
 	},
 	"Import": {
 		"prefix": "import",
 		"body": "import \"${module}\"",
 		"description": "Import a YARA module"
+	},
+	"Author": {
+		"prefix": "author",
+		"body": "author = ${author}",
+		"description": "Metadata. Creator of this YARA rule"
+	},
+	"Description": {
+		"prefix": "description",
+		"body": "description = ${desc}",
+		"description": "Metadata. A short description of this YARA rule"
+	},
+	"CVE": {
+		"prefix": "cve",
+		"body": "cve = ${cve}",
+		"description": "Metadata. Common Vulnerabilities and Exposures reference"
+	},
+	"Version": {
+		"prefix": "version",
+		"body": "version = ${version}",
+		"description": "Metadata. Version number of this YARA rule"
 	}
 }
