@@ -13,6 +13,11 @@ Currently, Snippets support includes:
 * Manual: Copy the 'yara' directory into your $HOME/.vscode/extensions folder and restart Visual Studio Code
 * Auto: Run `ext install yara` in Visual Studio Code
 
+## Future Plans
+* YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
+* Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
+* Add a Linter
+
 ## Problems?
 If you encounter an issue with the syntax, feel free to create an issue or pull request!
 Alternatively, check out some of the YARA syntaxes for Sublime and Textmate (i.e. those in the <b>Example Code</b> section below).
