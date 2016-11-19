@@ -16,7 +16,7 @@ Currently, Snippets support includes:
 ## Future Plans
 * YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
 * Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
-* Add a Linter
+* Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
 
 ## Problems?
 If you encounter an issue with the syntax, feel free to create an issue or pull request!
