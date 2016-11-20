@@ -41,13 +41,8 @@
             "properties": {
                 "yara.installPath": {
                     "type": ["string", "null"],
-                    "default": "null",
-                    "description": "The folder path to your yara.exe and yara64.exe binaries. If this is 'null', some commands will not work"
-                },
-                "yara.testFile": {
-                    "type": ["string"],
-                    "default": ".\\examples\\test.yara",
-                    "description": "The file path to run YARA rules against when using the TestRule command."
+                    "default": "yara",
+                    "description": "The folder path to your YARA binaries. If this is 'null', some commands will not work. The default assumes the 'yara' and 'yarac' commands are in your $PATH"
                 },
                 "yara.timeout": {
                     "type": ["integer"],
