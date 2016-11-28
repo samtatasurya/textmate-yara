@@ -19,6 +19,12 @@
                 "taskName": "yara-version",
                 "suppressTaskName": true,
                 "args": ["yara64.exe", "--version"]
+            },
+            {
+                "taskName": "build",
+                "suppressTaskName": true,
+                "showOutput": "always",
+                "args": ["${workspaceRoot}\\node_modules\\.bin\\tsc", "${workspaceRoot}\\src\\extension.ts"]
             }
         ]
     },
