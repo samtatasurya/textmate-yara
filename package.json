@@ -54,11 +54,6 @@
                     "type": ["string", "null"],
                     "default": "yara",
                     "description": "The folder path to your YARA binaries. If this is 'null', some commands will not work. The default assumes the 'yara' and 'yarac' commands are in your $PATH"
-                },
-                "yara.timeout": {
-                    "type": ["integer"],
-                    "default": 30,
-                    "description": "Number of seconds to abort after a YARA scan starts"
                 }
             }
         },
