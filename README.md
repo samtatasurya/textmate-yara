@@ -8,10 +8,15 @@ Currently, Snippets support includes:
 * `import` statement completion
 * `strings:` section skeleton
 * `meta:` section skeleton
+* `author` statement
+* `description` statement
+* `cve` statement
+* `version` statement
 
-## Installation
-* Manual: Copy the 'yara' directory into your $HOME/.vscode/extensions folder and restart Visual Studio Code
-* Auto: Run `ext install yara` in Visual Studio Code
+## Extension Functionality
+* Periodically compile YARA rulefiles using either (a) yara-python or (b) pre-compiled yara binaries
+* Allow the user to run her YARA rules manually through VSCode commands
+* Display any compiler errors to the user through the VSCode workspace
 
 ## Future Plans
 * YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
