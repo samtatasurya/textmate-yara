@@ -1,43 +1,10 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "0.1.0",
-    "isShellCommand": true,
-    "echoCommand": true,
-    "showOutput": "always",
-    // workaround for one task per tasks.json is to invoke the OS shell
-    "windows": {
-        "command": "cmd",
-        "args": ["/C"],
-        "tasks": [
-            {
-                "taskName": "yara-help",
-                "suppressTaskName": true,
-                "args": ["yara64.exe", "--help"]
-            },
-            {
-                "taskName": "yara-version",
-                "suppressTaskName": true,
-                "args": ["yara64.exe", "--version"]
-            },
-            {
-                "taskName": "build",
-                "suppressTaskName": true,
-                "showOutput": "always",
-                "args": ["${workspaceRoot}\\node_modules\\.bin\\tsc", "${workspaceRoot}\\src\\extension.ts"]
-            }
-        ]
-    },
-    "linux": {
-        "command": "sh",
-        "args": ["-c"],
-        "tasks": [
-            {
-                "taskName": "yara-help",
-                "showOutput": "always",
-                "suppressTaskName": true,
-                "args": ["yara", "--help"]
-            }
-        ]
-    }
+	// See http://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "0.1.0",
+	"command": "tsc",
+	"isShellCommand": true,
+	"args": ["-p", "."],
+	"showOutput": "silent",
+	"problemMatcher": "$tsc"
 }
