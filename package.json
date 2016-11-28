@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "main": "./out/src/main",
+    "main": "./src/extension.js",
     "publisher": "infosec-intern",
     "version": "1.1.1",
     "categories": [
@@ -42,8 +42,7 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "activationEvents": [
-        "onLanguage:yara",
-        "onCommand:yara.ShowMessage"
+        "onLanguage:yara"
     ],
     "contributes": {
         "configuration": {
