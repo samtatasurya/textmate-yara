@@ -8,15 +8,19 @@
     "main": "./out/src/main",
     "publisher": "infosec-intern",
     "version": "1.1.1",
-    "galleryBanner": {
-        "color": "#A4A4A4",
-        "theme": "dark"
-    },
+    "categories": [
+        "Languages",
+        "Snippets"
+    ],
     "keywords": [
         "yara",
         "malware",
         "pattern"
     ],
+    "galleryBanner": {
+        "color": "#A4A4A4",
+        "theme": "dark"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/infosec-intern/textmate-yara"
@@ -36,10 +40,6 @@
         "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
-    "categories": [
-        "Languages",
-        "Snippets"
-    ],
     "activationEvents": [               // covers when to load this extension (e.g. YARA file opened or command 'showMessage')
         "onLanguage:yara",
         "onCommand:yara.ShowMessage"
