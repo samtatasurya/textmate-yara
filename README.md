@@ -3,7 +3,7 @@
 # textmate-yara
 Syntax Highlighting and Snippets support for the YARA pattern matching language
 
-Currently, Snippets support includes:
+## Snippets
 * A new file skeleton (or `rule:` skeleton)
 * `import` statement completion
 * `strings:` section skeleton
