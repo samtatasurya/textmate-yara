@@ -1,7 +1,6 @@
 "use strict";
 
 import * as vscode from "vscode";
-// import * as childproc from "child_process";
 
 export function activate(context: vscode.ExtensionContext) {
     console.log("[*] Inside activate!");
