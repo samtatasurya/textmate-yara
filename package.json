@@ -40,11 +40,11 @@
         "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
-    "activationEvents": [               // covers when to load this extension (e.g. YARA file opened or command 'showMessage')
+    "activationEvents": [
         "onLanguage:yara",
         "onCommand:yara.ShowMessage"
     ],
-    "contributes": {                    // lists what the extension will do
+    "contributes": {
         "configuration": {
             "title": "YARA Settings",
             "properties": {
