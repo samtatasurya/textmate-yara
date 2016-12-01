@@ -17,6 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Registering our simple commands to call here
 	var compileDisposable = vscode.commands.registerCommand('yara.CompileRule', cmdCompileRule);
     var testDisposable = vscode.commands.registerCommand('yara.TestRule', cmdTestRule);
+    const config = vscode.workspace.getConfiguration("yara");
     // Letting VSCode know that we will want to dispose of these items later
 	context.subscriptions.push(compileDisposable);
     context.subscriptions.push(testDisposable);
