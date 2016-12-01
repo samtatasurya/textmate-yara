@@ -16,7 +16,11 @@ Syntax Highlighting and Snippets support for the YARA pattern matching language
 ## Extension Functionality
 * Periodically compile YARA rulefiles using either (a) yara-python or (b) pre-compiled yara binaries
 * Allow the user to run her YARA rules manually through VSCode commands
+  * Use configuration settings to modify how command is run
+  * Install path (for pre-compiled binaries), timeout
 * Display any compiler errors to the user through the VSCode workspace
+  * Number of errors in status bar
+  * Integration with right ruler (similar to Git differences)
 
 ## Future Plans
 * YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
