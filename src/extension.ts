@@ -12,7 +12,7 @@ function cmdTestRule() {
     vscode.window.showInformationMessage("Test YARA Rule!");
 }
 
-export function activate(context: vscode.ExtensionContext) {
+function activate(context: vscode.ExtensionContext) {
     console.log("[*] Installing the YARA extension")
     // Registering our simple commands to call here
 	var compileDisposable = vscode.commands.registerCommand('yara.CompileRule', cmdCompileRule);
@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(testDisposable);
 }
 
-export function deactivate(context: vscode.ExtensionContext) {
+function deactivate(context: vscode.ExtensionContext) {
     console.log("[*] Uninstalling the YARA extension")
 }
 
