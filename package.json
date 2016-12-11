@@ -61,10 +61,6 @@
             {
                 "command": "yara.CompileRule",
                 "title": "YARA: Compiles the current file into a YARA rule."
-            },
-            {
-                "command": "yara.TestRule",
-                "title": "YARA: Test the current YARA rulefile against a sample."
             }
         ],
         "grammars": [
