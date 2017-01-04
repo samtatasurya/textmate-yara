@@ -17,13 +17,13 @@ def set_logger():
 def compile_rules(filepath, logger):
     """Compile YARA rules and report back with any errors"""
     try:
-        errors = []
-        rules = yara.compile(filepath=filepath)
+        error_msgs = []
+        yara.compile(filepath=filepath)
+        return None
     except yara.SyntaxError as errormsg:
         logger.error(errormsg)
-        errors.append(errormsg)
-        return errors
-
+        error_msgs.append(errormsg)
+        return error_msgs
 
 if __name__ == '__main__':
     BASELOGGER = set_logger()
