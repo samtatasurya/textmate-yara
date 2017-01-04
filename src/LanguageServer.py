@@ -7,29 +7,23 @@ for compilation errors and warnings for YARA rules
 import logging
 import yara
 
+logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
-def set_logger():
-    """Create a logger to use as our 'root' logger"""
-    logger = logging.getLogger(name="server")
-    logger.setLevel(logging.DEBUG)
-    return logger
-
-def compile_rules(filepath, logger):
+def compile_rules(filepath):
     """Compile YARA rules and report back with any errors"""
     try:
         error_msgs = []
         yara.compile(filepath=filepath)
         return None
     except yara.SyntaxError as errormsg:
-        logger.error(errormsg)
+        logging.error(errormsg)
         error_msgs.append(errormsg)
+    finally:
         return error_msgs
 
 if __name__ == '__main__':
-    BASELOGGER = set_logger()
-    BASELOGGER.debug("Test debug statement")
-    TESTPATH = "./examples/test.yara"
-    errors = compile_rules(TESTPATH, BASELOGGER)
+    TESTPATH = "../examples/test.yara"
+    errors = compile_rules(TESTPATH)
     for error in errors:
         print("Args: %s", error.args)
         print("Traceback: %s" % error.with_traceback(None))
