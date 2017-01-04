@@ -67,8 +67,7 @@ class Yara {
             vscode.window.showErrorMessage("The current document is not a YARA rulefile");
             return;
         }
-        let path = doc.fileName;
-        console.log("Compiling " + path);
+        console.log("Compiling " + doc.fileName);
     }
 
     // VSCode must dispose of the Yara object in some way
