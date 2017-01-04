@@ -47,8 +47,7 @@ class Yara {
             return;
         }
         let count = this.errors.length;
-        let message = "${ count } errors";
-        vscode.window.setStatusBarMessage(message);
+        vscode.window.setStatusBarMessage("${ count } errors");
     }
 
     // Compile the current text document into a set of rules
