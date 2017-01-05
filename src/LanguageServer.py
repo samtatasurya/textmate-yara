@@ -16,6 +16,24 @@ logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 # To ensure that both client and server split the string into the same line representation
 EOL = ["\n", "\r", "\r\n"]
 
+class Diagnostic(object):
+    '''
+    Represents a diagnostic, such as a compiler error or warning.
+    Diagnostic objects are only valid in the scope of a resource.
+    Input
+        msg_range: The range at which the message applies
+        message: The diagnostic's message
+        severity: The diagnostic's severity. If omitted, it is up to the client to interpret diagnostics as error, warning, info or hint
+        code: The diagnostic's code
+        source: A human-readable string describing the source of this diagnostic (e.g. 'typescript' or 'super lint')
+    '''
+    def __init__(self, msg_range, message, severity=None, code=None, source=None):
+        self.range = msg_range
+        self.message = message
+        self.severity = severity
+        self.code = code
+        self.source = source
+
 class Location(object):
     '''
     Represents a location inside a resource, such as a line inside a text file
