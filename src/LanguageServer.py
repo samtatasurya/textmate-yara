@@ -5,10 +5,32 @@ This implementation integrates with the 'yara-python' library to provide real-ti
 for compilation errors and warnings for YARA rules
 """
 import logging
-import yara
 import json
+import urlparse
+import yara
 
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
+
+# To ensure that both client and server split the string into the same line representation
+EOL = ["\n", "\r", "\r\n"]
+
+class Position(object):
+    '''
+    Position in a text document expressed as zero-based line and character offset
+    A position is between two characters like an 'insert' cursor in a editor
+    '''
+    def __init__(self, line, character):
+        self.line = line
+        self.character = character
+
+class Range(object):
+    '''
+    A range in a text document expressed as (zero-based) start and end positions
+    A range is comparable to a selection in an editor. Therefore the end position is exclusive
+    '''
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
 
 # Bases many function/variable names on
 # https://github.com/Microsoft/vscode-languageserver-node-example/blob/master/server/src/server.ts
@@ -23,27 +45,27 @@ class Protocol(object):
 
     def onDidOpenTextDocument(self, uri, text):
         '''
-        A text document got opened in VSCode.
+        A text document got opened in VSCode
         Input
-            uri: uniquely identifies the document. For documents store on disk this is a file URI.
-            text: the initial full content of the document.
+            uri: uniquely identifies the document. For documents store on disk this is a file URI
+            text: the initial full content of the document
         '''
         self.logger.debug("onDidOpenTextDocument")
 
     def onDidCloseTextDocument(self, uri):
         '''
-        A text document got closed in VSCode.
+        A text document got closed in VSCode
         Input
-    	    uri: uniquely identifies the document.
+    	    uri: uniquely identifies the document
         '''
         self.logger.debug("onDidCloseTextDocument")
 
     def onDidChangeTextDocument(self, uri, contentChanges):
         '''
-        The content of a text document changed in VSCode.
+        The content of a text document changed in VSCode
         Input
-            uri: uniquely identifies the document.
-	        contentChanges: describe the content changes to the document.
+            uri: uniquely identifies the document
+	        contentChanges: describe the content changes to the document
         '''
         self.logger.debug("onDidChangeTextDocument")
 
@@ -57,7 +79,9 @@ class Protocol(object):
 
 
 def compile_rules(filepath):
-    """Compile YARA rules and report back with any errors"""
+    '''
+    Compile YARA rules and report back with any errors
+    '''
     try:
         error_msgs = []
         yara.compile(filepath=filepath)
