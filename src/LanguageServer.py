@@ -8,13 +8,29 @@ https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
 '''
 import logging
 import json
-import urlparse
 import yara
 
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
 # To ensure that both client and server split the string into the same line representation
 EOL = ["\n", "\r", "\r\n"]
+
+class Command(object):
+    '''
+    Represents a reference to a command
+    Provides a title which will be used to represent a command in the UI
+    Commands are identitifed using a string identifier and the protocol
+        currently doesn't specify a set of well known commands
+    So executing a command requires some tool extension code
+    Input
+        title: Title of the command (e.g. save)
+        command: The identifier of the actual command handler
+        arguments: Arguments that the command handler should be invoked with
+    '''
+    def __init__(self, title, command, arguments=None):
+        self.title = title
+        self.command = command
+        self.arguments = arguments
 
 class Diagnostic(object):
     '''
@@ -33,6 +49,15 @@ class Diagnostic(object):
         self.severity = severity
         self.code = code
         self.source = source
+
+class DiagnosticSeverity(object):
+    '''
+    Report message severities
+    '''
+    Error = 1
+    Warning = 2
+    Information = 3
+    Hint = 4
 
 class Location(object):
     '''
