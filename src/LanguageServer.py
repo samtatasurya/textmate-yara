@@ -6,6 +6,7 @@ for compilation errors and warnings for YARA rules
 """
 import logging
 import yara
+import json
 
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
@@ -51,6 +52,8 @@ class Protocol(object):
         The server identifies errors/warnings and notifies the client
         '''
         self.logger.debug("publishDiagnostics")
+        diagnostics = {"errors": 0, "warnings": 0}
+        return diagnostics
 
 
 def compile_rules(filepath):
