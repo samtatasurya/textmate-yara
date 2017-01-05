@@ -138,4 +138,14 @@ class Protocol(object):
         diagnostics = {"errors": 0, "warnings": 0}
         return diagnostics
 
-
+class TextEdit(object):
+    '''
+    A textual edit applicable to a text document
+    Input
+        doc_range: The range of the text document to be manipulated
+            To insert text into a document create a range where start === end
+        new_text: The string to be inserted. For delete operations use an empty string
+    '''
+    def __init__(self, doc_range, new_text):
+        self.doc_range = doc_range
+        self.new_text = new_text
