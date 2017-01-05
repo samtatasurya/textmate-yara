@@ -1,9 +1,11 @@
-"""
+'''
 A language server for the YARA pattern-matching language.
 
 This implementation integrates with the 'yara-python' library to provide real-time feedback
 for compilation errors and warnings for YARA rules
-"""
+
+https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
+'''
 import logging
 import json
 import urlparse
@@ -14,10 +16,24 @@ logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 # To ensure that both client and server split the string into the same line representation
 EOL = ["\n", "\r", "\r\n"]
 
+class Location(object):
+    '''
+    Represents a location inside a resource, such as a line inside a text file
+    Input
+        uri: Uniquely identifies the document. For documents store on disk this is a file URI
+        doc_range: Range in a text document; comparable to an editor selection
+    '''
+    def __init__(self, uri, doc_range):
+        self.uri = uri
+        self.range = doc_range
+
 class Position(object):
     '''
     Position in a text document expressed as zero-based line and character offset
     A position is between two characters like an 'insert' cursor in a editor
+    Input
+        line: Line position in a document (zero-based)
+        character: Character offset on a line in a document (zero-based)
     '''
     def __init__(self, line, character):
         self.line = line
@@ -27,6 +43,9 @@ class Range(object):
     '''
     A range in a text document expressed as (zero-based) start and end positions
     A range is comparable to a selection in an editor. Therefore the end position is exclusive
+    Input
+        start: Start position
+        end: End position
     '''
     def __init__(self, start, end):
         self.start = start
