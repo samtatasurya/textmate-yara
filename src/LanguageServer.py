@@ -140,23 +140,3 @@ class Protocol(object):
         return diagnostics
 
 
-def compile_rules(filepath):
-    '''
-    Compile YARA rules and report back with any errors
-    '''
-    try:
-        error_msgs = []
-        yara.compile(filepath=filepath)
-        return None
-    except yara.SyntaxError as errormsg:
-        logging.error(errormsg)
-        error_msgs.append(errormsg)
-        return error_msgs
-
-if __name__ == '__main__':
-    TESTPATH = "../examples/test.yara"
-    errors = compile_rules(TESTPATH)
-    for error in errors:
-        print("Args: %s", error.args)
-        print("Traceback: %s" % error.with_traceback(None))
-        print("Error: %s", error)
