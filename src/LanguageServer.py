@@ -8,7 +8,6 @@ https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
 '''
 import logging
 import json
-import yara
 
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
