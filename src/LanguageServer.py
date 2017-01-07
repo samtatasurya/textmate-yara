@@ -10,10 +10,31 @@ import logging
 import json
 import queue
 
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
 # To ensure that both client and server split the string into the same line representation
 EOL = ["\n", "\r", "\r\n"]
+
+class ClientCapabilities(object):
+    '''
+    Define capabilities for dynamic registration, workspace and text document features the client supports
+    The experimental can be used to pass experimential capabilities under development
+    Input
+        (WorkspaceClientCapabilites) workspace: Optional. Workspace specific client capabilities
+        (TextDocumentClientCapabilities) textDocument: Optional. Text document specific client capabilities
+        (any) experimental: Optional. Experimental client capabilities
+    '''
+    def __init__(self, workspace=None, textDocument=None, experimental=None):
+        self.experimental = experimental
+        if workspace is None or isinstance(workspace, WorkspaceClientCapabilities):
+            self.workspace = workspace
+        else:
+            raise TypeError("'workspace' value is not None or of type WorkspaceClientCapabilities")
+        if textDocument is None or isinstance(textDocument, TextDocumentClientCapabilities):
+            self.textDocument = textDocument
+        else:
+            raise TypeError("'textDocument' value is not None or of type TextDocumentClientCapabilities")
 
 class Command(object):
     '''
@@ -102,11 +123,12 @@ class InitializeParams(object):
         self.processId = processId
         self.rootUri = rootUri
         self.initializationOptions = initializationOptions
-        self.capabilities = capabilities
+        if isinstance(capabilities, ClientCapabilities):
+            self.capabilities = capabilities
         if trace in ("off", "messages", "verbose"):
             self.trace = trace
         else:
-            self.trace = "off"
+            raise TypeError("'trace' value is not allowed. Acceptable values are off|messages|verbose")
 
 
 class Location(object):
