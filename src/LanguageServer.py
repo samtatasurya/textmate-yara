@@ -85,6 +85,30 @@ class DocumentSelector(list):
     def __init__(self, documents):
         super(DocumentSelector, self).__init__(documents)
 
+class InitializeParams(object):
+    '''
+    Required parameters for the first request between the client and server
+    Input
+        (int|None) processId: The process Id of the parent process that started the server
+            Is null if the process has not been started by another process
+            If the parent process is not alive then the server should exit (see exit notification) its process
+        (string|None) rootPath: The rootPath of the workspace. Is null if no folder is open. Deprecated in favour of rootUri
+        (string|None) rootUri: The rootUri of the workspace. Is null if no folder is open
+        (ClientCapabilities) capabilities: The capabilities provided by the client (editor or tool)
+        (any) initializationOptions: Optional. User provided initialization options
+        (string) trace: Optional. The initial trace setting. If omitted trace is disabled ('off')
+    '''
+    def __init__(self, processId, rootUri, capabilities, initializationOptions=None, trace="off"):
+        self.processId = processId
+        self.rootUri = rootUri
+        self.initializationOptions = initializationOptions
+        self.capabilities = capabilities
+        if trace in ("off", "messages", "verbose"):
+            self.trace = trace
+        else:
+            self.trace = "off"
+
+
 class Location(object):
     '''
     Represents a location inside a resource, such as a line inside a text file
@@ -121,8 +145,8 @@ class Protocol(object):
         '''
         A text document got opened in VSCode
         Input
-            uri: uniquely identifies the document. For documents store on disk this is a file URI
-            text: the initial full content of the document
+            (TextDocumentIdentifier) uri: Uniquely identifies the document. For documents store on disk this is a file URI
+            text: The initial full content of the document
         '''
         self.logger.debug("onDidOpenTextDocument")
 
@@ -130,7 +154,7 @@ class Protocol(object):
         '''
         A text document got closed in VSCode
         Input
-    	    uri: uniquely identifies the document
+    	    (TextDocumentIdentifier) uri: Uniquely identifies the document
         '''
         self.logger.debug("onDidCloseTextDocument")
 
@@ -138,14 +162,16 @@ class Protocol(object):
         '''
         The content of a text document changed in VSCode
         Input
-            uri: uniquely identifies the document
-	        contentChanges: describe the content changes to the document
+            (TextDocumentIdentifier) uri: Uniquely identifies the document
+	        contentChanges: Describe the content changes to the document
         '''
         self.logger.debug("onDidChangeTextDocument")
 
     def publishDiagnostics(self):
         '''
         The server identifies errors/warnings and notifies the client
+        Output
+            (Diagnostic) diagnostics: Diagnostic data about the editor
         '''
         self.logger.debug("publishDiagnostics")
         diagnostics = {"errors": 0, "warnings": 0}
