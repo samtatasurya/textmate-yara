@@ -1,8 +1,5 @@
 '''
-A language server for the YARA pattern-matching language.
-
-This implementation integrates with the 'yara-python' library to provide real-time feedback
-for compilation errors and warnings for YARA rules
+A language server for Visual Studio Code
 
 https://github.com/Microsoft/language-server-protocol/blob/master/protocol.md
 
@@ -11,6 +8,7 @@ https://github.com/Microsoft/vscode-languageserver-node-example/blob/master/serv
 '''
 import logging
 import json
+import queue
 
 logging.basicConfig(format="%(message)s", level=logging.DEBUG)
 
