@@ -78,14 +78,14 @@ class DocumentFilter(object):
         self.scheme = scheme
         self.pattern = pattern
 
-class DocumentSelector(object):
+class DocumentSelector(list):
     '''
     The combination of one or many document filters
     Input
         (list) documents: One or more DocumentFilters
     '''
     def __init__(self, documents):
-        self.documents = documents
+        super(DocumentSelector, self).__init__(documents)
 
 class Location(object):
     '''
