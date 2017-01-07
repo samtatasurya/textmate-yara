@@ -27,7 +27,7 @@ class Command(object):
     Input
         (string) title: Title of the command (e.g. save)
         (string) command: The identifier of the actual command handler
-        (list) arguments: Arguments that the command handler should be invoked with
+        (list) arguments: Optional. Arguments that the command handler should be invoked with
     '''
     def __init__(self, title, command, arguments=None):
         self.title = title
@@ -41,10 +41,10 @@ class Diagnostic(object):
     Input
         (Range) msg_range: The range at which the message applies
         (string) message: The diagnostic's message
-        (int) severity: The diagnostic's severity.
+        (int) severity: Optional. The diagnostic's severity.
             If omitted, it is up to the client to interpret diagnostics as error, warning, info or hint
-        (int|string) code: The diagnostic's code
-        (string) source: A human-readable string describing the source of this diagnostic (e.g. 'typescript' or 'super lint')
+        (int|string) code: Optional. The diagnostic's code
+        (string) source: Optional. A human-readable string describing the source of this diagnostic (e.g. 'typescript' or 'super lint')
     '''
     def __init__(self, msg_range, message, severity=None, code=None, source=None):
         self.range = msg_range
@@ -61,6 +61,20 @@ class DiagnosticSeverity(object):
     Warning = 2
     Information = 3
     Hint = 4
+
+class DocumentFilter(object):
+    '''
+    Denotes a document through properties like language, schema or pattern
+        (e.g. a filter that applies to TypeScript files on disk or a filter the applies to JSON files with name package.json)
+    Input
+        (string) language: Optional. A language id, like `typescript`
+        (string) scheme: Optional. A Uri [scheme](#Uri.scheme), like `file` or `untitled`
+        (string) pattern: Optional. A glob pattern, like `*.{ts,js}`
+    '''
+    def __init__(self, language=None, scheme=None, pattern=None):
+        self.language = language
+        self.scheme = scheme
+        self.pattern = pattern
 
 class Location(object):
     '''
