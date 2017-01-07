@@ -211,6 +211,10 @@ class Range(object):
         self.start = start
         self.end = end
 
+class TextDocumentClientCapabilities(object):
+    '''
+    '''
+
 class TextDocumentIdentifier(object):
     '''
     TextDocuments are identified using a URI. On the protocol level, URIs are passed as strings
@@ -257,6 +261,50 @@ class TextDocumentPositionParams(object):
     def __init__(self, textDocument, position):
         self.textDocument = textDocument
         self.position = position
+
+class WorkspaceClientCapabilities(object):
+    '''
+    Define capabilities the editor / tool provides on the workspace
+    Input
+        (bool) applyEdit: Optional. The client supports applying batch edits to the workspace. Defaults to False
+        (bool) didChangeConfigurationReg: Optional. Did change configuration notification supports dynamic registration
+        (bool) didChangeWatchedFilesReg: Optional. Did change watched files notification supports dynamic registration
+        (bool) symbolReg: Optional. Symbol request supports dynamic registration
+        (bool) executeCommandReg: Optional. Execute command supports dynamic registration
+    '''
+    def __init__(self, applyEdit=False, dynamicRegistration=False):
+        if applyEdit is True or applyEdit is False:
+            self.applyEdit = applyEdit
+        else:
+            raise TypeError("'applyEdit' must be True or False")
+        self.didChangeConfiguration = self.Notification(dynamicRegistration)
+        self.didChangeWatchedFiles = self.Notification(dynamicRegistration)
+        self.symbol = self.Request(dynamicRegistration)
+        self.executeCommand = self.Request(dynamicRegistration)
+
+    class Notification(object):
+        '''
+        Capabilities specific to the `workspace/didChangeConfiguration` and `workspace/didChangeWatchedFiles` notifications
+        Input
+            (bool) dynamicRegistration: Optional. Notification supports dynamic registration
+        '''
+        def __init__(self, dynamicRegistration=False):
+            if dynamicRegistration is True or dynamicRegistration is False:
+                self.dynamicRegistration = dynamicRegistration
+            else:
+                raise TypeError("'dynamicRegistration' is not a boolean")
+
+    class Request(object):
+        '''
+        Capabilities specific to the `workspace/symbol` and `workspace/executeCommand` requests
+        Input
+            (bool) dynamicRegistration: Optional. Request supports dynamic registration
+        '''
+        def __init__(self, dynamicRegistration=False):
+            if dynamicRegistration is True or dynamicRegistration is False:
+                self.dynamicRegistration = dynamicRegistration
+            else:
+                raise TypeError("'dynamicRegistration' is not a boolean")
 
 class WorkspaceEdit(object):
     '''
