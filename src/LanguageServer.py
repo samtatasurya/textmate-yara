@@ -142,10 +142,20 @@ class TextEdit(object):
     '''
     A textual edit applicable to a text document
     Input
-        doc_range: The range of the text document to be manipulated
+        (Range) doc_range: The range of the text document to be manipulated
             To insert text into a document create a range where start === end
-        new_text: The string to be inserted. For delete operations use an empty string
+        (string) new_text: The string to be inserted. For delete operations use an empty string
     '''
     def __init__(self, doc_range, new_text):
         self.doc_range = doc_range
         self.new_text = new_text
+
+class WorkspaceEdit(object):
+    '''
+    Changes to many resources managed in the workspace
+    Input
+        (dictionary) changes: Holds changes to existing resources
+            Takes the form { [uri: string]: TextEdit[]; };
+    '''
+    def __init__(self, changes):
+        self.changes = changes
