@@ -140,6 +140,30 @@ class Range(object):
         self.start = start
         self.end = end
 
+class TextDocumentIdentifier(object):
+    '''
+    TextDocuments are identified using a URI. On the protocol level, URIs are passed as strings
+    Input
+        (string) uri: The text document's URI
+    '''
+    def __init__(self, uri):
+        self.uri = uri
+
+class TextDocumentItem(object):
+    '''
+    An item to transfer a text document from the client to the server
+    Input
+        (string) uri: The text document's URI
+        (string) languageId: The text document's language identifier
+        (int) version: The version number of this document. It will strictly increase after each change, including undo/redo
+        (string) text: The content of the opened text document
+    '''
+    def __init__(self, uri, languageId, version, text):
+        self.uri = uri
+        self.languageId = languageId
+        self.version = version
+        self.text = text
+
 class TextEdit(object):
     '''
     A textual edit applicable to a text document
