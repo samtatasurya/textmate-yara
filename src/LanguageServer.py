@@ -66,6 +66,8 @@ class DocumentFilter(object):
     '''
     Denotes a document through properties like language, schema or pattern
         (e.g. a filter that applies to TypeScript files on disk or a filter the applies to JSON files with name package.json)
+        Example 1: { language: 'typescript', scheme: 'file' }
+        Example 2: { language: 'json', pattern: '**/package.json' }
     Input
         (string) language: Optional. A language id, like `typescript`
         (string) scheme: Optional. A Uri [scheme](#Uri.scheme), like `file` or `untitled`
