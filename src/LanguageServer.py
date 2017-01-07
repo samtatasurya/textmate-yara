@@ -176,6 +176,17 @@ class TextEdit(object):
         self.doc_range = doc_range
         self.new_text = new_text
 
+class TextDocumentPositionParams(object):
+    '''
+    A parameter literal used in requests to pass a text document and a position inside that document
+    Input
+        (TextDocumentIdentifier) textDocument: The text document
+        (Position) position: The position inside the text document
+    '''
+    def __init__(self, textDocument, position):
+        self.textDocument = textDocument
+        self.position = position
+
 class WorkspaceEdit(object):
     '''
     Changes to many resources managed in the workspace
@@ -185,3 +196,12 @@ class WorkspaceEdit(object):
     '''
     def __init__(self, changes):
         self.changes = changes
+
+class VersionedTextDocumentIdentifier(object):
+    '''
+    An identifier to denote a specific version of a text document
+    Input
+        (int) version: The version number of this document
+    '''
+    def __init__(self, version):
+        self.version = version
