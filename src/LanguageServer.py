@@ -78,6 +78,15 @@ class DocumentFilter(object):
         self.scheme = scheme
         self.pattern = pattern
 
+class DocumentSelector(object):
+    '''
+    The combination of one or many document filters
+    Input
+        (list) documents: One or more DocumentFilters
+    '''
+    def __init__(self, documents):
+        self.documents = documents
+
 class Location(object):
     '''
     Represents a location inside a resource, such as a line inside a text file
