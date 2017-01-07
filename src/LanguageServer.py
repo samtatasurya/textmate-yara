@@ -81,18 +81,6 @@ class Position(object):
         self.line = line
         self.character = character
 
-class Range(object):
-    '''
-    A range in a text document expressed as (zero-based) start and end positions
-    A range is comparable to a selection in an editor. Therefore the end position is exclusive
-    Input
-        start: Start position
-        end: End position
-    '''
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
-
 # Bases many function/variable names on
 # https://github.com/Microsoft/vscode-languageserver-node-example/blob/master/server/src/server.ts
 class Protocol(object):
@@ -137,6 +125,18 @@ class Protocol(object):
         self.logger.debug("publishDiagnostics")
         diagnostics = {"errors": 0, "warnings": 0}
         return diagnostics
+
+class Range(object):
+    '''
+    A range in a text document expressed as (zero-based) start and end positions
+    A range is comparable to a selection in an editor. Therefore the end position is exclusive
+    Input
+        start: Start position
+        end: End position
+    '''
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
 
 class TextEdit(object):
     '''
