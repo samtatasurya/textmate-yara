@@ -27,14 +27,8 @@ class ClientCapabilities(object):
     '''
     def __init__(self, workspace=None, textDocument=None, experimental=None):
         self.experimental = experimental
-        if workspace is None or isinstance(workspace, WorkspaceClientCapabilities):
-            self.workspace = workspace
-        else:
-            raise TypeError("'workspace' value is not None or of type WorkspaceClientCapabilities")
-        if textDocument is None or isinstance(textDocument, TextDocumentClientCapabilities):
-            self.textDocument = textDocument
-        else:
-            raise TypeError("'textDocument' value is not None or of type TextDocumentClientCapabilities")
+        self.workspace = workspace
+        self.textDocument = textDocument
 
 class Command(object):
     '''
@@ -123,13 +117,8 @@ class InitializeParams(object):
         self.processId = processId
         self.rootUri = rootUri
         self.initializationOptions = initializationOptions
-        if isinstance(capabilities, ClientCapabilities):
-            self.capabilities = capabilities
-        if trace in ("off", "messages", "verbose"):
-            self.trace = trace
-        else:
-            raise TypeError("'trace' value is not allowed. Acceptable values are off|messages|verbose")
-
+        self.capabilities = capabilities
+        self.trace = trace
 
 class Location(object):
     '''
@@ -213,7 +202,27 @@ class Range(object):
 
 class TextDocumentClientCapabilities(object):
     '''
+    Define capabilities the editor / tool provides on text documents
+    Input
     '''
+    def __init__(self):
+        self.synchronization = self.docSynchronization()
+
+    class docSynchronization(object):
+        '''
+        Capabilities specific to the `textDocument/synchronization`
+        Input
+            (bool) dynamicRegistration: Optional. Whether text document synchronization supports dynamic registratio
+            (bool) willSave: Optional. The client supports sending will save notifications
+            (bool) willSaveWaitUntil: Optional. The client supports sending a will save request and
+                    waits for a response providing text edits which will be applied to the document before it is saved
+            (bool) didSave: Optional. The client supports did save notifications
+        '''
+        def __init__(self, dynamicRegistration=False, willSave=False, willSaveWaitUntil=False, didSave=False):
+            self.dynamicRegistration = dynamicRegistration
+            self.willSave = willSave
+            self.willSaveWaitUntil = willSaveWaitUntil
+            self.didSave = didSave
 
 class TextDocumentIdentifier(object):
     '''
@@ -239,6 +248,17 @@ class TextDocumentItem(object):
         self.version = version
         self.text = text
 
+class TextDocumentPositionParams(object):
+    '''
+    A parameter literal used in requests to pass a text document and a position inside that document
+    Input
+        (TextDocumentIdentifier) textDocument: The text document
+        (Position) position: The position inside the text document
+    '''
+    def __init__(self, textDocument, position):
+        self.textDocument = textDocument
+        self.position = position
+
 class TextEdit(object):
     '''
     A textual edit applicable to a text document
@@ -251,36 +271,22 @@ class TextEdit(object):
         self.doc_range = doc_range
         self.new_text = new_text
 
-class TextDocumentPositionParams(object):
-    '''
-    A parameter literal used in requests to pass a text document and a position inside that document
-    Input
-        (TextDocumentIdentifier) textDocument: The text document
-        (Position) position: The position inside the text document
-    '''
-    def __init__(self, textDocument, position):
-        self.textDocument = textDocument
-        self.position = position
-
 class WorkspaceClientCapabilities(object):
     '''
     Define capabilities the editor / tool provides on the workspace
     Input
         (bool) applyEdit: Optional. The client supports applying batch edits to the workspace. Defaults to False
-        (bool) didChangeConfigurationReg: Optional. Did change configuration notification supports dynamic registration
-        (bool) didChangeWatchedFilesReg: Optional. Did change watched files notification supports dynamic registration
-        (bool) symbolReg: Optional. Symbol request supports dynamic registration
-        (bool) executeCommandReg: Optional. Execute command supports dynamic registration
+        (bool) changeConfig: Optional. Did change configuration notification supports dynamic registration
+        (bool) changeWatched: Optional. Did change watched files notification supports dynamic registration
+        (bool) symbol: Optional. Symbol request supports dynamic registration
+        (bool) execCmd: Optional. Execute command supports dynamic registration
     '''
-    def __init__(self, applyEdit=False, dynamicRegistration=False):
-        if applyEdit is True or applyEdit is False:
-            self.applyEdit = applyEdit
-        else:
-            raise TypeError("'applyEdit' must be True or False")
-        self.didChangeConfiguration = self.Notification(dynamicRegistration)
-        self.didChangeWatchedFiles = self.Notification(dynamicRegistration)
-        self.symbol = self.Request(dynamicRegistration)
-        self.executeCommand = self.Request(dynamicRegistration)
+    def __init__(self, applyEdit=False, changeConfig=False, changeWatched=False, symbol=False, execCmd=False):
+        self.applyEdit = applyEdit
+        self.didChangeConfiguration = self.Notification(changeConfig)
+        self.didChangeWatchedFiles = self.Notification(changeWatched)
+        self.symbol = self.Request(symbol)
+        self.executeCommand = self.Request(execCmd)
 
     class Notification(object):
         '''
@@ -289,10 +295,7 @@ class WorkspaceClientCapabilities(object):
             (bool) dynamicRegistration: Optional. Notification supports dynamic registration
         '''
         def __init__(self, dynamicRegistration=False):
-            if dynamicRegistration is True or dynamicRegistration is False:
-                self.dynamicRegistration = dynamicRegistration
-            else:
-                raise TypeError("'dynamicRegistration' is not a boolean")
+            self.dynamicRegistration = dynamicRegistration
 
     class Request(object):
         '''
@@ -301,10 +304,7 @@ class WorkspaceClientCapabilities(object):
             (bool) dynamicRegistration: Optional. Request supports dynamic registration
         '''
         def __init__(self, dynamicRegistration=False):
-            if dynamicRegistration is True or dynamicRegistration is False:
-                self.dynamicRegistration = dynamicRegistration
-            else:
-                raise TypeError("'dynamicRegistration' is not a boolean")
+            self.dynamicRegistration = dynamicRegistration
 
 class WorkspaceEdit(object):
     '''
