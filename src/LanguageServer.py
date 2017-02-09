@@ -212,7 +212,7 @@ class TextDocumentClientCapabilities(object):
         '''
         Capabilities specific to the `textDocument/synchronization`
         Input
-            (bool) dynamicRegistration: Optional. Whether text document synchronization supports dynamic registratio
+            (bool) dynamicRegistration: Optional. Whether text document synchronization supports dynamic registration
             (bool) willSave: Optional. The client supports sending will save notifications
             (bool) willSaveWaitUntil: Optional. The client supports sending a will save request and
                     waits for a response providing text edits which will be applied to the document before it is saved
@@ -223,6 +223,17 @@ class TextDocumentClientCapabilities(object):
             self.willSave = willSave
             self.willSaveWaitUntil = willSaveWaitUntil
             self.didSave = didSave
+
+    class docCompletion(object):
+        '''
+        Capabilities specific to the `textDocument/completion`
+        Input
+            (bool) dynamicRegistration: Optional. Whether text document completion supports dynamic registration
+            ()
+        '''
+        def __init__(self, dynamicRegistration=False, completionItem=None):
+            self.dynamicRegistration = dynamicRegistration
+            self.completionItem = completionItem
 
 class TextDocumentIdentifier(object):
     '''
