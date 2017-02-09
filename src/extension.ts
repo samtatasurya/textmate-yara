@@ -18,9 +18,16 @@ function deactivate(context: vscode.ExtensionContext) {
 }
 
 class Yara {
-    private config = vscode.workspace.getConfiguration("yara");
+
+    private config;
     private statusBarItem: vscode.StatusBarItem;
-    private errors: Array<string> = [];
+    private errors: Array<string>;
+
+    // called on creation
+    constructor() {
+        this.config = vscode.workspace.getConfiguration("yara");
+        this.errors = [];
+    }
 
     // Display how many errors exist in the current YARA rulefile
     public updateStatusBar() {
