@@ -74,10 +74,10 @@
             {
                 "id": "yara",
                 "aliases": [
+                    "Yara",
                     "yara-syntax",
                     "yaralang",
-                    "YARA",
-                    "Yara"
+                    "YARA"
                 ],
                 "extensions": [
                     ".yara",
