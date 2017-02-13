@@ -1,18 +1,19 @@
 "use strict";
 
 import * as vscode from "vscode";
-// import ext = require("./yara");
 
 export class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
     private errors: Array<string>;
+    private warnings: Array<string>;
 
     // called on creation
     constructor() {
         this.config = vscode.workspace.getConfiguration("yara");
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
         this.errors = [];
+        this.warnings = [];
     }
 
     // Compile the current file
