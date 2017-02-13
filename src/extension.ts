@@ -17,10 +17,7 @@ export class Yara {
 
     // Compile the current file
     public compileRule() {
-        console.log("compileRule()");
-        // console.log(this.config.has("installPath"));
         let yarac = this.config.get("installPath") + "\\yarac64.exe";
-        console.log("YARAC Path: " + yarac);
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
             console.log("Couldn't get the text editor");
@@ -31,21 +28,14 @@ export class Yara {
             console.log("Couldn't get the active text document");
             return;
         }
-        console.log("languageId: " + doc.languageId);
         console.log(yarac + " " + doc.fileName + " FILE");
         let leaf = doc.fileName.split("\\").pop();
         if (this.errors.length == 0) {
-            this.updateStatusBar("Compiled " + leaf + " successfully!");
+            vscode.window.setStatusBarMessage("Compiled " + leaf + " successfully!");
         }
         else {
-            this.updateStatusBar("Failed to compile " + leaf);
+            vscode.window.setStatusBarMessage("Failed to compile " + leaf);
         }
-    }
-
-    // Display how many errors exist in the current YARA rulefile
-    public updateStatusBar(msg: string) {
-        console.log("updateStatusBar()");
-        vscode.window.setStatusBarMessage(msg);
     }
 
     // VSCode must dispose of the Yara object in some way
