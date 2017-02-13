@@ -31,12 +31,15 @@ export class Yara {
         }
         console.log(yarac + " " + doc.fileName + " FILE");
         let leaf = doc.fileName.split("\\").pop();
+        let message = "";
         if (this.errors.length == 0) {
-            vscode.window.setStatusBarMessage("Compiled " + leaf + " successfully!");
+            message = `Compiled ${leaf} successfully!`;
         }
         else {
-            vscode.window.setStatusBarMessage("Failed to compile " + leaf);
+            message = `Failed to compile ${leaf}`;
         }
+        vscode.window.setStatusBarMessage(message);
+        // this.statusBarItem.text = message;
     }
 
     // VSCode must dispose of the Yara object in some way
