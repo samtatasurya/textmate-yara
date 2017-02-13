@@ -38,8 +38,8 @@ export class Yara {
         else {
             message = `Failed to compile ${leaf}`;
         }
-        vscode.window.setStatusBarMessage(message);
-        // this.statusBarItem.text = message;
+        this.statusBarItem.text = message;
+        this.statusBarItem.show();
     }
 
     // VSCode must dispose of the Yara object in some way
