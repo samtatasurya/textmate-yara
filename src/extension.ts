@@ -33,13 +33,19 @@ export class Yara {
         }
         console.log("languageId: " + doc.languageId);
         console.log(yarac + " " + doc.fileName + " FILE");
+        let leaf = doc.fileName.split("\\").pop();
+        if (this.errors.length == 0) {
+            this.updateStatusBar("Compiled " + leaf + " successfully!");
+        }
+        else {
+            this.updateStatusBar("Failed to compile " + leaf);
+        }
     }
 
     // Display how many errors exist in the current YARA rulefile
-    public updateStatusBar() {
+    public updateStatusBar(msg: string) {
         console.log("updateStatusBar()");
-        let count = this.errors.length;
-        vscode.window.setStatusBarMessage(count + " errors");
+        vscode.window.setStatusBarMessage(msg);
     }
 
     // VSCode must dispose of the Yara object in some way
@@ -50,7 +56,7 @@ export class Yara {
 }
 
 function activate(context: vscode.ExtensionContext) {
-    console.log("[*] Installing the YARA extension")
+    console.log("[*] Activating Yara extension")
     let file_selector = { language: 'Yara', scheme: 'file' };
     // console.log();
     // Create our YARA object to do everything with
@@ -63,7 +69,7 @@ function activate(context: vscode.ExtensionContext) {
 }
 
 function deactivate(context: vscode.ExtensionContext) {
-    console.log("[*] Uninstalling the YARA extension")
+    console.log("[*] Deactivating Yara extension")
 }
 
 exports.activate = activate
