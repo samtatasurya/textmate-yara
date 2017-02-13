@@ -11,6 +11,10 @@ export class Yara {
     // called on creation
     constructor() {
         this.config = vscode.workspace.getConfiguration("yara");
+        if (!this.config.has("installPath")) {
+            vscode.window.showErrorMessage("No YARA installation specified! Please set one in settings");
+            return;
+        }
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
         this.errors = [];
         this.warnings = [];
@@ -21,15 +25,15 @@ export class Yara {
         let yarac = this.config.get("installPath") + "\\yarac64.exe";
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
-            console.log("Couldn't get the text editor");
+            vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
         let doc = editor.document;
         if (!doc) {
-            console.log("Couldn't get the active text document");
+            vscode.window.showErrorMessage("Couldn't get the active text document");
             return;
         }
-        console.log(yarac + " " + doc.fileName + " FILE");
+        console.log(`${yarac} ${doc.fileName}`);
         let leaf = doc.fileName.split("\\").pop();
         let message = "";
         if (this.errors.length == 0) {
@@ -42,6 +46,37 @@ export class Yara {
         this.statusBarItem.show();
     }
 
+    // Run the current file against a target specified in settings
+    public executeRule() {
+        let yara = this.config.get("installPath") + "\\yara64.exe";
+
+        if (!this.config.has("target")) {
+            vscode.window.showErrorMessage("You must set a YARA target file!");
+            return;
+        }
+        let target = this.config.get("target");
+
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showErrorMessage("Couldn't get the text editor");
+            return;
+        }
+
+        let doc = editor.document;
+        if (!doc) {
+            vscode.window.showErrorMessage("Couldn't get the activate text document");
+            return;
+        }
+
+        let options = this.config.get("options");
+        if (options != "null") {
+            console.log(`${yara} ${options} ${doc.fileName} ${target}`);
+        }
+        else {
+            console.log(`${yara} ${doc.fileName} ${target}`);
+        }
+    }
+
     // VSCode must dispose of the Yara object in some way
     // Define how we want our disposal to occur
     public dispose() {
@@ -50,20 +85,22 @@ export class Yara {
 }
 
 function activate(context: vscode.ExtensionContext) {
-    console.log("[*] Activating Yara extension")
+    console.log("Activating Yara extension")
     let file_selector = { language: 'Yara', scheme: 'file' };
     // console.log();
     // Create our YARA object to do everything with
     // let yara = new ext.Yara();
     let yara = new Yara();
     let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
+    let execRule = vscode.commands.registerCommand("yara.ExecRule", () => {yara.executeRule()});
     // Dispose of our objects later
     context.subscriptions.push(yara);
     context.subscriptions.push(compileRule);
+    context.subscriptions.push(execRule);
 }
 
 function deactivate(context: vscode.ExtensionContext) {
-    console.log("[*] Deactivating Yara extension")
+    console.log("Deactivating Yara extension");
 }
 
 exports.activate = activate
