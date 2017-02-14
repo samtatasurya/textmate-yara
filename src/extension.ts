@@ -84,7 +84,7 @@ class Yara {
     }
 }
 
-class YaraController {
+class YaraSubscriber {
     private _yara: Yara;
     private _disposable: vscode.Disposable;
 
@@ -107,7 +107,7 @@ function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension")
     const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
     let yara = new Yara();
-    let controller = new YaraController(yara);
+    let controller = new YaraSubscriber(yara);
     let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
     let execRule = vscode.commands.registerCommand("yara.ExecRule", () => {yara.executeRule()});
     // Dispose of our objects later
