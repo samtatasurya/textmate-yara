@@ -2,7 +2,7 @@
 
 import * as vscode from "vscode";
 
-export class Yara {
+class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
     private errors: Array<string>;
@@ -86,10 +86,7 @@ export class Yara {
 
 function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension")
-    let file_selector = { language: 'Yara', scheme: 'file' };
-    // console.log();
-    // Create our YARA object to do everything with
-    // let yara = new ext.Yara();
+    const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
     let yara = new Yara();
     let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
     let execRule = vscode.commands.registerCommand("yara.ExecRule", () => {yara.executeRule()});
