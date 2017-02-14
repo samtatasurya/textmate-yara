@@ -6,8 +6,6 @@ import * as proc from "child_process";
 class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
-    private errors: Array<string>;
-    private warnings: Array<string>;
 
     // called on creation
     constructor() {
@@ -17,13 +15,14 @@ class Yara {
             return;
         }
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
-        this.errors = [];
-        this.warnings = [];
     }
 
     // Compile the current file
     public compileRule() {
-        let yarac = this.config.get("installPath") + "\\yarac64.exe";
+        const ofile: vscode.Uri = vscode.Uri.file("~\\AppData\\Local\\compiled.yarac");
+        let errors: Array<string> = [];
+        let yarac: string = this.config.get("installPath") + "\\yarac64.exe";
+
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
@@ -33,15 +32,25 @@ class Yara {
         if (!doc) {
             vscode.window.showErrorMessage("Couldn't get the active text document");
             return;
-        }
-        console.log(`${yarac} ${doc.fileName}`);
+        };
+        // run a sub-process and capture STDOUT to see what errors we have
+        const result = proc.spawn(yarac, [doc.fileName, ofile.toString()]);
+        result.stderr.on('data', (data) => {
+            errors.push(data.toString());
+            console.log(data.toString());
+        });
+        console.log(errors.toString());
+        // relay child process results to the user
         let leaf = doc.fileName.split("\\").pop();
         let message = "";
-        if (this.errors.length == 0) {
+        if (errors.length == 0) {
             message = `Compiled ${leaf} successfully!`;
         }
         else {
-            message = `Failed to compile ${leaf}`;
+            message = `Failed to compile ${leaf}: ${errors.length} errors found`;
+            errors.forEach(errormsg => {
+                console.log(`[-] ${errormsg}`);
+            });
         }
         this.statusBarItem.text = message;
         this.statusBarItem.show();
