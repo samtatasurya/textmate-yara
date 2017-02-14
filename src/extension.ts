@@ -84,14 +84,35 @@ class Yara {
     }
 }
 
+class YaraController {
+    private _yara: Yara;
+    private _disposable: vscode.Disposable;
+
+    // called on creation
+    constructor(yara: Yara) {
+        this._yara = yara;
+        // compile YARA rules when the user saves a text document
+        let subscriptions: vscode.Disposable[] = [];
+        vscode.workspace.onDidSaveTextDocument(() => {this._yara.compileRule()}, this, subscriptions);
+        // create a combined disposable from both event subscriptions
+        this._disposable = vscode.Disposable.from(...subscriptions);
+    }
+
+    dispose() {
+        this._disposable.dispose();
+    }
+}
+
 function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension")
     const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
     let yara = new Yara();
+    let controller = new YaraController(yara);
     let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
     let execRule = vscode.commands.registerCommand("yara.ExecRule", () => {yara.executeRule()});
     // Dispose of our objects later
     context.subscriptions.push(yara);
+    context.subscriptions.push(controller);
     context.subscriptions.push(compileRule);
     context.subscriptions.push(execRule);
 }
@@ -100,5 +121,5 @@ function deactivate(context: vscode.ExtensionContext) {
     console.log("Deactivating Yara extension");
 }
 
-exports.activate = activate
-exports.deactivate = deactivate
+exports.activate = activate;
+exports.deactivate = deactivate;
