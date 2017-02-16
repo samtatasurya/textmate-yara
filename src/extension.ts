@@ -21,6 +21,7 @@ class Yara {
     public compileRule() {
         const ofile: vscode.Uri = vscode.Uri.file("~\\AppData\\Local\\compiled.yarac");
         let errors: Array<string> = [];
+        let exit_code: number = 0;
         let yarac: string = this.config.get("installPath") + "\\yarac64.exe";
 
         let editor = vscode.window.activeTextEditor;
@@ -36,16 +37,20 @@ class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const result = proc.spawn(yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
-            console.log(data.toString().split("error: ")[1]);
+            // console.log(data.toString().split("error: ")[1]);
+            errors.push(data.toString().split("error: ")[1]);
+        });
+        result.on("close", (code) => {
+            exit_code = code;
         });
         // relay child process results to the user
         let leaf = doc.fileName.split("\\").pop();
         let message = "";
-        if (errors.length == 0) {
+        if (exit_code == 0) {
             message = `Compiled ${leaf} successfully!`;
         }
         else {
-            message = `Failed to compile ${leaf}: ${errors.length} errors found`;
+            message = `Failed to compile ${leaf}: exit code ${exit_code}`;
             errors.forEach(errormsg => {
                 console.log(`[-] ${errormsg}`);
             });
