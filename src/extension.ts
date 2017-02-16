@@ -36,10 +36,8 @@ class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const result = proc.spawn(yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
-            errors.push(data.toString());
-            console.log(data.toString());
+            console.log(data.toString().split("error: ")[1]);
         });
-        console.log(errors.toString());
         // relay child process results to the user
         let leaf = doc.fileName.split("\\").pop();
         let message = "";
