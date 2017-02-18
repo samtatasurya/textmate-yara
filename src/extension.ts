@@ -6,6 +6,7 @@ import * as proc from "child_process";
 class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
+    private diagCollection: vscode.DiagnosticCollection;
 
     // called on creation
     constructor() {
@@ -14,7 +15,8 @@ class Yara {
             vscode.window.showErrorMessage("No YARA installation specified! Please set one in settings");
             return;
         }
-        this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
+        this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        this.diagCollection = vscode.languages.createDiagnosticCollection("yara");
     }
 
     // Compile the current file
@@ -23,6 +25,7 @@ class Yara {
         let errors: Array<string> = [];
         let exit_code: number = 0;
         let yarac: string = this.config.get("installPath") + "\\yarac64.exe";
+        let diagnostics: Array<vscode.Diagnostic> = [];
 
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -39,33 +42,15 @@ class Yara {
         // regex to match line number in resulting YARAC output
         const pattern = RegExp("\([0-9]+\)");
         result.stderr.on('data', (data) => {
-            console.log(`stderr: ${data.toString()}`);
             let messages = data.toString().trim().split(": ");
-            let line_no = pattern.exec(messages[0])[0];
-            let msg = messages.pop();
-            console.log(msg);
-            console.log(line_no);
-        });
-        result.stdout.on('data', (data) => {
-            console.log(`stdout: ${data.toString()}`);
+            let line_no = parseInt(pattern.exec(messages[0])[0]);
+            let line_range = doc.lineAt(line_no).range;
+            diagnostics.push(new vscode.Diagnostic(line_range, messages.pop(), vscode.DiagnosticSeverity.Error));
         });
         result.on("close", (code) => {
-            exit_code = code;
+            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+            console.log(diagnostics);
         });
-        // relay child process results to the user
-        let leaf = doc.fileName.split("\\").pop();
-        let message = "";
-        if (exit_code == 0) {
-            message = `Compiled ${leaf} successfully!`;
-        }
-        else {
-            message = `Failed to compile ${leaf}: exit code ${exit_code}`;
-            errors.forEach(errormsg => {
-                console.log(`[-] ${errormsg}`);
-            });
-        }
-        this.statusBarItem.text = message;
-        this.statusBarItem.show();
     }
 
     // Run the current file against a target specified in settings
@@ -103,6 +88,7 @@ class Yara {
     // Define how we want our disposal to occur
     public dispose() {
         this.statusBarItem.dispose();
+        this.diagCollection.dispose();
     }
 }
 
