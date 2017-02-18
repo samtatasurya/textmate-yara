@@ -30,7 +30,7 @@ class Yara {
         const ofile: vscode.Uri = vscode.Uri.file("~\\AppData\\Local\\compiled.yarac");
         let errors: Array<string> = [];
         let exit_code: number = 0;
-        let yarac: string = this.config.get("installPath") + "\\yarac64.exe";
+        let yarac: string = this.config.get("installPath") + "\\yarac.exe";
         let diagnostics: Array<vscode.Diagnostic> = [];
 
         let doc = this.editor.document;
@@ -64,7 +64,7 @@ class Yara {
 
     // Run the current file against a target specified in settings
     public executeRule() {
-        let yara = this.config.get("installPath") + "\\yara64.exe";
+        let yara = this.config.get("installPath") + "\\yara.exe";
 
         if (!this.config.has("target")) {
             vscode.window.showErrorMessage("You must set a YARA target file!");
