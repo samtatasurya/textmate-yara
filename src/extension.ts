@@ -36,9 +36,18 @@ class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const result = proc.spawn(yarac, [doc.fileName, ofile.toString()]);
+        // regex to match line number in resulting YARAC output
+        const pattern = RegExp("\([0-9]+\)");
         result.stderr.on('data', (data) => {
-            // console.log(data.toString().split("error: ")[1]);
-            errors.push(data.toString().split("error: ")[1]);
+            console.log(`stderr: ${data.toString()}`);
+            let messages = data.toString().trim().split(": ");
+            let line_no = pattern.exec(messages[0])[0];
+            let msg = messages.pop();
+            console.log(msg);
+            console.log(line_no);
+        });
+        result.stdout.on('data', (data) => {
+            console.log(`stdout: ${data.toString()}`);
         });
         result.on("close", (code) => {
             exit_code = code;
