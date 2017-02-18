@@ -5,6 +5,7 @@ import * as proc from "child_process";
 
 class Yara {
     private config: vscode.WorkspaceConfiguration;
+    private editor: vscode.TextEditor;
     private statusBarItem: vscode.StatusBarItem;
     private diagCollection: vscode.DiagnosticCollection;
 
@@ -13,6 +14,11 @@ class Yara {
         this.config = vscode.workspace.getConfiguration("yara");
         if (!this.config.has("installPath")) {
             vscode.window.showErrorMessage("No YARA installation specified! Please set one in settings");
+            return;
+        }
+        this.editor = vscode.window.activeTextEditor;
+        if (!this.editor) {
+            vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -27,12 +33,7 @@ class Yara {
         let yarac: string = this.config.get("installPath") + "\\yarac64.exe";
         let diagnostics: Array<vscode.Diagnostic> = [];
 
-        let editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            vscode.window.showErrorMessage("Couldn't get the text editor");
-            return;
-        }
-        let doc = editor.document;
+        let doc = this.editor.document;
         if (!doc) {
             vscode.window.showErrorMessage("Couldn't get the active text document");
             return;
@@ -43,6 +44,7 @@ class Yara {
         const pattern = RegExp("\([0-9]+\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
+                console.log(line);
                 let messages = line.trim().split(": ");
                 // dunno why this adds one to the result - for some reason the render is off by a line
                 let parsed = pattern.exec(messages[0]);
@@ -57,7 +59,6 @@ class Yara {
         });
         result.on("close", (code) => {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-            console.log(diagnostics);
         });
     }
 
