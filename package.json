@@ -71,10 +71,6 @@
             {
                 "command": "yara.CompileRule",
                 "title": "YARA: Compiles the current file into a YARA rule."
-            },
-            {
-                "command": "yara.ExecRule",
-                "title": "YARA: Executes the current YARA rule against a file"
             }
         ],
         "grammars": [
