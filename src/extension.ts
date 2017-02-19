@@ -40,15 +40,16 @@ class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const result = proc.spawn(yarac, [doc.fileName, ofile.toString()]);
         // regex to match line number in resulting YARAC output
-        const pattern = RegExp("\([0-9]+\)");
+        const pattern = RegExp("\\([0-9]+\\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 console.log(line);
                 let messages = line.trim().split(": ");
                 // dunno why this adds one to the result - for some reason the render is off by a line
-                let parsed = pattern.exec(messages[0]);
-                if (parsed != null && parsed.length > 0) {
-                    let line_no = parseInt(parsed[0]) - 1;
+                let matches = pattern.exec(messages[0]);
+                console.log(matches);
+                if (matches != null && matches.length > 0) {
+                    let line_no = parseInt(matches[0]) - 1;
                     let start = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
                     let end = new vscode.Position(line_no, data.length);
                     let line_range = new vscode.Range(start, end);
