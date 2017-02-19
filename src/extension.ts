@@ -43,17 +43,17 @@ class Yara {
         const pattern = RegExp("\\([0-9]+\\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                console.log(line);
                 let messages = line.trim().split(": ");
                 // dunno why this adds one to the result - for some reason the render is off by a line
                 let matches = pattern.exec(messages[0]);
-                console.log(matches);
-                if (matches != null && matches.length > 0) {
-                    let line_no = parseInt(matches[0]) - 1;
+                let severity = messages[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
+                if (matches != null) {
+                    // remove the surrounding parentheses
+                    let line_no = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
                     let start = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
                     let end = new vscode.Position(line_no, data.length);
                     let line_range = new vscode.Range(start, end);
-                    diagnostics.push(new vscode.Diagnostic(line_range, messages.pop(), vscode.DiagnosticSeverity.Error));
+                    diagnostics.push(new vscode.Diagnostic(line_range, messages.pop(), severity));
                 }
             });
         });
