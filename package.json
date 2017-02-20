@@ -7,7 +7,7 @@
     "license": "SEE LICENSE IN LICENSE.md",
     "main": "./out/src/extension.js",
     "publisher": "infosec-intern",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "categories": [
         "Languages",
         "Snippets"
@@ -62,8 +62,13 @@
                 },
                 "yara.target": {
                     "type": ["string", "null"],
-                    "default": "README.md",
-                    "description": "Target file to execute YARA rules against"
+                    "default": ".\\text.json",
+                    "description": "Destination file for the ExecuteRule command (yara.exe)"
+                },
+                "yarac.compiled": {
+                    "type": ["string"],
+                    "default": "~\\AppData\\Local\\yara_tmp.bin",
+                    "description": "Destination file for the CompileRule command (yarac.exe)"
                 }
             }
         },
