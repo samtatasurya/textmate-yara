@@ -27,45 +27,45 @@ class Yara {
 
     // Compile the current file
     public compileRule() {
+        let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
-        let ofile_path = null;
+        let ofile_path: string|null = null;
         if (!this.config.has("compiled")) {
             ofile_path = "~\\AppData\\Local\\yara_tmp.bin";
             vscode.window.showWarningMessage(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
             return;
         }
-        ofile_path = this.config.get("compiled");
+        else {
+            ofile_path = this.config.get("compiled").toString();
+        }
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
-        let exit_code: number = 0;
-        let diagnostics: Array<vscode.Diagnostic> = [];
         // regex to match line number in resulting YARAC output
-        const pattern = RegExp("\\([0-9]+\\)");
-
-        const editor = vscode.window.activeTextEditor;
+        const pattern: RegExp = RegExp("\\([0-9]+\\)");
+        const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
-        const doc = editor.document;
+        const doc: vscode.TextDocument = editor.document;
         if (!doc) {
             vscode.window.showErrorMessage("Couldn't get the active text document");
             return;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        const result = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
+        const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 try {
-                    let parsed = line.trim().split(": ");
+                    let parsed:Array<string> = line.trim().split(": ");
                     // dunno why this adds one to the result - for some reason the render is off by a line
-                    let matches = pattern.exec(parsed[0]);
-                    let severity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
+                    let matches: RegExpExecArray = pattern.exec(parsed[0]);
+                    let severity: vscode.DiagnosticSeverity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
                     if (matches != null) {
                         // remove the surrounding parentheses
-                        let line_no = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
-                        let start = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
-                        let end = new vscode.Position(line_no, data.length);
-                        let line_range = new vscode.Range(start, end);
+                        let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
+                        let start: vscode.Position = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
+                        let end: vscode.Position = new vscode.Position(line_no, data.length);
+                        let line_range: vscode.Range = new vscode.Range(start, end);
                         diagnostics.push(new vscode.Diagnostic(line_range, parsed.pop(), severity));
                     }
                 }
@@ -78,6 +78,16 @@ class Yara {
         result.on("close", (code) => {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
         });
+    }
+
+    // Execute the current file against a pre-defined target file
+    public executeRule() {
+        let target_file: string|null = this.config.get("target").toString();
+        if (target_file == null) {
+            vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
+        }
+        const tfile: vscode.Uri = vscode.Uri.file(target_file);
+        const editor: vscode.TextEditor = vscode.window.activeTextEditor;
     }
 
     // VSCode must dispose of the Yara object in some way
