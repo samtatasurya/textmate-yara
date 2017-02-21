@@ -55,10 +55,10 @@
                     "default": null,
                     "description": "The folder path to your YARA binaries. If this is 'null', some commands will not work. The default assumes the 'yara' and 'yarac' commands are in your $PATH"
                 },
-                "yara.options": {
+                "yara.args": {
                     "type": ["string", null],
-                    "default": "null",
-                    "description": "Optional flags for YARA commands"
+                    "default": null,
+                    "description": "Optional arguments for YARA commands"
                 },
                 "yara.target": {
                     "type": ["string", null],
