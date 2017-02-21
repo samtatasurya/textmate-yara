@@ -62,10 +62,8 @@ class Yara {
             });
         });
         result.on("close", (code) => {
-            if (diagnostics.length > 0) {
-                this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-            }
-            else {
+            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+            if (diagnostics.length == 0) {
                 // status bar message goes away after 3 seconds
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
             }
