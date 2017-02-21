@@ -108,7 +108,7 @@ class Yara {
             return;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.toString()]);
+        const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
