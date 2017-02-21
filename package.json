@@ -53,7 +53,7 @@
                 "yara.installPath": {
                     "type": ["string", null],
                     "default": null,
-                    "description": "The folder path to your YARA binaries. If this is 'null', some commands will not work. The default assumes the 'yara' and 'yarac' commands are in your $PATH"
+                    "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
                 "yara.args": {
                     "type": ["string", null],
