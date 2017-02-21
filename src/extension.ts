@@ -40,7 +40,6 @@ class Yara {
         }
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         // regex to match line number in resulting YARAC output
-        const pattern: RegExp = RegExp("\\([0-9]+\\)");
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
@@ -53,25 +52,12 @@ class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
+        const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                try {
-                    let parsed:Array<string> = line.trim().split(": ");
-                    // dunno why this adds one to the result - for some reason the render is off by a line
-                    let matches: RegExpExecArray = pattern.exec(parsed[0]);
-                    let severity: vscode.DiagnosticSeverity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
-                    if (matches != null) {
-                        // remove the surrounding parentheses
-                        let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
-                        let start: vscode.Position = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
-                        let end: vscode.Position = new vscode.Position(line_no, data.length);
-                        let line_range: vscode.Range = new vscode.Range(start, end);
-                        diagnostics.push(new vscode.Diagnostic(line_range, parsed.pop(), severity));
-                    }
-                }
-                catch (error) {
-                    vscode.window.showErrorMessage(error);
-                    console.log(`Typescript Error: ${error}`);
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, pattern, doc);
+                if (current != null) {
+                    diagnostics.push(current);
                 }
             });
         });
@@ -80,15 +66,39 @@ class Yara {
         });
     }
 
+    private convertStderrToDiagnostic(line, length, pattern, doc) {
+        try {
+            let parsed:Array<string> = line.trim().split(": ");
+            // dunno why this adds one to the result - for some reason the render is off by a line
+            let matches: RegExpExecArray = pattern.exec(parsed[0]);
+            let severity: vscode.DiagnosticSeverity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
+            if (matches != null) {
+                // remove the surrounding parentheses
+                let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
+                let start: vscode.Position = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
+                let end: vscode.Position = new vscode.Position(line_no, length);
+                let line_range: vscode.Range = new vscode.Range(start, end);
+                return new vscode.Diagnostic(line_range, parsed.pop(), severity);
+            }
+            return null;
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(error);
+            console.log(`Typescript Error: ${error}`);
+            return null;
+        }
+    }
+
     // Execute the current file against a pre-defined target file
     public executeRule() {
+        let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string|null = this.config.get("target").toString();
         if (target_file == null) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
-                if (!editor) {
+        if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
@@ -99,14 +109,20 @@ class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.toString()]);
+        const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
             console.log(`stdout: ${data}`);
         });
         result.stderr.on('data', (data) => {
-            console.log(`stderr: ${data}`);
+            data.toString().split("\n").forEach(line => {
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, pattern, doc);
+                if (current != null) {
+                    diagnostics.push(current);
+                }
+            });
         });
         result.on('close', (data) => {
-            console.log(`close: ${data}`);
+            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
         });
     }
 
