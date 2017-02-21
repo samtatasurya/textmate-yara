@@ -62,7 +62,7 @@
                 },
                 "yara.target": {
                     "type": ["string", null],
-                    "default": ".\\text.json",
+                    "default": null,
                     "description": "Destination file for the ExecuteRule command (yara.exe)"
                 },
                 "yara.compiled": {
