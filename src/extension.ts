@@ -70,6 +70,7 @@ class Yara {
         });
     }
 
+    // Parse YARA STDERR output and create Diagnostics for the window
     private convertStderrToDiagnostic(line, length, pattern, doc) {
         try {
             let parsed:Array<string> = line.trim().split(": ");
