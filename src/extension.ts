@@ -38,6 +38,8 @@ class Yara {
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         let exit_code: number = 0;
         let diagnostics: Array<vscode.Diagnostic> = [];
+        // regex to match line number in resulting YARAC output
+        const pattern = RegExp("\\([0-9]+\\)");
 
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -51,8 +53,6 @@ class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const result = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
-        // regex to match line number in resulting YARAC output
-        const pattern = RegExp("\\([0-9]+\\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 try {
