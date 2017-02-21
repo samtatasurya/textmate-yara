@@ -34,9 +34,7 @@ class Yara {
             vscode.window.showWarningMessage(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
             return;
         }
-        else {
-            ofile_path = this.config.get("compiled");
-        }
+        ofile_path = this.config.get("compiled");
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         let exit_code: number = 0;
         let diagnostics: Array<vscode.Diagnostic> = [];
