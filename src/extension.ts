@@ -88,6 +88,26 @@ class Yara {
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
+                if (!editor) {
+            vscode.window.showErrorMessage("Couldn't get the text editor");
+            return;
+        }
+        const doc: vscode.TextDocument = editor.document;
+        if (!doc) {
+            vscode.window.showErrorMessage("Couldn't get the active text document");
+            return;
+        };
+        // run a sub-process and capture STDOUT to see what errors we have
+        const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.toString()]);
+        result.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+        result.stderr.on('data', (data) => {
+            console.log(`stderr: ${data}`);
+        });
+        result.on('close', (data) => {
+            console.log(`close: ${data}`);
+        });
     }
 
     // VSCode must dispose of the Yara object in some way
@@ -104,10 +124,12 @@ function activate(context: vscode.ExtensionContext) {
     let yara = new Yara();
     let saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {yara.compileRule()})
     let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
+    let execRule = vscode.commands.registerCommand("yara.ExecuteRule", () => {yara.executeRule()});
     // Dispose of our objects later
     context.subscriptions.push(yara);
     context.subscriptions.push(saveSubscription);
     context.subscriptions.push(compileRule);
+    context.subscriptions.push(execRule);
 }
 
 function deactivate(context: vscode.ExtensionContext) {
