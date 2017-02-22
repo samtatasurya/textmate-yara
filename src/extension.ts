@@ -52,10 +52,9 @@ class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
-        const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, pattern, doc);
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, doc);
                 if (current != null) {
                     diagnostics.push(current);
                 }
@@ -71,8 +70,9 @@ class Yara {
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
-    private convertStderrToDiagnostic(line, length, pattern, doc) {
+    private convertStderrToDiagnostic(line, length, doc) {
         try {
+            const pattern: RegExp = RegExp("\\([0-9]+\\)");
             let parsed:Array<string> = line.trim().split(": ");
             // dunno why this adds one to the result - for some reason the render is off by a line
             let matches: RegExpExecArray = pattern.exec(parsed[0]);
@@ -120,13 +120,14 @@ class Yara {
         });
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, pattern, doc);
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, doc);
                 if (current != null) {
                     diagnostics.push(current);
                 }
             });
         });
-        result.on('close', (data) => {
+        result.on('close', (code) => {
+            console.log(`Exit code: ${code}`);
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
         });
     }
