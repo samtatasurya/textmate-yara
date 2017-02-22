@@ -116,7 +116,11 @@ class Yara {
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
-            console.log(`stdout: ${data}`);
+            data.toString().split("\n").forEach(line => {
+                if (line.trim() != "") {
+                    console.log(`stdout: ${line}`);
+                }
+            });
         });
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
