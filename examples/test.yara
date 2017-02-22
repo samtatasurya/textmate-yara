@@ -12,3 +12,9 @@ rule TestRule
     condition:
         $basicString
 }
+
+rule Dummy
+{
+    condition:
+        true
+}
