@@ -16,9 +16,9 @@ import * as ext from '../src/yara';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Yara Tests", () => {
-    test("Yara", (done) => {
+    test("Compile Success", (done) => {
         let yara = new ext.Yara();
-        vscode.workspace.openTextDocument("..\\examples\\test.yara").then((document) => {
+        vscode.workspace.openTextDocument(".\\rules\\compile_success.yara").then((document) => {
             // assert.
         });
     });

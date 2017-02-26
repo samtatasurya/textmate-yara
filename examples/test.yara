@@ -1,8 +1,7 @@
 /*
-    Basic example YARA file for testing
-    successful YARA matches
+    Basic example YARA file for testing YARA matches
 */
-rule TestRule
+rule Test
 {
     meta:
         author = "infosec_intern"
@@ -11,10 +10,4 @@ rule TestRule
         $basicString = "test"
     condition:
         $basicString
-}
-
-rule Dummy
-{
-    condition:
-        true
 }
