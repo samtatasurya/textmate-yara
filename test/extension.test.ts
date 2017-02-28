@@ -2,9 +2,6 @@
 // Note: This example test is leveraging the Mocha test framework.
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
-// Copied/modified example from
-// https://github.com/Microsoft/vscode-wordcount/blob/master/test/extension.test.ts
-//
 
 // The module 'assert' provides assertion methods from node
 import * as assert from 'assert';
@@ -19,7 +16,21 @@ suite("Yara Tests", () => {
     test("Compile Success", (done) => {
         let yara = new ext.Yara();
         vscode.workspace.openTextDocument(".\\rules\\compile_success.yara").then((document) => {
-            // assert.
+            assert.equal(yara.compileRule(), 0);
+            done();
+        }, (error) => {
+            assert.fail(error);
+            done();
+        });
+    });
+    test("Compile Fail", (done) => {
+        let yara = new ext.Yara();
+        vscode.workspace.openTextDocument(".\\rules\\compile_fail.yara").then((document) => {
+            assert.notEqual(yara.compileRule(), 0);
+            done();
+        }, (error) => {
+            assert.fail(error);
+            done();
         });
     });
 });
