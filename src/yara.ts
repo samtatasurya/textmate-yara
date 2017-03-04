@@ -53,7 +53,7 @@ export class Yara {
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, doc);
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
                 if (current != null) {
                     diagnostics.push(current);
                 }
@@ -71,7 +71,7 @@ export class Yara {
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
-    private convertStderrToDiagnostic(line, length, doc) {
+    private convertStderrToDiagnostic(line, doc) {
         try {
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             let parsed:Array<string> = line.trim().split(": ");
@@ -82,7 +82,7 @@ export class Yara {
                 // remove the surrounding parentheses
                 let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
                 let start: vscode.Position = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
-                let end: vscode.Position = new vscode.Position(line_no, length);
+                let end: vscode.Position = new vscode.Position(line_no, Number.MAX_VALUE);
                 let line_range: vscode.Range = new vscode.Range(start, end);
                 return new vscode.Diagnostic(line_range, parsed.pop(), severity);
             }
@@ -126,7 +126,7 @@ export class Yara {
         });
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, data.length, doc);
+                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
                 if (current != null) {
                     diagnostics.push(current);
                 }
