@@ -16,6 +16,7 @@ export class Yara {
             this.yara = this.config.get("installPath") + "\\yara"
         }
         else {
+            // assume YARA binaries are in users $PATH if none is specified
             this.yarac = "yarac";
             this.yara = "yara";
         }
@@ -30,7 +31,7 @@ export class Yara {
         let ofile_path: string|null = null;
         if (!this.config.has("compiled")) {
             ofile_path = "~\\AppData\\Local\\yara_tmp.bin";
-            vscode.window.showWarningMessage(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
+            console.log(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
             return;
         }
         else {
@@ -115,12 +116,14 @@ export class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         console.log(`${this.yara} ${doc.fileName} ${tfile.fsPath}`);
+        let matches = 0;
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 if (line.trim() != "") {
                     console.log(`stdout: ${line}`);
+                    matches++;
                 }
             });
         });
@@ -135,8 +138,11 @@ export class Yara {
         result.on('close', (code) => {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             // purely for testing purposes
-            return diagnostics.length;
         });
+        return {
+            "diagnostics": diagnostics.length,
+            "matches": matches
+        };
     }
 
     // VSCode must dispose of the Yara object in some way
