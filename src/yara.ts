@@ -11,7 +11,7 @@ export class Yara {
     // called on creation
     constructor() {
         this.config = vscode.workspace.getConfiguration("yara");
-        if (this.config.has("installPath")) {
+        if (this.config.has("installPath") && this.config.get("installPath") != null) {
             this.yarac = this.config.get("installPath") + "\\yarac";
             this.yara = this.config.get("installPath") + "\\yara"
         }
@@ -49,6 +49,7 @@ export class Yara {
             return;
         };
         // run a sub-process and capture STDOUT to see what errors we have
+        console.log(`${this.yarac} ${doc.fileName} ${ofile.toString()}`);
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
@@ -113,6 +114,7 @@ export class Yara {
             return;
         };
         // run a sub-process and capture STDOUT to see what errors we have
+        console.log(`${this.yara} ${doc.fileName} ${tfile.fsPath}`);
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
@@ -131,8 +133,9 @@ export class Yara {
             });
         });
         result.on('close', (code) => {
-            console.log(`Exit code: ${code}`);
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+            // purely for testing purposes
+            return diagnostics.length;
         });
     }
 
