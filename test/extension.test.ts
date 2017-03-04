@@ -16,11 +16,11 @@ suite("Yara Tests", () => {
         vscode.workspace.openTextDocument(filepath).then((document) => {
             // the YARA rule should've compiled successfully
             // errors/warnings don't get returned
-            assert.equal(yara.compileRule(), 0);
+            assert.equal(yara.compileRule(document), 0);
             done();
         },
         (error) => {
-            console.log(error);
+            console.log(`Compile Success: ${error}`);
             done();
         });
     });
@@ -30,11 +30,11 @@ suite("Yara Tests", () => {
         vscode.workspace.openTextDocument(filepath).then((document) => {
             // the YARA rule should've failed
             // errors/warnings get returned
-            assert.equal(yara.compileRule(), 1);
+            assert.equal(yara.compileRule(document), 1);
             done();
         },
             (error) => {
-            console.log(error);
+            console.log(`Compile Fail: ${error}`);
             done();
         });
     });
@@ -42,7 +42,7 @@ suite("Yara Tests", () => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test\\rules\\test.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
-            let results = yara.executeRule();
+            let results = yara.executeRule(document);
             // ensure our test YARA rule matches our test file
             // and that no errors or warnings were returned
             assert.equal(results.matches, 1);
@@ -50,7 +50,7 @@ suite("Yara Tests", () => {
             done();
         },
             (error) => {
-            console.log(error);
+            console.log(`Execute: ${error}`);
             done();
         });
     });

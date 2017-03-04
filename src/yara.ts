@@ -25,7 +25,7 @@ export class Yara {
     }
 
     // Compile the current file
-    public compileRule() {
+    public compileRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
         let ofile_path: string|null = null;
@@ -43,13 +43,11 @@ export class Yara {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
-        const doc: vscode.TextDocument = editor.document;
         if (!doc) {
-            vscode.window.showErrorMessage("Couldn't get the active text document");
-            return;
+            doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        console.log(`${this.yarac} ${doc.fileName} ${ofile.toString()}`);
+        console.log(`Executing command: ${this.yarac} ${doc.fileName} ${ofile.toString()}`);
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
@@ -97,7 +95,7 @@ export class Yara {
     }
 
     // Execute the current file against a pre-defined target file
-    public executeRule() {
+    public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string|null = this.config.get("target").toString();
         if (target_file == null) {
@@ -109,13 +107,11 @@ export class Yara {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return;
         }
-        const doc: vscode.TextDocument = editor.document;
         if (!doc) {
-            vscode.window.showErrorMessage("Couldn't get the active text document");
-            return;
+            doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        console.log(`${this.yara} ${doc.fileName} ${tfile.fsPath}`);
+        console.log(`Executing command: ${this.yara} ${doc.fileName} ${tfile.fsPath}`);
         let matches = 0;
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
