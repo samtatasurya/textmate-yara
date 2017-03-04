@@ -6,19 +6,12 @@
     "showOutput": "always",
     "tasks": [
         {
-            "taskName": "watch",
-            "command": "gulp",
-            "args": ["watch"],
-            "isShellCommand": true,
-            "isBuildCommand": true,
-			"problemMatcher": "$tsc"
-		},
-        {
             "taskName": "tsc",
             "command": "${workspaceRoot}\\node_modules\\.bin\\tsc",
             "isShellCommand": true,
             "args": ["-p", "${workspaceRoot}"],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$tsc",
+            "isBuildCommand": true
         }
     ]
 }
