@@ -37,7 +37,6 @@ export class Yara {
             ofile_path = this.config.get("compiled").toString();
         }
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
-        // regex to match line number in resulting YARAC output
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
@@ -73,6 +72,7 @@ export class Yara {
     // Parse YARA STDERR output and create Diagnostics for the window
     private convertStderrToDiagnostic(line, doc) {
         try {
+            // regex to match line number in resulting YARAC output
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             let parsed:Array<string> = line.trim().split(": ");
             // dunno why this adds one to the result - for some reason the render is off by a line
