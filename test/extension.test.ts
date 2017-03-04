@@ -30,7 +30,7 @@ suite("Yara Tests", () => {
         vscode.workspace.openTextDocument(filepath).then((document) => {
             // the YARA rule should've failed
             // errors/warnings get returned
-            assert.notEqual(yara.compileRule(), 0);
+            assert.equal(yara.compileRule(), 1);
             done();
         },
             (error) => {
