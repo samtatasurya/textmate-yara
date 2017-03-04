@@ -17,12 +17,10 @@ suite("Yara Tests", () => {
             // the YARA rule should've compiled successfully
             // errors/warnings don't get returned
             assert.equal(yara.compileRule(document), 0);
-            done();
-        },
-        (error) => {
+        }, (error) => {
             console.log(`Compile Success: ${error}`);
-            done();
         });
+        done();
     });
     test("Compile Fail", (done) => {
         let yara = new ext.Yara();
@@ -31,12 +29,10 @@ suite("Yara Tests", () => {
             // the YARA rule should've failed
             // errors/warnings get returned
             assert.equal(yara.compileRule(document), 1);
-            done();
-        },
-            (error) => {
+        }, (error) => {
             console.log(`Compile Fail: ${error}`);
-            done();
         });
+        done();
     });
     test("Execute", (done) => {
         let yara = new ext.Yara();
@@ -47,11 +43,9 @@ suite("Yara Tests", () => {
             // and that no errors or warnings were returned
             assert.equal(results.matches, 1);
             assert.equal(results.diagnostics, 0);
-            done();
-        },
-            (error) => {
+        }, (error) => {
             console.log(`Execute: ${error}`);
-            done();
         });
+        done();
     });
 });
