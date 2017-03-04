@@ -28,7 +28,7 @@ suite("Yara Tests", () => {
     test("Execute", () => {
         let yara = new ext.Yara();
         vscode.workspace.openTextDocument(".\\rules\\test.yara").then((document) => {
-            assert.notEqual(yara.executeRule(), 0);
+            assert.equal(yara.executeRule(), 0);
         });
     });
 });
