@@ -13,8 +13,8 @@ function activate(context: vscode.ExtensionContext) {
             let saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {yara.compileRule()})
             context.subscriptions.push(saveSubscription);
         }
-        let compileRule = vscode.commands.registerCommand("yara.CompileRule", () => {yara.compileRule()});
-        let execRule = vscode.commands.registerCommand("yara.ExecuteRule", () => {yara.executeRule()});
+        let compileRule = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {yara.compileRule()});
+        let execRule = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {yara.executeRule()});
         // Dispose of our objects later
         context.subscriptions.push(yara);
         context.subscriptions.push(compileRule);
