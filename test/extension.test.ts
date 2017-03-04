@@ -14,11 +14,13 @@ suite("Yara Tests", () => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test\\rules\\compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
+            let results = yara.compileRule(document);
+            console.log(results);
             // the YARA rule should've compiled successfully
             // errors/warnings don't get returned
-            assert.equal(yara.compileRule(document), 0);
+            assert.equal(results, 0);
         }, (error) => {
-            console.log(`Compile Success: ${error}`);
+            done(error);
         });
         done();
     });
@@ -26,11 +28,13 @@ suite("Yara Tests", () => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test\\rules\\compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
+            let results = yara.compileRule(document);
+            console.log(results);
             // the YARA rule should've failed
             // errors/warnings get returned
-            assert.equal(yara.compileRule(document), 1);
+            assert.equal(results, 1);
         }, (error) => {
-            console.log(`Compile Fail: ${error}`);
+            done(error);
         });
         done();
     });
@@ -39,12 +43,13 @@ suite("Yara Tests", () => {
         let filepath = path.join(__dirname, '..', '..', "test\\rules\\test.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
             let results = yara.executeRule(document);
+            console.log(JSON.stringify(results));
             // ensure our test YARA rule matches our test file
             // and that no errors or warnings were returned
             assert.equal(results.matches, 1);
             assert.equal(results.diagnostics, 0);
         }, (error) => {
-            console.log(`Execute: ${error}`);
+            done(error);
         });
         done();
     });
