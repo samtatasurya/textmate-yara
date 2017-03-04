@@ -13,34 +13,22 @@ import * as ext from '../src/yara';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Yara Tests", () => {
-    test("Compile Success", (done) => {
+    test("Compile Success", () => {
         let yara = new ext.Yara();
         vscode.workspace.openTextDocument(".\\rules\\compile_success.yara").then((document) => {
             assert.equal(yara.compileRule(), 0);
-            done();
-        // }, (error) => {
-        //     assert.fail("failed");
-        //     done();
         });
     });
-    test("Compile Fail", (done) => {
+    test("Compile Fail", () => {
         let yara = new ext.Yara();
         vscode.workspace.openTextDocument(".\\rules\\compile_fail.yara").then((document) => {
             assert.notEqual(yara.compileRule(), 0);
-            done();
-        // }, (error) => {
-        //     assert.fail("failed");
-        //     done();
         });
     });
-    test("Execute", (done) => {
+    test("Execute", () => {
         let yara = new ext.Yara();
         vscode.workspace.openTextDocument(".\\rules\\test.yara").then((document) => {
             assert.notEqual(yara.executeRule(), 0);
-            done();
-        // }, (error) => {
-        //     assert.fail(error);
-        //     done();
         });
     });
 });
