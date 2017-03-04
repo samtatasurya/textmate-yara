@@ -51,6 +51,11 @@
         "configuration": {
             "title": "YARA Settings",
             "properties": {
+                "yara.compileOnSave": {
+                    "type": ["boolean"],
+                    "default": true,
+                    "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'"
+                },
                 "yara.installPath": {
                     "type": ["string", null],
                     "default": null,
