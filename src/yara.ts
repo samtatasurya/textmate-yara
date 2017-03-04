@@ -32,7 +32,6 @@ export class Yara {
         if (!this.config.has("compiled")) {
             ofile_path = "~\\AppData\\Local\\yara_tmp.bin";
             console.log(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
-            return;
         }
         else {
             ofile_path = this.config.get("compiled").toString();
@@ -41,7 +40,7 @@ export class Yara {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
-            return;
+            return 0;
         }
         if (!doc) {
             doc = editor.document;
