@@ -64,7 +64,7 @@
                 "yara.target": {
                     "type": ["string", null],
                     "default": null,
-                    "description": "Destination file for the ExecuteRule command (yara.exe)"
+                    "description": "Destination file for the ExecuteRule command (yara.exe). Required to run the command"
                 },
                 "yara.compiled": {
                     "type": ["string"],
