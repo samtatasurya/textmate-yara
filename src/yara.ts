@@ -28,14 +28,7 @@ export class Yara {
     public compileRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
-        let ofile_path: string|null = null;
-        if (!this.config.has("compiled")) {
-            ofile_path = "~\\AppData\\Local\\yara_tmp.bin";
-            console.log(`No 'compiled' target is specified! Compiling to ${ofile_path}`);
-        }
-        else {
-            ofile_path = this.config.get("compiled").toString();
-        }
+        let ofile_path: string|null = this.config.get("compiled", "~\\AppData\\Local\\yara_tmp.bin").toString();
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -97,7 +90,7 @@ export class Yara {
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string|null = this.config.get("target").toString();
-        if (target_file == null) {
+        if (!target_file) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
@@ -118,6 +111,7 @@ export class Yara {
             data.toString().split("\n").forEach(line => {
                 if (line.trim() != "") {
                     console.log(`stdout: ${line}`);
+                    vscode.window.showInformationMessage(line);
                     matches++;
                 }
             });
