@@ -61,11 +61,6 @@
                     "default": null,
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
-                "yara.args": {
-                    "type": ["string", null],
-                    "default": null,
-                    "description": "Optional arguments for YARA commands"
-                },
                 "yara.target": {
                     "type": ["string", null],
                     "default": null,
