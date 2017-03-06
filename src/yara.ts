@@ -56,8 +56,6 @@ export class Yara {
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
             }
         });
-        // purely for testing purposes
-        return diagnostics.length;
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
@@ -128,10 +126,6 @@ export class Yara {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             // purely for testing purposes
         });
-        return {
-            "diagnostics": diagnostics.length,
-            "matches": matches
-        };
     }
 
     // VSCode must dispose of the Yara object in some way
