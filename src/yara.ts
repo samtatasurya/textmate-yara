@@ -33,7 +33,7 @@ export class Yara {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
-            return 0;
+            return;
         }
         if (!doc) {
             doc = editor.document;
