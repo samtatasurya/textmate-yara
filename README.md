@@ -14,18 +14,20 @@ Syntax Highlighting and Snippets support for the YARA pattern matching language
 * `version` statement
 
 ## Extension Functionality
-* Periodically compile YARA rulefiles using either (a) yara-python or (b) pre-compiled yara binaries
-* Allow the user to run her YARA rules manually through VSCode commands
+* Periodically compile YARA rulefiles using pre-compiled yara binaries
+  * By default, do this on each file save event like most linters
+* Allow the user to run YARA rules manually through VSCode commands
   * Use configuration settings to modify how command is run
-  * Install path (for pre-compiled binaries), timeout
+    * Add an 'extraArgs' setting or something
+  * Install path (for pre-compiled binaries)
 * Display any compiler errors to the user through the VSCode workspace
-  * Number of errors in status bar
-  * Integration with right ruler (similar to Git differences)
+  * Done by pushing Diagnostics data to the workspace
 
 ## Future Plans
-* YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
 * Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
+  * Working on it now
+* Get unit tests working (damn you Mocha and my lack of JS knowledge)
 
 ## Problems?
 If you encounter an issue with the syntax, feel free to create an issue or pull request!
@@ -33,7 +35,7 @@ Alternatively, check out some of the YARA syntaxes for Sublime and Textmate (i.e
 They use the same syntax engine as VSCode and should work the same way
 
 ## Screenshot
-![Image as of 04 Sept 2016](./images/04092016.PNG)
+![Image as of 04 Sept 2016](./images/29062016.PNG)
 
 ## References
 #### Syntax Reference:<br>
