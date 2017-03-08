@@ -99,9 +99,13 @@ export class Yara {
     // Execute the current file against a pre-defined target file
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
+        if (!this.config.has("target")) {
+            vscode.window.showErrorMessage("Cannot run ExecuteRule. Please specify a target file in settings");
+            return;
+        }
         let target_file: string|null = this.config.get("target").toString().replace("${workspaceRoot}", vscode.workspace.rootPath);
         if (!target_file) {
-            vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
+            vscode.window.showErrorMessage("Cannot execute file. Could not obtain target file. Please check permissions");
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
