@@ -28,7 +28,7 @@ export class Yara {
     public compileRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
-        let ofile_path: string|null = this.config.get("compiled", "~\\AppData\\Local\\yara_tmp.bin").toString();
+        let ofile_path: string|null = this.config.get("compiled").toString().replace("${workspaceRoot}", vscode.workspace.rootPath);
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -40,7 +40,7 @@ export class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         console.log(`${this.yarac} ${doc.fileName} ${ofile.toString()}`);
-        const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
+        const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);            
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
@@ -48,6 +48,18 @@ export class Yara {
                     diagnostics.push(current);
                 }
             });
+        });
+        result.on("error", (error) => {
+            if (error.message.endsWith("ENOENT")) {
+                vscode.window.showErrorMessage(`Compile Error: yarac could not be found`)
+            }
+            else {
+                vscode.window.showErrorMessage(`Compile Error! "${error.message}"`);
+                console.log(JSON.stringify(error));
+                console.log(`name: ${error.name}`);
+                console.log(`message: ${error.message}`);
+                console.log(`stack: ${error.stack}`);
+            }
         });
         result.on("close", (code) => {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
@@ -87,7 +99,7 @@ export class Yara {
     // Execute the current file against a pre-defined target file
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
-        let target_file: string|null = this.config.get("target").toString();
+        let target_file: string|null = this.config.get("target").toString().replace("${workspaceRoot}", vscode.workspace.rootPath);
         if (!target_file) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
         }
@@ -122,9 +134,20 @@ export class Yara {
                 }
             });
         });
+        result.on("error", (error) => {
+            if (error.message.endsWith("ENOENT")) {
+                vscode.window.showErrorMessage(`Execution Error: yara could not be found`)
+            }
+            else {
+                vscode.window.showErrorMessage(`Execution Error! "${error.message}"`);
+                console.log(JSON.stringify(error));
+                console.log(`name: ${error.name}`);
+                console.log(`message: ${error.message}`);
+                console.log(`stack: ${error.stack}`);
+            }
+        });
         result.on('close', (code) => {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-            // purely for testing purposes
         });
     }
 

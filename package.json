@@ -68,7 +68,7 @@
                 },
                 "yara.compiled": {
                     "type": ["string"],
-                    "default": "~\\AppData\\Local\\yara_tmp.bin",
+                    "default": "${workspaceRoot}/yara_tmp.bin",
                     "description": "Destination file for the CompileRule command (yarac.exe)"
                 }
             }
