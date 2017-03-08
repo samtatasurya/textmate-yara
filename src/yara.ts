@@ -51,7 +51,7 @@ export class Yara {
         });
         result.on("error", (error) => {
             if (error.message.endsWith("ENOENT")) {
-                vscode.window.showErrorMessage(`Compile Error: yarac could not be found`)
+                vscode.window.showErrorMessage(`Compile Error: yarac could not be found. Check your yara.installPath setting`)
             }
             else {
                 vscode.window.showErrorMessage(`Compile Error! "${error.message}"`);
@@ -136,7 +136,7 @@ export class Yara {
         });
         result.on("error", (error) => {
             if (error.message.endsWith("ENOENT")) {
-                vscode.window.showErrorMessage(`Execution Error: yara could not be found`)
+                vscode.window.showErrorMessage(`Execution Error: yara could not be found. Check your yara.installPath setting`)
             }
             else {
                 vscode.window.showErrorMessage(`Execution Error! "${error.message}"`);
