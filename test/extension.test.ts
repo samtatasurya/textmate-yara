@@ -28,7 +28,6 @@ suite("Yara Tests", () => {
                 });
                 done();
             }, (error) => {
-                // assert.fail(error);
                 done(error);
             }
         );
@@ -50,7 +49,6 @@ suite("Yara Tests", () => {
                 });
                 done();
             }, (error) => {
-                // assert.fail(error);
                 done(error);
             }
         );
@@ -77,7 +75,6 @@ suite("Yara Tests", () => {
                 });
                 done();
             }, (error) => {
-                // assert.fail(error);
                 done(error);
             }
         );
