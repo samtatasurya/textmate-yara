@@ -39,7 +39,7 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        console.log(`${this.yarac} ${doc.fileName} ${ofile.toString()}`);
+        // consofle.log(`compileRule: ${this.yarac} ${doc.fileName} ${ofile.toString()}`);
         const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
@@ -56,6 +56,7 @@ export class Yara {
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
             }
         });
+        return result;
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
@@ -79,7 +80,7 @@ export class Yara {
         }
         catch (error) {
             vscode.window.showErrorMessage(error);
-            console.log(`Typescript Error: ${error}`);
+            // console.log(`Typescript Error: ${error}`);
             return null;
         }
     }
@@ -101,14 +102,14 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        console.log(`${this.yara} ${doc.fileName} ${tfile.fsPath}`);
+        // console.log(`executeRule: ${this.yara} ${doc.fileName} ${tfile.fsPath}`);
         let matches = 0;
         const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
         const pattern: RegExp = RegExp("\\([0-9]+\\)");
         result.stdout.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
                 if (line.trim() != "") {
-                    console.log(`stdout: ${line}`);
+                    // console.log(`stdout: ${line}`);
                     vscode.window.showInformationMessage(line);
                     matches++;
                 }
@@ -126,6 +127,7 @@ export class Yara {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             // purely for testing purposes
         });
+        return result;
     }
 
     // VSCode must dispose of the Yara object in some way
