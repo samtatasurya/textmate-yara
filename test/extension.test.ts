@@ -12,7 +12,7 @@ import * as ext from '../src/yara';
 suite("Yara Tests", () => {
     test("Compile Success", (done) => {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test\\rules\\compile_success.yara");
+        let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(
             (document) => {
                 let results = yara.compileRule(document);
@@ -28,13 +28,14 @@ suite("Yara Tests", () => {
                 });
                 done();
             }, (error) => {
+                assert.fail(error, "", `${error}`, "operator");
                 done(error);
             }
         );
     });
     test("Compile Fail", (done) => {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test\\rules\\compile_fail.yara");
+        let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(
             (document) => {
                 let results = yara.compileRule(document);
@@ -55,7 +56,7 @@ suite("Yara Tests", () => {
     });
     test("Execute", (done) => {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test\\rules\\test.yara");
+        let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then(
             (document) => {
                 let results = yara.executeRule(document);
