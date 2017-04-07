@@ -4,7 +4,7 @@ import * as proc from "child_process";
 export class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
-    private diagCollection: vscode.DiagnosticCollection;
+    public diagCollection: vscode.DiagnosticCollection;
     private yarac: string;
     private yara: string;
 
@@ -56,7 +56,6 @@ export class Yara {
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
             }
         });
-        return result;
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
@@ -87,6 +86,7 @@ export class Yara {
 
     // Execute the current file against a pre-defined target file
     public executeRule(doc: null|vscode.TextDocument) {
+        let diagPromise: Promise<vscode.Diagnostic>;
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string|null = this.config.get("target").toString();
         if (!target_file) {
@@ -127,7 +127,6 @@ export class Yara {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             // purely for testing purposes
         });
-        return result;
     }
 
     // VSCode must dispose of the Yara object in some way
