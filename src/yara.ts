@@ -26,9 +26,10 @@ export class Yara {
 
     // Compile the current file
     public compileRule(doc: null|vscode.TextDocument) {
+        let diagPromise: Promise<vscode.Diagnostic>;
         let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
-        let ofile_path: string|null = this.config.get("compiled", "~\\AppData\\Local\\yara_tmp.bin").toString();
+        let ofile_path: string|null = this.config.get("compiled", "~/.yara_tmp.bin").toString();
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -56,6 +57,7 @@ export class Yara {
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
             }
         });
+        return diagPromise;
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
@@ -127,6 +129,7 @@ export class Yara {
             this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             // purely for testing purposes
         });
+        return diagPromise;
     }
 
     // VSCode must dispose of the Yara object in some way
