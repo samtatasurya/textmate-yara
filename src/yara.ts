@@ -26,7 +26,6 @@ export class Yara {
 
     // Compile the current file
     public compileRule(doc: null|vscode.TextDocument) {
-        let diagPromise: Promise<vscode.Diagnostic>;
         let diagnostics: Array<vscode.Diagnostic> = [];
         // need to initialize to null otherwise a compile error will happen in the else block
         let ofile_path: string|null = this.config.get("compiled", "~/.yara_tmp.bin").toString();
@@ -40,22 +39,24 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        // consofle.log(`compileRule: ${this.yarac} ${doc.fileName} ${ofile.toString()}`);
-        const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
-        result.stderr.on('data', (data) => {
-            data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
-                if (current != null) {
-                    diagnostics.push(current);
+        let diagPromise = new Promise( (resolve, reject) => {
+            const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
+            result.stderr.on('data', (data) => {
+                data.toString().split("\n").forEach(line => {
+                    let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
+                    if (current != null) {
+                        diagnostics.push(current);
+                    }
+                });
+            });
+            result.on("close", (code) => {
+                this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+                if (diagnostics.length == 0) {
+                    // status bar message goes away after 3 seconds
+                    vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
+                    resolve(this.diagCollection);
                 }
             });
-        });
-        result.on("close", (code) => {
-            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-            if (diagnostics.length == 0) {
-                // status bar message goes away after 3 seconds
-                vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
-            }
         });
         return diagPromise;
     }
@@ -103,7 +104,6 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        // console.log(`executeRule: ${this.yara} ${doc.fileName} ${tfile.fsPath}`);
         let diagPromise = new Promise( (resolve, reject) => {
             let matches = 0;
             const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);

@@ -14,25 +14,42 @@ suite("Yara Tests", () => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
-            yara.compileRule(document);
+            yara.compileRule(document).then(
+                function (result) {
+                    console.log('CompileSuccess promise complete: ' + JSON.stringify(result));
+                    done();
+                }, function (err) {
+                    console.log('CompileSuccess promise rejected: ' + JSON.stringify(err));
+                }
+            );
         });
     });
     test("Compile Fail", (done) => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
-            yara.compileRule(document);
+            yara.compileRule(document).then(
+                function (result) {
+                    console.log('CompileFail promise complete: ' + JSON.stringify(result));
+                    done();
+                }, function (err) {
+                    console.log('CompileFail promise rejected: ' + JSON.stringify(err));
+                }
+            );
         });
     });
     test("Execute", (done) => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
-            yara.executeRule(document).then(function (result) {
-                console.log('promise complete: ' + JSON.stringify(result));
-            }, function (err) {
-                console.log('promise rejected: ' + JSON.stringify(err));
-            });
+            yara.executeRule(document).then(
+                function (result) {
+                    console.log('Execute promise complete: ' + JSON.stringify(result));
+                    done();
+                }, function (err) {
+                    console.log('Execute promise rejected: ' + JSON.stringify(err));
+                }
+            );
         });
     });
 });
