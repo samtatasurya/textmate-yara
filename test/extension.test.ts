@@ -18,10 +18,10 @@ suite("Yara Tests", () => {
                 function (result) {
                     console.log('CompileSuccess promise complete: ' + JSON.stringify(result));
                     done();
-                }, function (err) {
-                    console.log('CompileSuccess promise rejected: ' + JSON.stringify(err));
                 }
-            );
+            ).catch((err) => {
+                console.log('CompileSuccess promise rejected: ' + JSON.stringify(err));
+            });
         });
     });
     test("Compile Fail", (done) => {
@@ -32,10 +32,10 @@ suite("Yara Tests", () => {
                 function (result) {
                     console.log('CompileFail promise complete: ' + JSON.stringify(result));
                     done();
-                }, function (err) {
-                    console.log('CompileFail promise rejected: ' + JSON.stringify(err));
                 }
-            );
+            ).catch((err) => {
+                    console.log('CompileFail promise rejected: ' + JSON.stringify(err));
+            });
         });
     });
     test("Execute", (done) => {
@@ -46,10 +46,10 @@ suite("Yara Tests", () => {
                 function (result) {
                     console.log('Execute promise complete: ' + JSON.stringify(result));
                     done();
-                }, function (err) {
-                    console.log('Execute promise rejected: ' + JSON.stringify(err));
                 }
-            );
+            ).catch((err) => {
+                console.log('Execute promise rejected: ' + JSON.stringify(err));
+            });
         });
     });
 });
