@@ -88,7 +88,6 @@ export class Yara {
 
     // Execute the current file against a pre-defined target file
     public executeRule(doc: null|vscode.TextDocument) {
-        let diagPromise: Promise<vscode.Diagnostic>;
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string|null = this.config.get("target").toString();
         if (!target_file) {
@@ -105,29 +104,31 @@ export class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         // console.log(`executeRule: ${this.yara} ${doc.fileName} ${tfile.fsPath}`);
-        let matches = 0;
-        const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
-        const pattern: RegExp = RegExp("\\([0-9]+\\)");
-        result.stdout.on('data', (data) => {
-            data.toString().split("\n").forEach(line => {
-                if (line.trim() != "") {
-                    // console.log(`stdout: ${line}`);
-                    vscode.window.showInformationMessage(line);
-                    matches++;
-                }
+        let diagPromise = new Promise( (resolve, reject) => {
+            let matches = 0;
+            const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
+            const pattern: RegExp = RegExp("\\([0-9]+\\)");
+            result.stdout.on('data', (data) => {
+                data.toString().split("\n").forEach(line => {
+                    if (line.trim() != "") {
+                        // console.log(`stdout: ${line}`);
+                        vscode.window.showInformationMessage(line);
+                        matches++;
+                    }
+                });
             });
-        });
-        result.stderr.on('data', (data) => {
-            data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
-                if (current != null) {
-                    diagnostics.push(current);
-                }
+            result.stderr.on('data', (data) => {
+                data.toString().split("\n").forEach(line => {
+                    let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
+                    if (current != null) {
+                        diagnostics.push(current);
+                    }
+                });
             });
-        });
-        result.on('close', (code) => {
-            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-            // purely for testing purposes
+            result.on('close', (code) => {
+                this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+                resolve(this.diagCollection);
+            });
         });
         return diagPromise;
     }

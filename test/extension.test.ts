@@ -28,7 +28,11 @@ suite("Yara Tests", () => {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then((document) => {
-            yara.executeRule(document);
+            yara.executeRule(document).then(function (result) {
+                console.log('promise complete: ' + JSON.stringify(result));
+            }, function (err) {
+                console.log('promise rejected: ' + JSON.stringify(err));
+            });
         });
     });
 });
