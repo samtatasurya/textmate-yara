@@ -39,7 +39,7 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        let diagPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
@@ -58,7 +58,6 @@ export class Yara {
                 }
             });
         });
-        return diagPromise;
     }
 
     // Parse YARA STDERR output and create Diagnostics for the window
@@ -104,7 +103,7 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        let diagPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let matches = 0;
             const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
@@ -130,7 +129,6 @@ export class Yara {
                 resolve(this.diagCollection);
             });
         });
-        return diagPromise;
     }
 
     // VSCode must dispose of the Yara object in some way
