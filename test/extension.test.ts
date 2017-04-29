@@ -10,7 +10,8 @@ import * as vscode from 'vscode';
 import * as ext from '../src/yara';
 
 suite("Yara Tests", function() {
-    this.timeout(5000)
+    this.timeout(2000);
+
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
