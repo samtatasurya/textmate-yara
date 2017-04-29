@@ -39,7 +39,7 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, [doc.fileName, ofile.toString()]);
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
@@ -103,14 +103,13 @@ export class Yara {
             doc = editor.document;
         };
         // run a sub-process and capture STDOUT to see what errors we have
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             let matches = 0;
             const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             result.stdout.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     if (line.trim() != "") {
-                        // console.log(`stdout: ${line}`);
                         vscode.window.showInformationMessage(line);
                         matches++;
                     }
