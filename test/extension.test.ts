@@ -15,7 +15,8 @@ suite("Yara Tests", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.compileRule(document).then(function(diagnostics) {
+            const promise = yara.compileRule(document);
+            promise.then(function(diagnostics) {
                 console.log('CompileSuccess promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
@@ -27,7 +28,8 @@ suite("Yara Tests", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.compileRule(document).then(function(diagnostics) {
+            const promise = yara.compileRule(document);
+            promise.then(function(diagnostics) {
                 console.log('CompileFail promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
@@ -39,7 +41,8 @@ suite("Yara Tests", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.executeRule(document).then(function(diagnostics) {
+            const promise = yara.executeRule(document);
+            promise.then(function(diagnostics) {
                 console.log('Execute promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
