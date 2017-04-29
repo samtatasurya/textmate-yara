@@ -17,10 +17,10 @@ suite("Yara Tests", function() {
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
-                console.log('CompileSuccess promise complete: ' + JSON.stringify(diagnostics));
+                console.log(JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
-                console.log('CompileSuccess promise rejected: ' + JSON.stringify(err));
+                console.log(err);
             });
         });
     });
@@ -30,10 +30,10 @@ suite("Yara Tests", function() {
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
-                console.log('CompileFail promise complete: ' + JSON.stringify(diagnostics));
+                console.log(JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
-                console.log('CompileFail promise rejected: ' + JSON.stringify(err));
+                console.log(err);
             });
         });
     });
@@ -43,10 +43,10 @@ suite("Yara Tests", function() {
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.executeRule(document);
             promise.then(function(diagnostics) {
-                console.log('Execute promise complete: ' + JSON.stringify(diagnostics));
+                console.log(JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
-                console.log('Execute promise rejected: ' + JSON.stringify(err));
+                console.log(err);
             });
         });
     });
