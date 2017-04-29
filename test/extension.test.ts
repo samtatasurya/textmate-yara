@@ -10,12 +10,13 @@ import * as vscode from 'vscode';
 import * as ext from '../src/yara';
 
 suite("Yara Tests", function() {
+    this.timeout(5000)
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.compileRule(document).then(function (result) {
-                console.log('CompileSuccess promise complete: ' + JSON.stringify(result));
+            yara.compileRule(document).then(function(diagnostics) {
+                console.log('CompileSuccess promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
                 console.log('CompileSuccess promise rejected: ' + JSON.stringify(err));
@@ -26,8 +27,8 @@ suite("Yara Tests", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.compileRule(document).then(function (result) {
-                console.log('CompileFail promise complete: ' + JSON.stringify(result));
+            yara.compileRule(document).then(function(diagnostics) {
+                console.log('CompileFail promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
                 console.log('CompileFail promise rejected: ' + JSON.stringify(err));
@@ -38,8 +39,8 @@ suite("Yara Tests", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            yara.executeRule(document).then(function (result) {
-                console.log('Execute promise complete: ' + JSON.stringify(result));
+            yara.executeRule(document).then(function(diagnostics) {
+                console.log('Execute promise complete: ' + JSON.stringify(diagnostics));
                 done();
             }).catch(function(err) {
                 console.log('Execute promise rejected: ' + JSON.stringify(err));
