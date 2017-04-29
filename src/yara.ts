@@ -54,8 +54,8 @@ export class Yara {
                 if (diagnostics.length == 0) {
                     // status bar message goes away after 3 seconds
                     vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
-                    resolve(diagnostics);
                 }
+                resolve(diagnostics);
             });
         });
         return promise;
