@@ -1,7 +1,6 @@
 //
 // Note: This example test is leveraging the Mocha test framework.
 // Please refer to their documentation on https://mochajs.org/ for help.
-// Based on https://github.com/Microsoft/vscode-wordcount/blob/master/test/extension.test.ts
 //
 
 import * as assert from 'assert';
