@@ -5,25 +5,23 @@ Syntax Highlighting and Snippets support for the YARA pattern matching language
 
 ## Snippets
 * A new file skeleton (or `rule:` skeleton)
-* `import` statement completion
-* `strings:` section skeleton
 * `meta:` section skeleton
+* `strings:` section skeleton
+* `condition:` section skeleton
+* `import` statement
 * `author` statement
 * `description` statement
 * `cve` statement
 * `version` statement
 
 ## Extension Functionality
-* Periodically compile YARA rulefiles using either (a) yara-python or (b) pre-compiled yara binaries
-* Allow the user to run her YARA rules manually through VSCode commands
+* Periodically compile YARA rulefiles using pre-compiled binaries in the user's $PATH
+* Allow the user to run YARA rules manually through VSCode commands
   * Use configuration settings to modify how command is run
-  * Install path (for pre-compiled binaries), timeout
 * Display any compiler errors to the user through the VSCode workspace
-  * Number of errors in status bar
-  * Integration with right ruler (similar to Git differences)
+  * Uses diagnostics already integrated into VSCode to display "squiggle" lines and right ruler
 
 ## Future Plans
-* YARA Tool Integration: Add commands for testing and compiling YARA rules in the current workspace
 * Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
 
@@ -45,7 +43,7 @@ http://manual.macromates.com/en/language_grammars
 #### Regular Expressions:<br>
 http://www.regular-expressions.info/modifiers.html
 
-#### Example Code:<br>
+#### Other Code Inspirations:<br>
 https://github.com/mmcgrana/textmate-clojure/blob/master/Syntaxes/Clojure.tmLanguage <br>
 https://github.com/textmate/python.tmbundle/blob/master/Syntaxes/Python.tmLanguage <br>
 https://github.com/nyx0/YaraSyntax/blob/master/yara.tmLanguage <br>
