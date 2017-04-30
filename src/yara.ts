@@ -13,7 +13,7 @@ export class Yara {
         this.config = vscode.workspace.getConfiguration("yara");
         if (this.config.has("installPath") && this.config.get("installPath") != null) {
             this.yarac = this.config.get("installPath") + "\\yarac";
-            this.yara = this.config.get("installPath") + "\\yara"
+            this.yara = this.config.get("installPath") + "\\yara";
         }
         else {
             // assume YARA binaries are in users $PATH if none is specified
