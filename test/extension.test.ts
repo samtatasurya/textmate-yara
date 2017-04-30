@@ -8,9 +8,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as ext from '../src/yara';
 
-suite("Yara Tests", function() {
-    this.timeout(2000);
-
+suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
@@ -58,5 +56,33 @@ suite("Yara Tests", function() {
             });
         });
     });
+});
 
+suite("YARA: Settings", function() {
+    test("compileOnSave", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+
+    test("installPath", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+
+    test("target", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+
+    test("compiled", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+});
+
+suite("YARA: Activation & Deactivation", function() {
+    test("Bad Activation", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
 });
