@@ -18,37 +18,46 @@ suite("Yara Tests", function() {
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
-                console.log(JSON.stringify(diagnostics));
+                let count:number = 0;
+                for (var i in diagnostics) { count++; }
+                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
                 done();
             }).catch(function(err) {
                 console.log(err);
             });
         });
     });
+
     test("Compile Fail", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
-                console.log(JSON.stringify(diagnostics));
+                let count:number = 0;
+                for (var i in diagnostics) { count++; }
+                assert.equal(count, 2, `Found ${count} errors. 2 expected`);
                 done();
             }).catch(function(err) {
                 console.log(err);
             });
         });
     });
+
     test("Execute", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.executeRule(document);
             promise.then(function(diagnostics) {
-                console.log(JSON.stringify(diagnostics));
+                let count:number = 0;
+                for (var i in diagnostics) { count++; }
+                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
                 done();
             }).catch(function(err) {
                 console.log(err);
             });
         });
     });
+
 });
