@@ -125,7 +125,9 @@ export class Yara {
             });
             result.on('close', (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-                vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`);
+                if (matches.length > 0) {
+                    vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`);
+                }
                 resolve(diagnostics);
             });
         });
