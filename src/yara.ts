@@ -104,14 +104,14 @@ export class Yara {
         };
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
-            let matches = 0;
+            let matches = [];
             const result: proc.ChildProcess = proc.spawn(this.yara, [doc.fileName, tfile.fsPath]);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             result.stdout.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     if (line.trim() != "") {
-                        vscode.window.showInformationMessage(line);
-                        matches++;
+                        // first line in string is the YARA rule name
+                        matches.push(line.split(" ")[0]);
                     }
                 });
             });
@@ -125,6 +125,7 @@ export class Yara {
             });
             result.on('close', (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+                vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`);
                 resolve(diagnostics);
             });
         });
