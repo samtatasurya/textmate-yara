@@ -5,12 +5,12 @@ import * as ext from "./yara";
 
 
 function activate(context: vscode.ExtensionContext) {
-    console.log("Activating Yara extension")
+    console.log("Activating Yara extension");
     const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
     let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let yara = new ext.Yara();
         if (config.get("compileOnSave")) {
-            let saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {yara.compileRule(null)})
+            let saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {yara.compileRule(null)});
             context.subscriptions.push(saveSubscription);
         }
         let compileRule = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {yara.compileRule(null)});
