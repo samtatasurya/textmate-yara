@@ -64,12 +64,22 @@
                 "yara.target": {
                     "type": ["string", null],
                     "default": null,
-                    "description": "Destination file for the ExecuteRule command (yara.exe). Required to run the command"
+                    "description": "Destination file for the ExecuteRule command. Required to run the command"
                 },
                 "yara.compiled": {
                     "type": ["string"],
                     "default": "~/.yara_tmp.bin",
-                    "description": "Destination file for the CompileRule command (yarac.exe)"
+                    "description": "Destination file for the CompileRule command"
+                },
+                "yara.yaraFlags": {
+                    "type": ["string", "Array<string>", null],
+                    "default": null,
+                    "description": "Command-line flags for running the yara binary. Can be either one string or an Array of strings"
+                },
+                "yara.yaraCompilerFlags": {
+                    "type": ["string", "Array<string>", null],
+                    "default": null,
+                    "description": "Command-line flags for running the yarac compiler. Can be either one string or an Array of strings"
                 }
             }
         },
