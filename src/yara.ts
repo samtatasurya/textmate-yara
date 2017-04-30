@@ -4,7 +4,7 @@ import * as proc from "child_process";
 export class Yara {
     private config: vscode.WorkspaceConfiguration;
     private statusBarItem: vscode.StatusBarItem;
-    public diagCollection: vscode.DiagnosticCollection;
+    private diagCollection: vscode.DiagnosticCollection;
     private yarac: string;
     private yara: string;
 
