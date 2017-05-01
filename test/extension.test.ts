@@ -78,6 +78,16 @@ suite("YARA: Settings", function() {
         let yara = new ext.Yara();
         done();
     });
+
+    test("yaraFlags", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+
+    test("yaraCompilerFlags", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
 });
 
 suite("YARA: Activation & Deactivation", function() {
