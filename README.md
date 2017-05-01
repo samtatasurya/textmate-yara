@@ -26,9 +26,7 @@ Syntax Highlighting and Snippets support for the YARA pattern matching language
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
 
 ## Problems?
-If you encounter an issue with the syntax, feel free to create an issue or pull request!
-Alternatively, check out some of the YARA syntaxes for Sublime and Textmate (i.e. those in the <b>Example Code</b> section below).
-They use the same syntax engine as VSCode and should work the same way
+If you encounter any issues, feel free to create an issue or pull request
 
 ## Screenshot
 ![Image as of 04 Sept 2016](./images/04092016.PNG)
