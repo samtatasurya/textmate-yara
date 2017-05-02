@@ -79,12 +79,12 @@ suite("YARA: Settings", function() {
         done();
     });
 
-    test("yaraFlags", function(done) {
+    test("executeFlags", function(done) {
         let yara = new ext.Yara();
         done();
     });
 
-    test("yaraCompilerFlags", function(done) {
+    test("compileFlags", function(done) {
         let yara = new ext.Yara();
         done();
     });

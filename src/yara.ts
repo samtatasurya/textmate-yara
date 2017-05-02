@@ -28,7 +28,7 @@ export class Yara {
     public compileRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let ofile_path: string = this.config.get("compiled", "~/.yara_tmp.bin").toString();
-        let flags: string|null = this.config.get("yaraCompilerFlags", null);
+        let flags: string|null = this.config.get("compileFlags", null);
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -93,7 +93,7 @@ export class Yara {
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string = this.config.get("target").toString();
-        let flags: string|null = this.config.get("yaraFlags", null);
+        let flags: string|null = this.config.get("executeFlags", null);
         if (!target_file) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
         }

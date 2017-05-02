@@ -71,12 +71,12 @@
                     "default": "~/.yara_tmp.bin",
                     "description": "Destination file for the CompileRule command"
                 },
-                "yara.yaraFlags": {
+                "yara.executeFlags": {
                     "type": ["string", null],
                     "default": null,
                     "description": "Command-line flags for running the yara binary. Can be either one string or null"
                 },
-                "yara.yaraCompilerFlags": {
+                "yara.compileFlags": {
                     "type": ["string", null],
                     "default": null,
                     "description": "Command-line flags for running the yarac compiler. Can be either one string or null"
