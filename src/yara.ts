@@ -43,6 +43,7 @@ export class Yara {
         }
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
+            console.log(`const result: proc.ChildProcess = proc.spawn(${this.yarac}, [${flags}, ${doc.fileName}, ${ofile.toString()}])`);
             const result: proc.ChildProcess = proc.spawn(this.yarac, [flags, doc.fileName, ofile.toString()]);
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
@@ -112,6 +113,7 @@ export class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
             let matches = [];
+            console.log(`const result: proc.ChildProcess = proc.spawn(${this.yara}, [${flags}, ${doc.fileName}, ${tfile.fsPath}])`);
             const result: proc.ChildProcess = proc.spawn(this.yara, [flags, doc.fileName, tfile.fsPath]);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             result.stdout.on('data', (data) => {
