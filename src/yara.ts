@@ -24,6 +24,7 @@ export class Yara {
         this.diagCollection = vscode.languages.createDiagnosticCollection("yara");
     }
 
+    // callback function when the Yara settings get changed
     public updateSettings() {
         this.config = vscode.workspace.getConfiguration("yara");
     }
