@@ -10,7 +10,7 @@ export class Yara {
 
     // called on creation
     constructor() {
-        this.config = vscode.workspace.getConfiguration("yara");
+        this.updateSettings();
         if (this.config.has("installPath") && this.config.get("installPath") != null) {
             this.yarac = this.config.get("installPath") + "\\yarac";
             this.yara = this.config.get("installPath") + "\\yara";
@@ -22,6 +22,10 @@ export class Yara {
         }
         this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
         this.diagCollection = vscode.languages.createDiagnosticCollection("yara");
+    }
+
+    public updateSettings() {
+        this.config = vscode.workspace.getConfiguration("yara");
     }
 
     // Compile the current file
@@ -43,7 +47,6 @@ export class Yara {
         }
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
-            console.log(`const result: proc.ChildProcess = proc.spawn(${this.yarac}, [${flags}, ${doc.fileName}, ${ofile.toString()}])`);
             const result: proc.ChildProcess = proc.spawn(this.yarac, [flags, doc.fileName, ofile.toString()]);
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
@@ -113,7 +116,6 @@ export class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
             let matches = [];
-            console.log(`const result: proc.ChildProcess = proc.spawn(${this.yara}, [${flags}, ${doc.fileName}, ${tfile.fsPath}])`);
             const result: proc.ChildProcess = proc.spawn(this.yara, [flags, doc.fileName, tfile.fsPath]);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             result.stdout.on('data', (data) => {

@@ -9,12 +9,13 @@ function activate(context: vscode.ExtensionContext) {
     const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
     let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let yara = new ext.Yara();
+        let configWatcher = vscode.workspace.onDidChangeConfiguration(() => {yara.updateSettings()});
+        let compileRule = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {yara.compileRule(null)});
+        let execRule = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {yara.executeRule(null)});
         if (config.get("compileOnSave")) {
             let saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {yara.compileRule(null)});
             context.subscriptions.push(saveSubscription);
         }
-        let compileRule = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {yara.compileRule(null)});
-        let execRule = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {yara.executeRule(null)});
         // Dispose of our objects later
         context.subscriptions.push(yara);
         context.subscriptions.push(compileRule);
