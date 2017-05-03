@@ -43,7 +43,7 @@ suite("YARA: Commands", function() {
 
     test("Execute", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test/rules/test.yara");
+        let filepath = path.join(__dirname, '..', '..', "test/rules/execute.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.executeRule(document);
             promise.then(function(diagnostics) {
