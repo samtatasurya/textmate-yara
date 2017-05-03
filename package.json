@@ -72,14 +72,14 @@
                     "description": "Destination file for the CompileRule command"
                 },
                 "yara.executeFlags": {
-                    "type": ["string", null],
+                    "type": ["string[]", null],
                     "default": null,
-                    "description": "Command-line flags for running the yara binary. Can be either one string or null"
+                    "description": "Command-line flags for running the yara binary. Can be either a string array or null"
                 },
                 "yara.compileFlags": {
-                    "type": ["string", null],
+                    "type": ["string[]", null],
                     "default": null,
-                    "description": "Command-line flags for running the yarac compiler. Can be either one string or null"
+                    "description": "Command-line flags for running the yarac compiler. Can be either a string array or null"
                 }
             }
         },

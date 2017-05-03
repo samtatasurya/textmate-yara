@@ -33,7 +33,7 @@ export class Yara {
     public compileRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let ofile_path: string = this.config.get("compiled", "~/.yara_tmp.bin").toString();
-        let flags: string|null = this.config.get("compileFlags", null);
+        let flags: string[]|null = this.config.get("compileFlags", null);
         const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -44,11 +44,15 @@ export class Yara {
             doc = editor.document;
         };
         if (flags == null) {
-            flags = "";
+            flags = [doc.fileName, ofile.toString()];
         }
+        else {
+            flags = flags.concat([doc.fileName, ofile.toString()]);
+        }
+        // console.log(`${this.yarac} ${flags.join(" ")}`);
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
-            const result: proc.ChildProcess = proc.spawn(this.yarac, [flags, doc.fileName, ofile.toString()]);
+            const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
@@ -98,7 +102,7 @@ export class Yara {
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
         let target_file: string = this.config.get("target").toString();
-        let flags: string|null = this.config.get("executeFlags", null);
+        let flags: string[]|null = this.config.get("executeFlags", null);
         if (!target_file) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
         }
@@ -112,12 +116,16 @@ export class Yara {
             doc = editor.document;
         };
         if (flags == null) {
-            flags = "";
+            flags = [doc.fileName, target_file.toString()];
         }
+        else {
+            flags = flags.concat([doc.fileName, target_file.toString()]);
+        }
+        // console.log(`${this.yara} ${flags.join(" ")}`);
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
             let matches = [];
-            const result: proc.ChildProcess = proc.spawn(this.yara, [flags, doc.fileName, tfile.fsPath]);
+            const result: proc.ChildProcess = proc.spawn(this.yara, flags);
             const pattern: RegExp = RegExp("\\([0-9]+\\)");
             result.stdout.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
