@@ -17,6 +17,7 @@ function activate(context: vscode.ExtensionContext) {
             context.subscriptions.push(saveSubscription);
         }
         // Dispose of our objects later
+        context.subscriptions.push(configWatcher);
         context.subscriptions.push(yara);
         context.subscriptions.push(compileRule);
         context.subscriptions.push(execRule);
