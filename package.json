@@ -62,9 +62,9 @@
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
                 "yara.target": {
-                    "type": ["string", null],
+                    "type": ["string[]", null],
                     "default": null,
-                    "description": "Destination file for the ExecuteRule command. Required to run the command"
+                    "description": "Destination file(s) for the ExecuteRule command. Required to run the command"
                 },
                 "yara.compiled": {
                     "type": ["string"],
