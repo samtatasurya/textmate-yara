@@ -70,22 +70,28 @@ suite("YARA: Settings", function() {
 /*
     warning.yara file should return 1 diagnostic normally
     returns 0 diagnostics when --no-warning flag is set
+    The next two tests also serve as a test on the $flags in general
 */
-    test("--no-warning Flag", function(done) {
+    // test("Warnings Enabled", function(done) {
+    //     let yara = new ext.Yara();
+    //     let filepath = path.join(__dirname, '..', '..', "test/rules/warning.yara");
+    //     vscode.workspace.openTextDocument(filepath).then(function(document) {
+    //         const promise = yara.compileRule(document);
+    //         promise.then(function(diagnostics) {
+    //             let count:number = 0;
+    //             for (var i in diagnostics) { count++; }
+    //             assert.equal(count, 1, `Found ${count} errors. 1 expected`);
+    //             done();
+    //         }).catch(function(err) {
+    //             console.log(err);
+    //         });
+    //     });
+    // });
+
+    test("No Warnings Enabled", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/warning.yara");
-        // first no --no-warning flag is set
-        vscode.workspace.openTextDocument(filepath).then(function(document) {
-            const promise = yara.compileRule(document);
-            promise.then(function(diagnostics) {
-                let count:number = 0;
-                for (var i in diagnostics) { count++; }
-                assert.equal(count, 1, `Found ${count} errors. 1 expected`);
-            }).catch(function(err) {
-                console.log(err);
-            });
-        });
-        // then set the flag and re-run
+        // set the --no-warning flag and check if warnings are present
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
