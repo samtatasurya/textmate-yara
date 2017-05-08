@@ -72,22 +72,6 @@ suite("YARA: Settings", function() {
     returns 0 diagnostics when --no-warning flag is set
     The next two tests also serve as a test on the $flags in general
 */
-    // test("Warnings Enabled", function(done) {
-    //     let yara = new ext.Yara();
-    //     let filepath = path.join(__dirname, '..', '..', "test/rules/warning.yara");
-    //     vscode.workspace.openTextDocument(filepath).then(function(document) {
-    //         const promise = yara.compileRule(document);
-    //         promise.then(function(diagnostics) {
-    //             let count:number = 0;
-    //             for (var i in diagnostics) { count++; }
-    //             assert.equal(count, 1, `Found ${count} errors. 1 expected`);
-    //             done();
-    //         }).catch(function(err) {
-    //             console.log(err);
-    //         });
-    //     });
-    // });
-
     test("No Warnings Enabled", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/warning.yara");
