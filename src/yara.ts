@@ -43,7 +43,7 @@ export class Yara {
         if (!doc) {
             doc = editor.document;
         };
-        if (flags == null) {
+        if (!flags) {
             flags = [doc.fileName, ofile.toString()];
         }
         else {
@@ -56,6 +56,7 @@ export class Yara {
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
+                    console.log(line);
                     if (current != null) {
                         diagnostics.push(current);
                     }
@@ -115,13 +116,12 @@ export class Yara {
         if (!doc) {
             doc = editor.document;
         };
-        if (flags == null) {
+        if (!flags) {
             flags = [doc.fileName, target_file.toString()];
         }
         else {
             flags = flags.concat([doc.fileName, target_file.toString()]);
         }
-        // console.log(`${this.yara} ${flags.join(" ")}`);
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
             let matches = [];
@@ -146,7 +146,7 @@ export class Yara {
             result.on('close', (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
                 if (matches.length > 0) {
-                    vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`);
+                    vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`, 3000);
                 }
                 resolve(diagnostics);
             });
