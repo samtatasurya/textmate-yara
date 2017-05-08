@@ -56,7 +56,6 @@ export class Yara {
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
-                    console.log(line);
                     if (current != null) {
                         diagnostics.push(current);
                     }
