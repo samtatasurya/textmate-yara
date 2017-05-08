@@ -59,39 +59,17 @@ suite("YARA: Commands", function() {
 });
 
 suite("YARA: Settings", function() {
-    test("compileOnSave", function(done) {
+    test("--no-warning Flag", function(done) {
         let yara = new ext.Yara();
         done();
     });
 
-    test("installPath", function(done) {
+    test("Unknown Option Flag", function(done) {
         let yara = new ext.Yara();
         done();
     });
 
-    test("target", function(done) {
-        let yara = new ext.Yara();
-        done();
-    });
-
-    test("compiled", function(done) {
-        let yara = new ext.Yara();
-        done();
-    });
-
-    test("executeFlags", function(done) {
-        let yara = new ext.Yara();
-        done();
-    });
-
-    test("compileFlags", function(done) {
-        let yara = new ext.Yara();
-        done();
-    });
-});
-
-suite("YARA: Activation & Deactivation", function() {
-    test("Bad Activation", function(done) {
+    test("Install Path", function(done) {
         let yara = new ext.Yara();
         done();
     });
