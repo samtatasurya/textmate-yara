@@ -3,10 +3,10 @@
 // Please refer to their documentation on https://mochajs.org/ for help.
 //
 
-import * as assert from 'assert';
-import * as path from 'path';
-import * as vscode from 'vscode';
-import * as ext from '../src/yara';
+import * as assert from "assert";
+import * as path from "path";
+import * as vscode from "vscode";
+import * as ext from "../src/yara";
 
 suite("YARA: Commands", function() {
 /*
