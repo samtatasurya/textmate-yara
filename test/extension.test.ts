@@ -9,9 +9,6 @@ import * as vscode from "vscode";
 import * as ext from "../src/yara";
 
 suite("YARA: Commands", function() {
-/*
-    Ensure no diagnostics are created when a file has proper syntax
-*/
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
@@ -27,9 +24,7 @@ suite("YARA: Commands", function() {
             });
         });
     });
-/*
-    Check the number of diagnostics returned when a file fails to compile
-*/
+
     test("Compile Fail", function(done) {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, "..", "..", "test/rules/compile_fail.yara");
@@ -51,34 +46,30 @@ suite("YARA: Commands", function() {
         let filepath = path.join(__dirname, "..", "..", "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(done) {
             let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
-            let compiled_setting = config.get("compiled");
-            config.update("compiled", undefined, true).then(function(result) {
-                console.log(result);
-                console.log(config);
-            });
-            // done();
-            config.update("compiled", compiled_setting, true);
-        });
-    });
-/*
-    Ensure the appropriate number of diagnostics are returned when executing a collection of rules
-    Display to the user which rules executed successfully
-*/
-    test("Execute", function(done) {
-        let yara = new ext.Yara();
-        let filepath = path.join(__dirname, "..", "..", "test/rules/execute.yara");
-        vscode.workspace.openTextDocument(filepath).then(function(document) {
-            const promise = yara.executeRule(document);
-            promise.then(function(diagnostics) {
-                let count:number = 0;
-                for (var i in diagnostics) { count++; }
-                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
-                done();
-            }).catch(function(err) {
-                console.log(err);
+            let compiled_setting = config.get("compiled", true);
+            console.log(`compiled_setting:${compiled_setting}`);
+            config.update("compiled", undefined, true).then(function(results) {
+                console.log(results);
+                console.log(`updated compiled_setting: ${config.get("compiled", true)}`);
+                config.update("compiled", compiled_setting, true);
             });
         });
     });
+    // test("Execute", function(done) {
+    //     let yara = new ext.Yara();
+    //     let filepath = path.join(__dirname, "..", "..", "test/rules/execute.yara");
+    //     vscode.workspace.openTextDocument(filepath).then(function(document) {
+    //         const promise = yara.executeRule(document);
+    //         promise.then(function(diagnostics) {
+    //             let count:number = 0;
+    //             for (var i in diagnostics) { count++; }
+    //             assert.equal(count, 0, `Found ${count} errors. 0 expected`);
+    //             done();
+    //         }).catch(function(err) {
+    //             console.log(err);
+    //         });
+    //     });
+    // });
 });
 
 // suite("YARA: Settings", function() {
