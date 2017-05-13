@@ -16,6 +16,8 @@ suite("YARA: Commands", function() {
         let yara = new ext.Yara();
         let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
+            let config = vscode.workspace.getConfiguration();
+            console.log(JSON.stringify(config.get("yara")));
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
                 let count:number = 0;
@@ -32,7 +34,7 @@ suite("YARA: Commands", function() {
 */
     test("Compile Fail", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test/rules/compile_fail.yara");
+        let filepath = path.join(__dirname, "..", "..", "test/rules/compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
@@ -45,13 +47,18 @@ suite("YARA: Commands", function() {
             });
         });
     });
+
+    test("Compile Error", function(done) {
+        let yara = new ext.Yara();
+        let filepath = path.join(__dirname, "..", "..")
+    });
 /*
     Ensure the appropriate number of diagnostics are returned when executing a collection of rules
     Display to the user which rules executed successfully
 */
     test("Execute", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test/rules/execute.yara");
+        let filepath = path.join(__dirname, "..", "..", "test/rules/execute.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.executeRule(document);
             promise.then(function(diagnostics) {
@@ -74,7 +81,7 @@ suite("YARA: Settings", function() {
 */
     test("No Warnings Enabled", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test/rules/warning.yara");
+        let filepath = path.join(__dirname, "..", "..", "test/rules/warning.yara");
         // set the --no-warning flag and check if warnings are present
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
