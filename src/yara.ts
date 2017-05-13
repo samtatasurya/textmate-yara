@@ -38,7 +38,7 @@ export class Yara {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
-            return;
+            return new Promise((resolve, reject) => { null; });
         }
         if (!doc) {
             doc = editor.document;
@@ -101,16 +101,17 @@ export class Yara {
     // Execute the current file against a pre-defined target file
     public executeRule(doc: null|vscode.TextDocument) {
         let diagnostics: Array<vscode.Diagnostic> = [];
-        let target_file: string = this.config.get("target").toString();
+        let target_file: string = this.config.get("target", null);
         let flags: string[]|null = this.config.get("executeFlags", null);
         if (!target_file) {
             vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
+            return new Promise((resolve, reject) => { null; });
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
-            return;
+            return new Promise((resolve, reject) => { null; });
         }
         if (!doc) {
             doc = editor.document;
