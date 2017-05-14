@@ -59,11 +59,6 @@ suite("YARA: Commands", function() {
 });
 
 // suite("YARA: Settings", function() {
-// /*
-//     warning.yara file should return 1 diagnostic normally
-//     returns 0 diagnostics when --no-warning flag is set
-//     The next two tests also serve as a test on the $flags in general
-// */
 //     test("No Warnings Enabled", function(done) {
 //         let yara = new ext.Yara();
 //         let filepath = path.join(__dirname, "..", "..", "test/rules/warning.yara");
@@ -82,17 +77,12 @@ suite("YARA: Commands", function() {
 //             });
 //         });
 //     });
-// /*
-//     Let user know an option they have set doesn't exist
-//     and that their compilation fails
-// */
+//
 //     test("Unknown Option Flag", function(done) {
 //         let yara = new ext.Yara();
 //         done();
 //     });
-// /*
-//     Gracefully handle scenario where YARA isn't found at installPath
-// */
+//
 //     test("Install Path", function(done) {
 //         let yara = new ext.Yara();
 //         done();
