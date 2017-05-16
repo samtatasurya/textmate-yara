@@ -54,7 +54,7 @@
                 "yara.compileOnSave": {
                     "type": ["boolean"],
                     "default": true,
-                    "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'"
+                    "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'. If changed, you'll need to reload your window"
                 },
                 "yara.installPath": {
                     "type": ["string", null],
