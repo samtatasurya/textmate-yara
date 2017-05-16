@@ -8,10 +8,12 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as ext from "../src/yara";
 
+let workspace = path.join(__dirname, "..", "..", "test/rules/");
+
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, '..', '..', "test/rules/compile_success.yara");
+        let filepath = path.join(workspace, "compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
@@ -27,7 +29,7 @@ suite("YARA: Commands", function() {
 
     test("Compile Fail", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, "..", "..", "test/rules/compile_fail.yara");
+        let filepath = path.join(workspace, "compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
@@ -43,16 +45,16 @@ suite("YARA: Commands", function() {
 
     test("Execute", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(__dirname, "..", "..", "test/rules/execute.yara");
+        let filepath = path.join(workspace, "execute.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            const promise = yara.executeRule(document);
-            promise.then(function(diagnostics) {
-                let count:number = 0;
-                for (var i in diagnostics) { count++; }
-                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
-                done();
-            }).catch(function(err) {
-                console.log(err);
+                const promise = yara.executeRule(document);
+                promise.then(function(diagnostics) {
+                    let count:number = 0;
+                    for (var i in diagnostics) { count++; }
+                    assert.equal(count, 0, `Found ${count} errors. 0 expected`);
+                    done();
+                }).catch(function(err) {
+                    console.log(err);
             });
         });
     });
