@@ -104,7 +104,7 @@ export class Yara {
         let target_file: string = this.config.get("target", null);
         let flags: string[]|null = this.config.get("executeFlags", null);
         if (!target_file) {
-            vscode.window.showErrorMessage("Cannot execute file. Please specify a target file in settings");
+            vscode.window.showErrorMessage("Cannot execute YARA rule. Please specify a target file in settings");
             return new Promise((resolve, reject) => { null; });
         }
         const tfile: vscode.Uri = vscode.Uri.file(target_file);
