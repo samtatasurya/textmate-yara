@@ -7,10 +7,19 @@ export class Yara {
     private diagCollection: vscode.DiagnosticCollection;
     private yarac: string;
     private yara: string;
+    private configWatcher;
 
     // called on creation
     constructor() {
         this.updateSettings();
+        this.configWatcher = vscode.workspace.onDidChangeConfiguration(() => {this.updateSettings()});
+        this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+        this.diagCollection = vscode.languages.createDiagnosticCollection("yara");
+    }
+
+    // callback function when the Yara settings get changed
+    public updateSettings() {
+        this.config = vscode.workspace.getConfiguration("yara");
         if (this.config.has("installPath") && this.config.get("installPath") != null) {
             this.yarac = this.config.get("installPath") + "\\yarac";
             this.yara = this.config.get("installPath") + "\\yara";
@@ -20,13 +29,6 @@ export class Yara {
             this.yarac = "yarac";
             this.yara = "yara";
         }
-        this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        this.diagCollection = vscode.languages.createDiagnosticCollection("yara");
-    }
-
-    // callback function when the Yara settings get changed
-    public updateSettings() {
-        this.config = vscode.workspace.getConfiguration("yara");
     }
 
     // Compile the current file
@@ -168,5 +170,6 @@ export class Yara {
     public dispose() {
         this.statusBarItem.dispose();
         this.diagCollection.dispose();
+        this.configWatcher.dispose();
     }
 }
