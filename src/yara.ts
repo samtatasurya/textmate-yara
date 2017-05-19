@@ -15,8 +15,8 @@ export class Yara {
             this.yarac = this.config.get("installPath") + "\\yarac";
             this.yara = this.config.get("installPath") + "\\yara";
         }
+        // assume YARA binaries are in user's PATH. If not, we'll handle errors later
         else {
-            // assume YARA binaries are in users $PATH if none is specified
             this.yarac = "yarac";
             this.yara = "yara";
         }
@@ -60,6 +60,10 @@ export class Yara {
                         diagnostics.push(current);
                     }
                 });
+            });
+            result.on("error", (err) => {
+                let message:string = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : err.message;
+                vscode.window.showErrorMessage(message);
             });
             result.on("close", (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
@@ -142,6 +146,11 @@ export class Yara {
                         diagnostics.push(current);
                     }
                 });
+            });
+            result.on("error", (err) => {
+                let message:string = err.message.endsWith("ENOENT") ? "Cannot execute YARA rule. Please specify an install path" : err.message;
+                vscode.window.showErrorMessage(message);
+
             });
             result.on('close', (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
