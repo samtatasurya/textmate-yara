@@ -71,7 +71,7 @@ export class Yara {
                 });
             });
             result.on("error", (err) => {
-                let message:string = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : err.message;
+                let message:string = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
                 vscode.window.showErrorMessage(message);
             });
             result.on("close", (code) => {
