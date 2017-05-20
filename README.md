@@ -1,10 +1,10 @@
 ![Source - https://raw.githubusercontent.com/blacktop/docker-yara/master/logo.png](./images/logo.png)
 
 # textmate-yara
-Syntax Highlighting and Snippets support for the YARA pattern matching language
+Syntax Highlighting, Diagnostics, and Snippets support for the YARA pattern matching language. A local copy of the YARA compiler, yarac, must be present on the system
 
 ## Snippets
-* A new file skeleton (or `rule:` skeleton)
+* New file skeleton (or `rule:` skeleton)
 * `meta:` section skeleton
 * `strings:` section skeleton
 * `condition:` section skeleton
@@ -15,14 +15,19 @@ Syntax Highlighting and Snippets support for the YARA pattern matching language
 * `version` statement
 
 ## Extension Functionality
-* Periodically compile YARA rulefiles using pre-compiled binaries in the user's $PATH
-* Allow the user to run YARA rules manually through VSCode commands
+* Compile YARA rules using pre-compiled binaries in the user's $PATH
+* Allow the user to compile YARA rules manually through VSCode commands
   * Use configuration settings to modify how command is run
 * Display any compiler errors to the user through the VSCode workspace
   * Uses diagnostics already integrated into VSCode to display "squiggle" lines and right ruler
 
+## How to get YARA binaries
+* YARA is hosted on GitHub at [VirusTotal/yara](https://github.com/VirusTotal/yara/releases)
+* Documentation for YARA is hosted at https://yara.readthedocs.io/
+
 ## Future Plans
-* Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
+* Execute YARA rules on one or more files at a time
+  * Ideally, this will allow you to easily generate YARA rules that match similar files
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
 
 ## Problems?
