@@ -66,7 +66,7 @@ suite("YARA: Commands", function() {
 
 // unset yara.installPath setting
 config.update("installPath", undefined, true);
-// suite("YARA: Settings", function() {
+suite("YARA: Settings", function() {
 //     test("No Warnings Enabled", function(done) {
 //         let yara = new ext.Yara();
 //         let filepath = path.join(__dirname, "..", "..", "test/rules/warning.yara");
@@ -91,8 +91,8 @@ config.update("installPath", undefined, true);
 //         done();
 //     });
 //
-//     test("Install Path", function(done) {
-//         let yara = new ext.Yara();
-//         done();
-//     });
-// });
+    test("Install Path", function(done) {
+        let yara = new ext.Yara();
+        done();
+    });
+});
