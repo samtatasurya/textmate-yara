@@ -62,6 +62,7 @@ export class Yara {
         // run a sub-process and capture STDOUT to see what errors we have
         const promise = new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
+            let errors:string|null = null;
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
@@ -71,12 +72,12 @@ export class Yara {
                 });
             });
             result.on("error", (err) => {
-                let message:string = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
-                vscode.window.showErrorMessage(message);
+                errors = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
+                vscode.window.showErrorMessage(errors);
             });
             result.on("close", (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-                if (diagnostics.length == 0) {
+                if (diagnostics.length == 0 && errors == null) {
                     // status bar message goes away after 3 seconds
                     vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
                 }
