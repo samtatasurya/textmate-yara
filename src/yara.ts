@@ -7,7 +7,8 @@ export class Yara {
     private diagCollection: vscode.DiagnosticCollection;
     private yarac: string;
     private yara: string;
-    private configWatcher;
+    private configWatcher: vscode.Disposable = null;
+    private saveSubscription: vscode.Disposable = null;
 
     // called on creation
     constructor() {
@@ -28,6 +29,12 @@ export class Yara {
         else {
             this.yarac = "yarac";
             this.yara = "yara";
+        }
+        if (this.config.get("compileOnSave")) {
+            this.saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {this.compileRule(null)});
+        }
+        else if (this.saveSubscription) {
+            this.saveSubscription.dispose();
         }
     }
 
@@ -171,5 +178,8 @@ export class Yara {
         this.statusBarItem.dispose();
         this.diagCollection.dispose();
         this.configWatcher.dispose();
+        if (this.saveSubscription) {
+            this.saveSubscription.dispose();
+        }
     }
 }
