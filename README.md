@@ -1,7 +1,7 @@
 ![Source - https://raw.githubusercontent.com/blacktop/docker-yara/master/logo.png](./images/logo.png)
 
 # textmate-yara
-Syntax Highlighting, Diagnostics, and Snippets support for the YARA pattern matching language. A local copy of the YARA compiler, yarac, must be present on the system
+Syntax Highlighting, Diagnostics, and Snippets support for the YARA pattern matching language. A local copy of the YARA compiler, yarac, must be present on the system for Diagnostics support and access to the compiler
 
 ## Snippets
 * New file skeleton (or `rule:` skeleton)
