@@ -88,11 +88,16 @@ export class Yara {
                             diagnostic_errors++;
                         }
                     }
+                    else if (line.startsWith("unknown option")) {
+                        vscode.window.showErrorMessage(`CompileFlags: ${line}`);
+                        errors = line;
+                    }
                 });
             });
             result.on("error", (err) => {
                 errors = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
                 vscode.window.showErrorMessage(errors);
+                reject(errors);
             });
             result.on("close", (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
