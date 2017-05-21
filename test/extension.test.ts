@@ -76,4 +76,6 @@ suite("YARA: Commands", function() {
     * compileFlags
         * If an improper flag is given, warn user and abort compilation
         * Change flags being run as soon as user changes setting - don't force window reload
+    * warnings.yara
+        * Push 1 diagnostic with severity = warning AND set statusbarmessage to "Compiled successfully"
 */
