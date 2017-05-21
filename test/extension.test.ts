@@ -43,10 +43,6 @@ suite("YARA: Commands", function() {
         });
     });
 
-    test("Warning", function(done) {
-
-    });
-
     // test("Execute", function(done) {
     //     let yara = new ext.Yara();
     //     let filepath = path.join(workspace, "execute.yara");
