@@ -9,6 +9,8 @@ export class Yara {
     private yara: string;
     private configWatcher: vscode.Disposable = null;
     private saveSubscription: vscode.Disposable = null;
+    private compileCommand: vscode.Disposable = null;
+    private executeCommand: vscode.Disposable = null;
 
     // called on creation
     constructor() {
@@ -21,20 +23,32 @@ export class Yara {
     // callback function when the Yara settings get changed
     public updateSettings() {
         this.config = vscode.workspace.getConfiguration("yara");
-        if (this.config.has("installPath") && this.config.get("installPath") != null) {
-            this.yarac = this.config.get("installPath") + "\\yarac";
-            this.yara = this.config.get("installPath") + "\\yara";
+        // set up everything if the user wants to use the YARA commands
+        if (this.config.get("commands")) {
+            this.compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {this.compileRule(null)});
+            this.executeCommand = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {this.executeRule(null)});
+            if (this.config.has("installPath") && this.config.get("installPath") != null) {
+                this.yarac = this.config.get("installPath") + "\\yarac";
+                this.yara = this.config.get("installPath") + "\\yara";
+            }
+            else {
+                // assume YARA binaries are in user's PATH. If not, we'll handle errors later
+                this.yarac = "yarac";
+                this.yara = "yara";
+            }
+
+            if (this.config.get("compileOnSave")) {
+                this.saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {this.compileRule(null)});
+            }
+            else if (this.saveSubscription != null) {
+                this.saveSubscription.dispose();
+            }
         }
-        // assume YARA binaries are in user's PATH. If not, we'll handle errors later
+        // otherwise, unregister commands and watcher for save events
         else {
-            this.yarac = "yarac";
-            this.yara = "yara";
-        }
-        if (this.config.get("compileOnSave")) {
-            this.saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {this.compileRule(null)});
-        }
-        else if (this.saveSubscription) {
-            this.saveSubscription.dispose();
+            if (this.saveSubscription != null) {this.saveSubscription.dispose();}
+            if (this.compileCommand != null) {this.compileCommand.dispose();}
+            if (this.executeCommand != null) {this.executeCommand.dispose();}
         }
     }
 
