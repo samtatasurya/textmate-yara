@@ -59,15 +59,20 @@ export class Yara {
             flags = flags.concat([doc.fileName, ofile.toString()]);
         }
         // console.log(`${this.yarac} ${flags.join(" ")}`);
-        // run a sub-process and capture STDOUT to see what errors we have
+        // run a sub-process and capture STDERR to see what errors we have
         const promise = new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
             let errors:string|null = null;
+            let diagnostic_errors: number = 0;
             result.stderr.on('data', (data) => {
                 data.toString().split("\n").forEach(line => {
                     let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
                     if (current != null) {
                         diagnostics.push(current);
+                        if (current.severity == vscode.DiagnosticSeverity.Error) {
+                            // track how many Error diagnostics there are to determine if file compiled or not later
+                            diagnostic_errors++;
+                        }
                     }
                 });
             });
@@ -77,7 +82,7 @@ export class Yara {
             });
             result.on("close", (code) => {
                 this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-                if (diagnostics.length == 0 && errors == null) {
+                if (diagnostic_errors == 0 && errors == null) {
                     // status bar message goes away after 3 seconds
                     vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
                 }
@@ -97,7 +102,9 @@ export class Yara {
             let matches: RegExpExecArray = pattern.exec(parsed[0]);
             let severity: vscode.DiagnosticSeverity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
             if (matches != null) {
+                // console.log(`Compiler Output: ${line}`);
                 // remove the surrounding parentheses
+                // VSCode render is off by one, and I'm not sure why. Have to subtract one to *generally* get the correct line
                 let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
                 let start: vscode.Position = new vscode.Position(line_no, doc.lineAt(line_no).firstNonWhitespaceCharacterIndex);
                 let end: vscode.Position = new vscode.Position(line_no, Number.MAX_VALUE);
