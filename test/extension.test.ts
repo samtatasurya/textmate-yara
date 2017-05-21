@@ -8,11 +8,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as ext from "../src/yara";
 
-let config = vscode.workspace.getConfiguration("yara");
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
-
-// set yara.installPath setting
-config.update("installPath", "%APPDATA%\\Yara", true);
 
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
@@ -42,9 +38,13 @@ suite("YARA: Commands", function() {
                 assert.equal(count, 2, `Found ${count} errors. 2 expected`);
                 done();
             }).catch(function(err) {
-                console.log(err);
+                assert.ok(false, `Error in CompileFail: ${err}`);
             });
         });
+    });
+
+    test("Warning", function(done) {
+
     });
 
     // test("Execute", function(done) {
@@ -62,37 +62,4 @@ suite("YARA: Commands", function() {
     //         });
     //     });
     // });
-});
-
-// unset yara.installPath setting
-config.update("installPath", undefined, true);
-suite("YARA: Settings", function() {
-//     test("No Warnings Enabled", function(done) {
-//         let yara = new ext.Yara();
-//         let filepath = path.join(__dirname, "..", "..", "test/rules/warning.yara");
-//         // set the --no-warning flag and check if warnings are present
-//         vscode.workspace.openTextDocument(filepath).then(function(document) {
-//             const promise = yara.compileRule(document);
-//             promise.then(function(diagnostics) {
-//                 let count:number = 0;
-//                 for (var i in diagnostics) {
-//                     // Diagnostic Severity of 1 == Warning
-//                     assert.equal(diagnostics[i].severity, 1);
-//                 }
-//                 done();
-//             }).catch(function(err) {
-//                 console.log(err);
-//             });
-//         });
-//     });
-//
-//     test("Unknown Option Flag", function(done) {
-//         let yara = new ext.Yara();
-//         done();
-//     });
-//
-    test("Install Path", function(done) {
-        let yara = new ext.Yara();
-        done();
-    });
 });
