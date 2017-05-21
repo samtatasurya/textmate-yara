@@ -63,3 +63,21 @@ suite("YARA: Commands", function() {
     //     });
     // });
 });
+
+/*
+    Scenarios that still need tests
+    * installPath:
+        * User-defined installPath must override default YARA binaries set in $PATH
+        * If no installPath given or installPath doesn't lead to YARA binaries, do three things:
+            * Unregister command(s) from VSCode
+            * Set compileOnSave to false
+            * Warn user and present options: "OK" and "Don't Show Again"
+    * target:
+        * If no target is given, unregister ExecuteRule command
+        * If target is improper, warn user and present options: "OK" and "Don't Show Again"
+    * compileOnSave
+        * Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
+    * compileFlags
+        * If an improper flag is given, warn user and abort compilation
+        * Change flags being run as soon as user changes setting - don't force window reload
+*/
