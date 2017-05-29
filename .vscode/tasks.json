@@ -12,6 +12,21 @@
             "args": ["-p", "${workspaceRoot}"],
             "problemMatcher": "$tsc",
             "isBuildCommand": true
+        },
+        {
+            "taskName": "install",
+            "command": "npm",
+            "args": ["install"]
+        },
+        {
+            "taskName": "update",
+            "command": "npm",
+            "args": ["update"]
+        },
+        {
+            "taskName": "test",
+            "command": "npm",
+            "args": ["run", "test"]
         }
     ]
 }
