@@ -22,14 +22,18 @@ export class Yara {
 
     // callback function when the Yara settings get changed
     public updateSettings() {
+        // reset the configuration
+        if (this.saveSubscription != null) {this.saveSubscription.dispose();}
+        if (this.compileCommand != null) {this.compileCommand.dispose();}
+        if (this.executeCommand != null) {this.executeCommand.dispose();}
         this.config = vscode.workspace.getConfiguration("yara");
         // set up everything if the user wants to use the YARA commands
         if (this.config.get("commands")) {
             this.compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {this.compileRule(null)});
             this.executeCommand = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {this.executeRule(null)});
             if (this.config.has("installPath") && this.config.get("installPath") != null) {
-                this.yarac = this.config.get("installPath") + "\\yarac";
-                this.yara = this.config.get("installPath") + "\\yara";
+                this.yarac = this.config.get("installPath") + "/yarac";
+                this.yara = this.config.get("installPath") + "/yara";
             }
             else {
                 // assume YARA binaries are in user's PATH. If not, we'll handle errors later
@@ -43,12 +47,6 @@ export class Yara {
             else if (this.saveSubscription != null) {
                 this.saveSubscription.dispose();
             }
-        }
-        // otherwise, unregister commands and watcher for save events
-        else {
-            if (this.saveSubscription != null) {this.saveSubscription.dispose();}
-            if (this.compileCommand != null) {this.compileCommand.dispose();}
-            if (this.executeCommand != null) {this.executeCommand.dispose();}
         }
     }
 
