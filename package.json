@@ -54,7 +54,7 @@
                 "yara.compileOnSave": {
                     "type": ["boolean"],
                     "default": true,
-                    "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'"
+                    "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'. If changed, you'll need to reload your window"
                 },
                 "yara.installPath": {
                     "type": ["string", null],
@@ -62,14 +62,29 @@
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
                 "yara.target": {
-                    "type": ["string", null],
+                    "type": ["string[]", null],
                     "default": null,
-                    "description": "Destination file for the ExecuteRule command (yara.exe). Required to run the command"
+                    "description": "Destination file(s) for the ExecuteRule command. Required to run the command"
                 },
                 "yara.compiled": {
                     "type": ["string"],
-                    "default": "${workspaceRoot}/yara_tmp.bin",
-                    "description": "Destination file for the CompileRule command (yarac.exe)"
+                    "default": "~/.yara_tmp.bin",
+                    "description": "Destination file for the CompileRule command"
+                },
+                "yara.executeFlags": {
+                    "type": ["string[]", null],
+                    "default": null,
+                    "description": "Command-line flags for running the yara binary. Can be either a string array or null"
+                },
+                "yara.compileFlags": {
+                    "type": ["string[]", null],
+                    "default": null,
+                    "description": "Command-line flags for running the yarac compiler. Can be either a string array or null"
+                },
+                "yara.commands": {
+                    "type": ["boolean"],
+                    "default": true,
+                    "description": "Determines if YARA commands are presented or not. Must be set to True for the other settings to have any effect"
                 }
             }
         },

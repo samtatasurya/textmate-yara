@@ -1,38 +1,39 @@
 ![Source - https://raw.githubusercontent.com/blacktop/docker-yara/master/logo.png](./images/logo.png)
 
 # textmate-yara
-Syntax Highlighting and Snippets support for the YARA pattern matching language
+Syntax Highlighting, Diagnostics, and Snippets support for the YARA pattern matching language. A local copy of the YARA compiler, yarac, must be present on the system for Diagnostics support and access to the compiler
 
 ## Snippets
-* A new file skeleton (or `rule:` skeleton)
-* `import` statement completion
-* `strings:` section skeleton
+* New file skeleton (or `rule:` skeleton)
 * `meta:` section skeleton
+* `strings:` section skeleton
+* `condition:` section skeleton
+* `import` statement
 * `author` statement
 * `description` statement
 * `cve` statement
 * `version` statement
 
 ## Extension Functionality
-* Periodically compile YARA rulefiles using pre-compiled yara binaries
-  * By default, do this on each file save event like most linters
-* Allow the user to run YARA rules manually through VSCode commands
+* Compile YARA rules using pre-compiled binaries in the user's $PATH
+* Allow the user to compile YARA rules manually through VSCode commands
   * Use configuration settings to modify how command is run
-    * Add an 'extraArgs' setting or something
-  * Install path (for pre-compiled binaries)
 * Display any compiler errors to the user through the VSCode workspace
-  * Done by pushing Diagnostics data to the workspace
+  * Uses diagnostics already integrated into VSCode to display "squiggle" lines and right ruler
+
+## How to get YARA binaries
+* YARA is hosted on GitHub at [VirusTotal/yara](https://github.com/VirusTotal/yara/releases)
+* Documentation for YARA is hosted at https://yara.readthedocs.io/
 
 ## Future Plans
-* Intellisense: Add Typescript definitions for integration with VSCode's Intellisense program
+* Execute YARA rules on one or more files at a time
+  * Ideally, this will allow you to easily generate YARA rules that match similar files
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
   * Working on it now
 * Get unit tests working (damn you Mocha and my lack of JS knowledge)
 
 ## Problems?
-If you encounter an issue with the syntax, feel free to create an issue or pull request!
-Alternatively, check out some of the YARA syntaxes for Sublime and Textmate (i.e. those in the <b>Example Code</b> section below).
-They use the same syntax engine as VSCode and should work the same way
+If you encounter any issues, feel free to create an issue or pull request
 
 ## Screenshot
 ![Image as of 04 Sept 2016](./images/29062016.PNG)
@@ -47,7 +48,7 @@ http://manual.macromates.com/en/language_grammars
 #### Regular Expressions:<br>
 http://www.regular-expressions.info/modifiers.html
 
-#### Example Code:<br>
+#### Other Code Inspirations:<br>
 https://github.com/mmcgrana/textmate-clojure/blob/master/Syntaxes/Clojure.tmLanguage <br>
 https://github.com/textmate/python.tmbundle/blob/master/Syntaxes/Python.tmLanguage <br>
 https://github.com/nyx0/YaraSyntax/blob/master/yara.tmLanguage <br>
