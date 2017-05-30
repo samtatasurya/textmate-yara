@@ -9,12 +9,14 @@ import * as vscode from "vscode";
 import * as ext from "../src/yara";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
+let folderUri = vscode.Uri.parse(workspace);
 
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
-        let filepath = path.join(workspace, "compile_success.yara");
-        vscode.workspace.openTextDocument(filepath).then(function(document) {
+        vscode.commands.executeCommand('vscode.openFolder', folderUri, true).then(function(document) {
+            let filepath = path.join(workspace, "compile_success.yara");
+            vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
                 let count:number = 0;
