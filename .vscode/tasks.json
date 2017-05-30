@@ -7,7 +7,7 @@
     "tasks": [
         {
             "taskName": "tsc",
-            "command": "${workspaceRoot}\\node_modules\\.bin\\tsc",
+            "command": "${workspaceRoot}/node_modules/.bin/tsc",
             "isShellCommand": true,
             "args": ["-p", "${workspaceRoot}"],
             "problemMatcher": "$tsc",

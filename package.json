@@ -84,7 +84,7 @@
                 "yara.commands": {
                     "type": ["boolean"],
                     "default": true,
-                    "description": "Determines if YARA commands are presented or not. Must be set to True for the other settings to have any effect"
+                    "description": "Determines if YARA commands are presented or not. Similar to previous extension functionality. Must be set to True for the other settings to have any effect"
                 }
             }
         },
