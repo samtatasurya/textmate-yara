@@ -23,15 +23,16 @@ export class Yara {
     // callback function when the Yara settings get changed
     public updateSettings() {
         // reset the configuration
-        if (this.saveSubscription != null) {this.saveSubscription.dispose();}
-        if (this.compileCommand != null) {this.compileCommand.dispose();}
-        if (this.executeCommand != null) {this.executeCommand.dispose();}
+        if (this.saveSubscription) { this.saveSubscription.dispose(); }
+        if (this.compileCommand) { this.compileCommand.dispose(); }
+        if (this.executeCommand) { this.executeCommand.dispose(); }
+
         this.config = vscode.workspace.getConfiguration("yara");
         // set up everything if the user wants to use the YARA commands
         if (this.config.get("commands")) {
             this.compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {this.compileRule(null)});
             this.executeCommand = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {this.executeRule(null)});
-            if (this.config.has("installPath") && this.config.get("installPath") != null) {
+            if (this.config.has("installPath") && this.config.get("installPath")) {
                 this.yarac = this.config.get("installPath") + "/yarac";
                 this.yara = this.config.get("installPath") + "/yara";
             }
@@ -44,7 +45,7 @@ export class Yara {
             if (this.config.get("compileOnSave")) {
                 this.saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {this.compileRule(null)});
             }
-            else if (this.saveSubscription != null) {
+            else if (this.saveSubscription) {
                 this.saveSubscription.dispose();
             }
         }
@@ -203,8 +204,8 @@ export class Yara {
         this.statusBarItem.dispose();
         this.diagCollection.dispose();
         this.configWatcher.dispose();
-        if (this.saveSubscription) {
-            this.saveSubscription.dispose();
-        }
+        if (this.saveSubscription) { this.saveSubscription.dispose(); }
+        if (this.compileCommand) { this.compileCommand.dispose(); }
+        if (this.executeCommand) { this.executeCommand.dispose(); }
     }
 }
