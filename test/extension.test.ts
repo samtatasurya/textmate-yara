@@ -14,9 +14,8 @@ let folderUri = vscode.Uri.parse(workspace);
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
         let yara = new ext.Yara();
-        vscode.commands.executeCommand('vscode.openFolder', folderUri, true).then(function(document) {
-            let filepath = path.join(workspace, "compile_success.yara");
-            vscode.workspace.openTextDocument(filepath).then(function(document) {
+        let filepath = path.join(workspace, "compile_success.yara");
+        vscode.workspace.openTextDocument(filepath).then(function(document) {
             const promise = yara.compileRule(document);
             promise.then(function(diagnostics) {
                 let count:number = 0;
