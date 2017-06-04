@@ -9,7 +9,6 @@ import * as vscode from "vscode";
 import * as ext from "../src/yara";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
-let folderUri = vscode.Uri.parse(workspace);
 
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
