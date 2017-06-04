@@ -43,22 +43,6 @@ suite("YARA: Commands", function() {
             });
         });
     });
-
-    // test("Execute", function(done) {
-    //     let yara = new ext.Yara();
-    //     let filepath = path.join(workspace, "execute.yara");
-    //     vscode.workspace.openTextDocument(filepath).then(function(document) {
-    //             const promise = yara.executeRule(document);
-    //             promise.then(function(diagnostics) {
-    //                 let count:number = 0;
-    //                 for (var i in diagnostics) { count++; }
-    //                 assert.equal(count, 0, `Found ${count} errors. 0 expected`);
-    //                 done();
-    //             }).catch(function(err) {
-    //                 console.log(err);
-    //         });
-    //     });
-    // });
 });
 
 /*
@@ -69,6 +53,7 @@ suite("YARA: Commands", function() {
             * Unregister command(s) from VSCode
             * Set compileOnSave to false
             * Warn user and present options: "OK" and "Don't Show Again"
+        * Don't assume user has 'yara.exe' or 'yarac.exe'
     * target:
         * If no target is given, unregister ExecuteRule command
         * If target is improper, warn user and present options: "OK" and "Don't Show Again"
