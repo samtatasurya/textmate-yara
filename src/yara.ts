@@ -1,3 +1,5 @@
+"use strict";
+
 import * as vscode from "vscode";
 import * as proc from "child_process";
 import * as path from "path";
