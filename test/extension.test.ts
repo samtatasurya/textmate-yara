@@ -54,9 +54,6 @@ suite("YARA: Commands", function() {
             * Set compileOnSave to false
             * Warn user and present options: "OK" and "Don't Show Again"
         * Don't assume user has 'yara.exe' or 'yarac.exe'
-    * target:
-        * If no target is given, unregister ExecuteRule command
-        * If target is improper, warn user and present options: "OK" and "Don't Show Again"
     * compileOnSave
         * Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
     * compileFlags
