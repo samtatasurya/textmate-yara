@@ -22,7 +22,7 @@ suite("YARA: Commands", function() {
                 assert.equal(count, 0, `Found ${count} errors. 0 expected`);
                 done();
             }).catch(function(err) {
-                console.log(err);
+                assert.ok(false, `Error in CompileSuccess: ${err}`);
             });
         });
     });
