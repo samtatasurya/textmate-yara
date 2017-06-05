@@ -11,5 +11,4 @@ exports.activate = function(context: vscode.ExtensionContext) {
 };
 exports.deactivate = function(context: vscode.ExtensionContext) {
     console.log("Deactivating Yara extension");
-    console.log(context.subscriptions.values());
 };
