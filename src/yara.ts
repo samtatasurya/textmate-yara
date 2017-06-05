@@ -63,6 +63,10 @@ export class Yara {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return new Promise((resolve, reject) => { null; });
         }
+        else if (editor.document.languageId != "yara") {
+            console.log(`Can't compile ${editor.document.fileName} - not a YARA file`);
+            return new Promise((resolve, reject) => { null; });
+        }
         if (!doc) {
             doc = editor.document;
         };
@@ -72,7 +76,7 @@ export class Yara {
         else {
             flags = flags.concat([doc.fileName, ofile.toString()]);
         }
-        // console.log(`${this.yarac} ${flags.join(" ")}`);
+        console.log(`${this.yarac} ${flags.join(" ")}`);
         // run a sub-process and capture STDERR to see what errors we have
         const promise = new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
