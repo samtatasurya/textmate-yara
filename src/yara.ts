@@ -13,7 +13,6 @@ export class Yara {
     private configWatcher: vscode.Disposable = null;
     private saveSubscription: vscode.Disposable = null;
     private compileCommand: vscode.Disposable = null;
-    // const YARA_MODE: vscode.DocumentFilter = { language: 'yara', scheme: 'file' };
 
     // called on creation
     constructor() {
