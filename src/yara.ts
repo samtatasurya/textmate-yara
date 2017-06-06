@@ -142,7 +142,6 @@ export class Yara {
     }
 
     // VSCode must dispose of the Yara object in some way
-    // Define how we want our disposal to occur
     public dispose() {
         this.statusBarItem.dispose();
         this.diagCollection.dispose();
