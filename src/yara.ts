@@ -1,5 +1,8 @@
+"use strict";
+
 import * as vscode from "vscode";
 import * as proc from "child_process";
+import * as path from "path";
 
 export class Yara {
     private config: vscode.WorkspaceConfiguration;
@@ -10,7 +13,6 @@ export class Yara {
     private configWatcher: vscode.Disposable = null;
     private saveSubscription: vscode.Disposable = null;
     private compileCommand: vscode.Disposable = null;
-    private executeCommand: vscode.Disposable = null;
 
     // called on creation
     constructor() {
@@ -22,14 +24,17 @@ export class Yara {
 
     // callback function when the Yara settings get changed
     public updateSettings() {
+        // reset the configuration
+        if (this.saveSubscription) { this.saveSubscription.dispose(); }
+        if (this.compileCommand) { this.compileCommand.dispose(); }
+
         this.config = vscode.workspace.getConfiguration("yara");
         // set up everything if the user wants to use the YARA commands
         if (this.config.get("commands")) {
             this.compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {this.compileRule(null)});
-            this.executeCommand = vscode.commands.registerTextEditorCommand("yara.ExecuteRule", () => {this.executeRule(null)});
-            if (this.config.has("installPath") && this.config.get("installPath") != null) {
-                this.yarac = this.config.get("installPath") + "\\yarac";
-                this.yara = this.config.get("installPath") + "\\yara";
+            if (this.config.has("installPath") && this.config.get("installPath")) {
+                let installPath = <string> this.config.get("installPath");
+                this.yarac = path.join(installPath, "yarac");
             }
             else {
                 // assume YARA binaries are in user's PATH. If not, we'll handle errors later
@@ -40,15 +45,9 @@ export class Yara {
             if (this.config.get("compileOnSave")) {
                 this.saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {this.compileRule(null)});
             }
-            else if (this.saveSubscription != null) {
+            else if (this.saveSubscription) {
                 this.saveSubscription.dispose();
             }
-        }
-        // otherwise, unregister commands and watcher for save events
-        else {
-            if (this.saveSubscription != null) {this.saveSubscription.dispose();}
-            if (this.compileCommand != null) {this.compileCommand.dispose();}
-            if (this.executeCommand != null) {this.executeCommand.dispose();}
         }
     }
 
@@ -63,6 +62,10 @@ export class Yara {
             vscode.window.showErrorMessage("Couldn't get the text editor");
             return new Promise((resolve, reject) => { null; });
         }
+        else if (editor.document.languageId != "yara") {
+            console.log(`Can't compile ${editor.document.fileName} - not a YARA file`);
+            return new Promise((resolve, reject) => { null; });
+        }
         if (!doc) {
             doc = editor.document;
         };
@@ -72,7 +75,7 @@ export class Yara {
         else {
             flags = flags.concat([doc.fileName, ofile.toString()]);
         }
-        // console.log(`${this.yarac} ${flags.join(" ")}`);
+        console.log(`${this.yarac} ${flags.join(" ")}`);
         // run a sub-process and capture STDERR to see what errors we have
         const promise = new Promise((resolve, reject) => {
             const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
@@ -138,75 +141,12 @@ export class Yara {
         }
     }
 
-    // Execute the current file against a pre-defined target file
-    public executeRule(doc: null|vscode.TextDocument) {
-        let diagnostics: Array<vscode.Diagnostic> = [];
-        let target_file: string = this.config.get("target", null);
-        let flags: string[]|null = this.config.get("executeFlags", null);
-        if (!target_file) {
-            vscode.window.showErrorMessage("Cannot execute YARA rule. Please specify a target file in settings");
-            return new Promise((resolve, reject) => { null; });
-        }
-        const tfile: vscode.Uri = vscode.Uri.file(target_file);
-        const editor: vscode.TextEditor = vscode.window.activeTextEditor;
-        if (!editor) {
-            vscode.window.showErrorMessage("Couldn't get the text editor");
-            return new Promise((resolve, reject) => { null; });
-        }
-        if (!doc) {
-            doc = editor.document;
-        };
-        if (!flags) {
-            flags = [doc.fileName, target_file.toString()];
-        }
-        else {
-            flags = flags.concat([doc.fileName, target_file.toString()]);
-        }
-        // run a sub-process and capture STDOUT to see what errors we have
-        const promise = new Promise((resolve, reject) => {
-            let matches = [];
-            const result: proc.ChildProcess = proc.spawn(this.yara, flags);
-            const pattern: RegExp = RegExp("\\([0-9]+\\)");
-            result.stdout.on('data', (data) => {
-                data.toString().split("\n").forEach(line => {
-                    if (line.trim() != "") {
-                        // first line in string is the YARA rule name
-                        matches.push(line.split(" ")[0]);
-                    }
-                });
-            });
-            result.stderr.on('data', (data) => {
-                data.toString().split("\n").forEach(line => {
-                    let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
-                    if (current != null) {
-                        diagnostics.push(current);
-                    }
-                });
-            });
-            result.on("error", (err) => {
-                let message:string = err.message.endsWith("ENOENT") ? "Cannot execute YARA rule. Please specify an install path" : err.message;
-                vscode.window.showErrorMessage(message);
-
-            });
-            result.on('close', (code) => {
-                this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
-                if (matches.length > 0) {
-                    vscode.window.setStatusBarMessage(`${target_file} matches: ${matches.join(", ")}`, 3000);
-                }
-                resolve(diagnostics);
-            });
-        });
-        return promise;
-    }
-
     // VSCode must dispose of the Yara object in some way
-    // Define how we want our disposal to occur
     public dispose() {
         this.statusBarItem.dispose();
         this.diagCollection.dispose();
         this.configWatcher.dispose();
-        if (this.saveSubscription) {
-            this.saveSubscription.dispose();
-        }
+        if (this.saveSubscription) { this.saveSubscription.dispose(); }
+        if (this.compileCommand) { this.compileCommand.dispose(); }
     }
 }

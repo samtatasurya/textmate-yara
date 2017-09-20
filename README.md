@@ -29,12 +29,14 @@ Syntax Highlighting, Diagnostics, and Snippets support for the YARA pattern matc
 * Execute YARA rules on one or more files at a time
   * Ideally, this will allow you to easily generate YARA rules that match similar files
 * Include compatibility with Unix-based OSes from the get-go for the linter/intellisense, and YARA tools
+  * Working on it now
+* Get unit tests working (damn you Mocha and my lack of JS knowledge)
 
 ## Problems?
 If you encounter any issues, feel free to create an issue or pull request
 
 ## Screenshot
-![Image as of 04 Sept 2016](./images/04092016.PNG)
+![Image as of 04 Sept 2016](./images/29062016.PNG)
 
 ## References
 #### Syntax Reference:<br>

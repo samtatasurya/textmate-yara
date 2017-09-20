@@ -61,20 +61,10 @@
                     "default": null,
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
-                "yara.target": {
-                    "type": ["string[]", null],
-                    "default": null,
-                    "description": "Destination file(s) for the ExecuteRule command. Required to run the command"
-                },
                 "yara.compiled": {
                     "type": ["string"],
                     "default": "~/.yara_tmp.bin",
                     "description": "Destination file for the CompileRule command"
-                },
-                "yara.executeFlags": {
-                    "type": ["string[]", null],
-                    "default": null,
-                    "description": "Command-line flags for running the yara binary. Can be either a string array or null"
                 },
                 "yara.compileFlags": {
                     "type": ["string[]", null],
@@ -84,7 +74,7 @@
                 "yara.commands": {
                     "type": ["boolean"],
                     "default": true,
-                    "description": "Determines if YARA commands are presented or not. Must be set to True for the other settings to have any effect"
+                    "description": "Determines if YARA commands are presented or not. Similar to previous extension functionality. Must be set to True for the other settings to have any effect"
                 }
             }
         },
@@ -92,10 +82,6 @@
             {
                 "command": "yara.CompileRule",
                 "title": "YARA: Compiles the current file into a YARA rule."
-            },
-            {
-                "command": "yara.ExecuteRule",
-                "title": "YARA: Executes the current file against a chosen target file (specified in yara.target setting)"
             }
         ],
         "grammars": [
