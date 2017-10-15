@@ -5,7 +5,7 @@
     "homepage": "https://github.com/infosec-intern/textmate-yara/blob/master/README.md",
     "icon": "images/logo.png",
     "license": "SEE LICENSE IN LICENSE.md",
-    "main": "./out/src/extension.js",
+    "main": "out/src/extension.js",
     "publisher": "infosec-intern",
     "version": "1.2.0",
     "categories": [
@@ -15,7 +15,8 @@
     "keywords": [
         "yara",
         "malware",
-        "pattern"
+        "pattern",
+        "security"
     ],
     "galleryBanner": {
         "color": "#A4A4A4",
@@ -104,7 +105,7 @@
                     ".yara",
                     ".yar"
                 ],
-                "configuration": "./yara-language-configuration.json"
+                "configuration": "yara-language-configuration.json"
             }
         ],
         "snippets": [
