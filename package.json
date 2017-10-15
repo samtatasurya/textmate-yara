@@ -33,11 +33,11 @@
         "vscode": "^1.0.0"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^6.0.89",
         "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "typescript": "^2.5.3",
+        "vscode": "^1.1.6"
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
@@ -53,27 +53,39 @@
             "title": "YARA Settings",
             "properties": {
                 "yara.compileOnSave": {
-                    "type": ["boolean"],
+                    "type": [
+                        "boolean"
+                    ],
                     "default": true,
                     "description": "Determines if the CompileRule command will run when files are saved. Default is 'true'. If changed, you'll need to reload your window"
                 },
                 "yara.installPath": {
-                    "type": ["string", null],
+                    "type": [
+                        "string",
+                        null
+                    ],
                     "default": null,
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
                 },
                 "yara.compiled": {
-                    "type": ["string"],
+                    "type": [
+                        "string"
+                    ],
                     "default": "~/.yara_tmp.bin",
                     "description": "Destination file for the CompileRule command"
                 },
                 "yara.compileFlags": {
-                    "type": ["string[]", null],
+                    "type": [
+                        "string[]",
+                        null
+                    ],
                     "default": null,
                     "description": "Command-line flags for running the yarac compiler. Can be either a string array or null"
                 },
                 "yara.commands": {
-                    "type": ["boolean"],
+                    "type": [
+                        "boolean"
+                    ],
                     "default": true,
                     "description": "Determines if YARA commands are presented or not. Similar to previous extension functionality. Must be set to True for the other settings to have any effect"
                 }
