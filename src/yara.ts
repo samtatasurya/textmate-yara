@@ -4,15 +4,12 @@ import * as vscode from "vscode";
 import * as proc from "child_process";
 import * as path from "path";
 
+
+
+
+
 export class Yara {
-    private config: vscode.WorkspaceConfiguration;
-    private statusBarItem: vscode.StatusBarItem;
-    private diagCollection: vscode.DiagnosticCollection;
-    private yarac: string;
-    private yara: string;
-    private configWatcher: vscode.Disposable = null;
-    private saveSubscription: vscode.Disposable = null;
-    private compileCommand: vscode.Disposable = null;
+
 
     // called on creation
     constructor() {
@@ -142,11 +139,5 @@ export class Yara {
     }
 
     // VSCode must dispose of the Yara object in some way
-    public dispose() {
-        this.statusBarItem.dispose();
-        this.diagCollection.dispose();
-        this.configWatcher.dispose();
-        if (this.saveSubscription) { this.saveSubscription.dispose(); }
-        if (this.compileCommand) { this.compileCommand.dispose(); }
-    }
+
 }
