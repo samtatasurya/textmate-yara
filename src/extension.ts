@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from "vscode";
+import * as path from "path";
 
 
 // hopefully there's a better way of instantiating these variables
@@ -16,6 +17,7 @@ let compileCommand: vscode.Disposable = null;
 /*
     Called on configuration changes (vscode.onDidChangeConfiguration)
     Clears the old configuration settings and sets new values
+
     :context: The YARA extension's current, private context
 */
 function updateSettings(context: vscode.ExtensionContext) {
@@ -54,7 +56,7 @@ function updateSettings(context: vscode.ExtensionContext) {
 export function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension");
     configWatcher = vscode.workspace.onDidChangeConfiguration(() => {
-        ext.updateSettings(context)
+        updateSettings(context)
     });
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     diagCollection = vscode.languages.createDiagnosticCollection("yara");
