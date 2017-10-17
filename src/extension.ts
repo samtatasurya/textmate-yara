@@ -21,7 +21,7 @@ let compileCommand: vscode.Disposable = null;
 
     :doc: The current workspace document if null or a vscode.TextDocument object
 */
-function compileRule(doc: null|vscode.TextDocument) {
+export function compileRule(doc: null|vscode.TextDocument) {
     let diagnostics: Array<vscode.Diagnostic> = [];
     let ofile_path: string = this.config.get("compiled", "~/.yara_tmp.bin").toString();
     let flags: string[]|null = this.config.get("compileFlags", null);
@@ -121,7 +121,7 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
 
     :context: The YARA extension's current, private context
 */
-function updateSettings(context: vscode.ExtensionContext) {
+export function updateSettings(context: vscode.ExtensionContext) {
     console.log("Updating configuration settings");
     let saveSubscription: vscode.Disposable = context.subscriptions["saveSubscription"];
     let compileCommand: vscode.Disposable = context.subscriptions["compileCommand"];
@@ -135,6 +135,8 @@ function updateSettings(context: vscode.ExtensionContext) {
         compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {
             compileRule(null)
         });
+        context.subscriptions.push(compileCommand);
+
         if (config.has("installPath") && config.get("installPath")) {
             let installPath = <string> config.get("installPath");
             yarac = path.join(installPath, "yarac");
@@ -149,6 +151,7 @@ function updateSettings(context: vscode.ExtensionContext) {
             saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {
                 compileRule(null)
             });
+            context.subscriptions.push(saveSubscription);
         }
         else if (saveSubscription) {
             saveSubscription.dispose();
@@ -165,6 +168,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(configWatcher);
     context.subscriptions.push(saveSubscription);
     context.subscriptions.push(diagCollection);
+    // perform our initial setup of config values & subscriptions
+    updateSettings(context);
 };
 
 export function deactivate(context: vscode.ExtensionContext) {
