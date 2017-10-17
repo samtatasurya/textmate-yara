@@ -8,16 +8,15 @@
 import * as assert from "assert";
 import * as path from "path";
 import * as vscode from "vscode";
-import * as ext from "../src/yara";
+import {compileRule, updateSettings} from "../src/extension";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
-        let yara = new ext.Yara();
         let filepath = path.join(workspace, "compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            const promise = yara.compileRule(document);
+            const promise = compileRule(document);
             promise.then(function(diagnostics) {
                 let count:number = 0;
                 for (var i in diagnostics) { count++; }
@@ -30,10 +29,9 @@ suite("YARA: Commands", function() {
     });
 
     test("Compile Fail", function(done) {
-        let yara = new ext.Yara();
         let filepath = path.join(workspace, "compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then(function(document) {
-            const promise = yara.compileRule(document);
+            const promise = compileRule(document);
             promise.then(function(diagnostics) {
                 let count:number = 0;
                 for (var i in diagnostics) { count++; }
