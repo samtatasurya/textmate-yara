@@ -5,10 +5,10 @@
 			"/*",
 			"\tRULE DESCRIPTION HERE",
 			"*/",
-			"rule ${name}",
+			"rule ${1:name:TM_FILENAME_BASE}",
 			"{",
 			"\tcondition:",
-			"\t\t$1",
+			"\t\t$2",
 			"}"
 		],
 		"description": "Generate a basic skeleton"
