@@ -19,14 +19,14 @@ let compileCommand: vscode.Disposable = null;
     Called on-demand or on file saves (yara.CompileRule & onDidSaveTextDocument)
     Compile the current file in the VSCode workspace as a YARA rule
 
+    :config: Dictionary of configuration values
     :doc: The current workspace document if null or a vscode.TextDocument object
 */
-export function compileRule(doc: null|vscode.TextDocument) {
+export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vscode.TextDocument) {
     let diagnostics: Array<vscode.Diagnostic> = [];
-    let ofile_path: string = this.config.get("compiled", "~/.yara_tmp.bin").toString();
-    let flags: string[]|null = this.config.get("compileFlags", null);
+    let ofile_path: string = config.get("compiled", "~/.yara_tmp.bin").toString();
+    let flags: string[]|null = config.get("compileFlags", null);
     const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
-
     if (!doc) {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -45,15 +45,14 @@ export function compileRule(doc: null|vscode.TextDocument) {
     else {
         flags = flags.concat([doc.fileName, ofile.toString()]);
     }
-    console.log(`${this.yarac} ${flags.join(" ")}`);
     // run a sub-process and capture STDERR to see what errors we have
     return new Promise((resolve, reject) => {
-        const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
+        const result: proc.ChildProcess = proc.spawn(yarac, flags);
         let errors: string|null = null;
         let diagnostic_errors: number = 0;
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
-                let current: vscode.Diagnostic|null = this.convertStderrToDiagnostic(line, doc);
+                let current: vscode.Diagnostic|null = convertStderrToDiagnostic(line, doc);
                 if (current != null) {
                     diagnostics.push(current);
                     if (current.severity == vscode.DiagnosticSeverity.Error) {
@@ -73,7 +72,7 @@ export function compileRule(doc: null|vscode.TextDocument) {
             reject(errors);
         });
         result.on("close", (code) => {
-            this.diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
+            diagCollection.set(vscode.Uri.file(doc.fileName), diagnostics);
             if (diagnostic_errors == 0 && errors == null) {
                 // status bar message goes away after 3 seconds
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
@@ -133,7 +132,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
     // set up everything if the user wants to use the YARA commands
     if (config.get("commands")) {
         compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {
-            compileRule(null)
+            compileRule(config, null)
         });
         context.subscriptions.push(compileCommand);
 
@@ -149,7 +148,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
 
         if (config.get("compileOnSave")) {
             saveSubscription = vscode.workspace.onDidSaveTextDocument(() => {
-                compileRule(null)
+                compileRule(config, null)
             });
             context.subscriptions.push(saveSubscription);
         }
@@ -157,7 +156,6 @@ export function updateSettings(context: vscode.ExtensionContext) {
             saveSubscription.dispose();
         }
     }
-    console.log(JSON.stringify(context.subscriptions));
 }
 
 export function activate(context: vscode.ExtensionContext) {
