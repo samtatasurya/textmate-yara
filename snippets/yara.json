@@ -5,10 +5,10 @@
 			"/*",
 			"\tRULE DESCRIPTION HERE",
 			"*/",
-			"rule ${1:name:TM_FILENAME_BASE}",
+			"rule $TM_FILENAME_BASE",
 			"{",
 			"\tcondition:",
-			"\t\t$2",
+			"\t\t$1",
 			"}"
 		],
 		"description": "Generate a basic skeleton"
@@ -17,7 +17,7 @@
 		"prefix": "meta",
 		"body": [
 			"meta:",
-			"\t${metadata}"
+			"\t$1"
 		],
 		"description": "Generate a 'meta' section"
 	},
@@ -25,7 +25,7 @@
 		"prefix": "strings",
 		"body": [
 			"strings:",
-			"\t${string(s)}"
+			"\t$1"
 		],
 		"description": "Generate a 'strings' section where the strings that will be part of the rule are defined"
 	},
@@ -33,33 +33,33 @@
 		"prefix": "condition",
 		"body": [
 			"condition:",
-			"\t${condition(s)}"
+			"\t$1"
 		],
 		"description": "Generate a 'condition' section where the logic of the rule resides"
 	},
 	"Import": {
 		"prefix": "import",
-		"body": "import \"${module}\"",
+		"body": "import \"$1\"",
 		"description": "Import a YARA module"
 	},
 	"Author": {
 		"prefix": "author",
-		"body": "author = ${author}",
+		"body": "author = $1",
 		"description": "Metadata. Creator of this YARA rule"
 	},
 	"Description": {
 		"prefix": "description",
-		"body": "description = ${desc}",
+		"body": "description = $1",
 		"description": "Metadata. A short description of this YARA rule"
 	},
 	"CVE": {
 		"prefix": "cve",
-		"body": "cve = ${cve}",
+		"body": "cve = $1",
 		"description": "Metadata. Common Vulnerabilities and Exposures reference"
 	},
 	"Version": {
 		"prefix": "version",
-		"body": "version = ${version}",
+		"body": "version = $1",
 		"description": "Metadata. Version number of this YARA rule"
 	}
 }
