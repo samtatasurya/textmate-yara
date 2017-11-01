@@ -33,10 +33,10 @@
         "vscode": "^1.0.0"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.43",
-        "@types/node": "^6.0.89",
+        "@types/mocha": "^2.2.44",
+        "@types/node": "^6.0.90",
         "mocha": "^2.3.3",
-        "typescript": "^2.5.3",
+        "typescript": "^2.6.1",
         "vscode": "^1.1.6"
     },
     "scripts": {
@@ -62,7 +62,7 @@
                 "yara.installPath": {
                     "type": [
                         "string",
-                        null
+                        "null"
                     ],
                     "default": null,
                     "description": "The folder path to your YARA binaries. Null means the 'yara' and 'yarac' commands are in your $PATH"
@@ -77,7 +77,7 @@
                 "yara.compileFlags": {
                     "type": [
                         "string[]",
-                        null
+                        "null"
                     ],
                     "default": null,
                     "description": "Command-line flags for running the yarac compiler. Can be either a string array or null"
