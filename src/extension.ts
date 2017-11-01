@@ -5,7 +5,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 
-// hopefully there's a better way of instantiating these variables
+// hopefully there's a better way to instantiate these variables
 let config: vscode.WorkspaceConfiguration;
 let statusBarItem: vscode.StatusBarItem;
 let diagCollection: vscode.DiagnosticCollection;
@@ -26,16 +26,17 @@ export function compileRule(doc: null|vscode.TextDocument) {
     let ofile_path: string = this.config.get("compiled", "~/.yara_tmp.bin").toString();
     let flags: string[]|null = this.config.get("compileFlags", null);
     const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
-    const editor: vscode.TextEditor = vscode.window.activeTextEditor;
-    if (!editor) {
-        vscode.window.showErrorMessage("Couldn't get the text editor");
-        return new Promise((resolve, reject) => { null; });
-    }
-    else if (editor.document.languageId != "yara") {
-        console.log(`Can't compile ${editor.document.fileName} - not a YARA file`);
-        return new Promise((resolve, reject) => { null; });
-    }
+
     if (!doc) {
+        const editor: vscode.TextEditor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showErrorMessage("Couldn't get the text editor");
+            return new Promise((resolve, reject) => { null; });
+        }
+        else if (editor.document.languageId != "yara") {
+            console.log(`Can't compile ${editor.document.fileName} - not a YARA file`);
+            return new Promise((resolve, reject) => { null; });
+        }
         doc = editor.document;
     };
     if (!flags) {
@@ -46,9 +47,9 @@ export function compileRule(doc: null|vscode.TextDocument) {
     }
     console.log(`${this.yarac} ${flags.join(" ")}`);
     // run a sub-process and capture STDERR to see what errors we have
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const result: proc.ChildProcess = proc.spawn(this.yarac, flags);
-        let errors:string|null = null;
+        let errors: string|null = null;
         let diagnostic_errors: number = 0;
         result.stderr.on('data', (data) => {
             data.toString().split("\n").forEach(line => {
@@ -80,7 +81,6 @@ export function compileRule(doc: null|vscode.TextDocument) {
             resolve(diagnostics);
         });
     });
-    return promise;
 }
 
 /*
@@ -138,7 +138,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
         context.subscriptions.push(compileCommand);
 
         if (config.has("installPath") && config.get("installPath")) {
-            let installPath = <string> config.get("installPath");
+            let installPath: string = config.get("installPath");
             yarac = path.join(installPath, "yarac");
         }
         else {
@@ -157,6 +157,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
             saveSubscription.dispose();
         }
     }
+    console.log(JSON.stringify(context.subscriptions));
 }
 
 export function activate(context: vscode.ExtensionContext) {
