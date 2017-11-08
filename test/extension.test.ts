@@ -8,7 +8,7 @@
 import * as assert from "assert";
 import * as path from "path";
 import * as vscode from "vscode";
-import {compileRule, updateSettings} from "../src/extension";
+import * as yara from "../src/extension";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
@@ -16,11 +16,10 @@ suite("YARA: Commands", () => {
     test("Compile Success", (done) => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
-        let curr_document: Thenable<vscode.TextDocument> = vscode.workspace.openTextDocument(filepath);
-        curr_document.then((doc) => {
-            const promise: Promise<{}> = compileRule(config, doc);
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            const promise: Promise<{}> = yara.compileRule(config, doc);
             promise.then((diagnostics) => {
-                let count:number = 0;
+                let count: number = 0;
                 for (var i in diagnostics) { count++; }
                 assert.equal(count, 0, `Found ${count} errors. 0 expected`);
                 done();
@@ -34,9 +33,9 @@ suite("YARA: Commands", () => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then((doc) => {
-            const promise: Promise<{}> = compileRule(config, doc);
+            const promise: Promise<{}> = yara.compileRule(config, doc);
             promise.then((diagnostics) => {
-                let count:number = 0;
+                let count: number = 0;
                 for (var i in diagnostics) { count++; }
                 assert.equal(count, 2, `Found ${count} errors. 2 expected`);
                 done();
