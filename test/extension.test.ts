@@ -12,35 +12,38 @@ import {compileRule, updateSettings} from "../src/extension";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
-suite("YARA: Commands", function() {
-    test("Compile Success", function(done) {
-        // let filepath = path.join(workspace, "compile_success.yara");
-        // vscode.workspace.openTextDocument(filepath).then(function(document) {
-        //     const promise = compileRule(document);
-        //     promise.then(function(diagnostics) {
-        //         let count:number = 0;
-        //         for (var i in diagnostics) { count++; }
-        //         assert.equal(count, 0, `Found ${count} errors. 0 expected`);
-        //         done();
-        //     }).catch(function(err) {
-        //         assert.ok(false, `Error in CompileSuccess: ${err}`);
-        //     });
-        // });
+suite("YARA: Commands", () => {
+    test("Compile Success", (done) => {
+        let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
+        let filepath: string = path.join(workspace, "compile_success.yara");
+        let curr_document: Thenable<vscode.TextDocument> = vscode.workspace.openTextDocument(filepath);
+        curr_document.then((doc) => {
+            const promise: Promise<{}> = compileRule(config, doc);
+            promise.then((diagnostics) => {
+                let count:number = 0;
+                for (var i in diagnostics) { count++; }
+                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
+                done();
+            }).catch((err) => {
+                assert.ok(false, `Error in CompileSuccess: ${err}`);
+            });
+        });
     });
 
-    test("Compile Fail", function(done) {
-        // let filepath = path.join(workspace, "compile_fail.yara");
-        // vscode.workspace.openTextDocument(filepath).then(function(document) {
-        //     const promise = compileRule(document);
-        //     promise.then(function(diagnostics) {
-        //         let count:number = 0;
-        //         for (var i in diagnostics) { count++; }
-        //         assert.equal(count, 2, `Found ${count} errors. 2 expected`);
-        //         done();
-        //     }).catch(function(err) {
-        //         assert.ok(false, `Error in CompileFail: ${err}`);
-        //     });
-        // });
+    test("Compile Fail", (done) => {
+        let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
+        let filepath: string = path.join(workspace, "compile_fail.yara");
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            const promise: Promise<{}> = compileRule(config, doc);
+            promise.then((diagnostics) => {
+                let count:number = 0;
+                for (var i in diagnostics) { count++; }
+                assert.equal(count, 2, `Found ${count} errors. 2 expected`);
+                done();
+            }).catch((err) => {
+                assert.ok(false, `Error in CompileFail: ${err}`);
+            });
+        });
     });
 });
 
