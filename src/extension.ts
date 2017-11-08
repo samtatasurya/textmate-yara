@@ -31,6 +31,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage("Couldn't get the text editor");
+            console.log("Couldn't get the text editor");
             return new Promise((resolve, reject) => { null; });
         }
         else if (editor.document.languageId != "yara") {
@@ -48,6 +49,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
     // run a sub-process and capture STDERR to see what errors we have
     return new Promise((resolve, reject) => {
         const result: proc.ChildProcess = proc.spawn(yarac, flags);
+        console.log(`Attempting to compile ${doc.fileName}`);
         let errors: string|null = null;
         let diagnostic_errors: number = 0;
         result.stderr.on('data', (data) => {
@@ -62,6 +64,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
                 }
                 else if (line.startsWith("unknown option")) {
                     vscode.window.showErrorMessage(`CompileFlags: ${line}`);
+                    console.log(`[Error] CompileFlags: ${line}`);
                     errors = line;
                 }
             });
@@ -69,6 +72,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         result.on("error", (err) => {
             errors = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
             vscode.window.showErrorMessage(errors);
+            console.log(`[Error] ${errors}`);
             reject(errors);
         });
         result.on("close", (code) => {
@@ -76,6 +80,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
             if (diagnostic_errors == 0 && errors == null) {
                 // status bar message goes away after 3 seconds
                 vscode.window.setStatusBarMessage("File compiled successfully!", 3000);
+                console.log("File compiled successfully!");
             }
             resolve(diagnostics);
         });
@@ -110,6 +115,7 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
     }
     catch (error) {
         vscode.window.showErrorMessage(error);
+        console.log(`[Error] ${error}`);
         return null;
     }
 }
@@ -131,6 +137,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
     let config = vscode.workspace.getConfiguration("yara");
     // set up everything if the user wants to use the YARA commands
     if (config.get("commands")) {
+        console.log("Enabling VSCode commands");
         compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {
             compileRule(config, null)
         });
@@ -138,12 +145,14 @@ export function updateSettings(context: vscode.ExtensionContext) {
 
         if (config.has("installPath") && config.get("installPath")) {
             let installPath: string = config.get("installPath");
+            console.log(`Setting compiler install path to ${installPath}`);
             yarac = path.join(installPath, "yarac");
         }
         else {
             // assume YARA binaries are in user's PATH. If not, we'll handle errors later
             yarac = "yarac";
             yara = "yara";
+            console.log("No compiler install path found. Assuming compiler is available in $PATH");
         }
 
         if (config.get("compileOnSave")) {
