@@ -24,7 +24,7 @@ let compileCommand: vscode.Disposable = null;
 */
 export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vscode.TextDocument) {
     let diagnostics: Array<vscode.Diagnostic> = [];
-    let ofile_path: string = config.get("compiled", "~/.yara_tmp.bin").toString();
+    let ofile_path: string = config.get("compiled").toString();
     let flags: string[]|null = config.get("compileFlags", null);
     const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
     if (!doc) {
@@ -174,7 +174,6 @@ export function activate(context: vscode.ExtensionContext) {
     diagCollection = vscode.languages.createDiagnosticCollection("yara");
     // start pushing things into our context to reuse later
     context.subscriptions.push(configWatcher);
-    context.subscriptions.push(saveSubscription);
     context.subscriptions.push(diagCollection);
     // perform our initial setup of config values & subscriptions
     updateSettings(context);
