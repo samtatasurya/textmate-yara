@@ -72,7 +72,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         result.on("error", (err) => {
             errors = err.message.endsWith("ENOENT") ? "Cannot compile YARA rule. Please specify an install path" : `Error: ${err.message}`;
             vscode.window.showErrorMessage(errors);
-            console.log(`[Error] ${errors}`);
+            console.log(`[CompileRuleError] ${errors}`);
             reject(errors);
         });
         result.on("close", (code) => {
@@ -102,7 +102,6 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
         let matches: RegExpExecArray = pattern.exec(parsed[0]);
         let severity: vscode.DiagnosticSeverity = parsed[1] == "error" ? vscode.DiagnosticSeverity.Error : vscode.DiagnosticSeverity.Warning;
         if (matches != null) {
-            // console.log(`Compiler Output: ${line}`);
             // remove the surrounding parentheses
             // VSCode render is off by one, and I'm not sure why. Have to subtract one to *generally* get the correct line
             let line_no: number = parseInt(matches[0].replace("(", "").replace(")", "")) - 1;
@@ -115,7 +114,7 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
     }
     catch (error) {
         vscode.window.showErrorMessage(error);
-        console.log(`[Error] ${error}`);
+        console.log(`[ConvertStderrToDiagnosticError] ${error}`);
         return null;
     }
 }
@@ -137,15 +136,16 @@ export function updateSettings(context: vscode.ExtensionContext) {
     let config = vscode.workspace.getConfiguration("yara");
     // set up everything if the user wants to use the YARA commands
     if (config.get("commands")) {
-        console.log("Enabling VSCode commands");
+        console.log("Enabling commands");
         compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {
             compileRule(config, null)
         });
         context.subscriptions.push(compileCommand);
 
-        if (config.has("installPath") && config.get("installPath")) {
+        // should match null and undefined
+        if (config.get("installPath") != null) {
             let installPath: string = config.get("installPath");
-            console.log(`Setting compiler install path to ${installPath}`);
+            console.log(`Setting compiler path to ${installPath}`);
             yarac = path.join(installPath, "yarac");
         }
         else {
