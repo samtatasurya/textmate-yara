@@ -14,6 +14,7 @@ let yara: string;
 let configWatcher: vscode.Disposable = null;
 let saveSubscription: vscode.Disposable = null;
 let compileCommand: vscode.Disposable = null;
+let yaraSelector: vscode.DocumentSelector = {language: "yara", scheme: "file"};
 
 /*
     Called on-demand or on file saves (yara.CompileRule & onDidSaveTextDocument)
@@ -37,7 +38,7 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         doc = editor.document;
     };
     // strict checking to make sure this one doc matches our yara signature
-    if (vscode.languages.match({language: "yara", scheme: "file"}, doc) < 10) {
+    if (vscode.languages.match(yaraSelector, doc) < 10) {
         console.log(`Can't compile ${doc.fileName} - not a YARA file`);
         return new Promise((resolve, reject) => { null; });
     }
