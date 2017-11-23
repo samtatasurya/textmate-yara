@@ -46,17 +46,31 @@ suite("YARA: Commands", () => {
             });
         });
     });
+
+    test("Compile Warning", (done) => {
+        let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
+        let filepath: string = path.join(workspace, "warning.yara");
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            yara.compileRule(config, doc).then((diagnostics) => {
+                console.log(JSON.stringify(diagnostics));
+            }).catch((err) => {
+                console.log(`[CompileWarningError] ${err}`);
+                assert.ok(false, `Error in CompileWarning: ${err}`);
+            });
+        });
+    });
 });
 
 /*
     Scenarios that still need tests
     * installPath:
         * User-defined installPath must override default YARA binaries set in $PATH
-        * If no installPath given or installPath doesn't lead to YARA binaries, do three things:
+        * If no installPath given or installPath is null:
+            * Assume YARA is in $PATH
+        * If installPath doesn't lead to YARA binaries, do three things:
             * Unregister command(s) from VSCode
             * Set compileOnSave to false
             * Warn user and present options: "OK" and "Don't Show Again"
-        * Don't assume user has 'yara.exe' or 'yarac.exe'
     * compileOnSave
         * Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
     * compileFlags
