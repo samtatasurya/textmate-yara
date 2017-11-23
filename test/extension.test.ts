@@ -17,11 +17,10 @@ suite("YARA: Commands", () => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics) => {
-                let count: number = 0;
-                for (var i in diagnostics) { count++; }
-                console.log(`Found ${count} errors. 0 expected`);
-                assert.equal(count, 0, `Found ${count} errors. 0 expected`);
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
+                let count: number = diagnostics.length;
+                console.log(`Found ${count} diagnostics. 0 expected`);
+                assert.equal(count, 0, `Found ${count} diagnostics. 0 expected`);
                 done();
             }).catch((err) => {
                 console.log(`[CompileSuccessError] ${err}`);
@@ -34,9 +33,12 @@ suite("YARA: Commands", () => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_fail.yara");
         vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics) => {
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
                 let count: number = 0;
-                for (var i in diagnostics) { count++; }
+                for (var i = 0; i < diagnostics.length; i++) {
+                    let d: vscode.Diagnostic = diagnostics[i];
+                    if (d.severity == vscode.DiagnosticSeverity.Error) { count++; }
+                }
                 console.log(`Found ${count} errors. 2 expected`);
                 assert.equal(count, 2, `Found ${count} errors. 2 expected`);
                 done();
@@ -49,10 +51,17 @@ suite("YARA: Commands", () => {
 
     test("Compile Warning", (done) => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
-        let filepath: string = path.join(workspace, "warning.yara");
+        let filepath: string = path.join(workspace, "compile_warning.yara");
         vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics) => {
-                console.log(JSON.stringify(diagnostics));
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
+                let count: number = 0;
+                for (var i = 0; i < diagnostics.length; i++) {
+                    let d: vscode.Diagnostic = diagnostics[i];
+                    if (d.severity == vscode.DiagnosticSeverity.Warning) { count++; }
+                }
+                console.log(`Found ${count} warnings. 1 expected`);
+                assert.equal(count, 1, `Found ${count} warnings. 1 expected`);
+                done();
             }).catch((err) => {
                 console.log(`[CompileWarningError] ${err}`);
                 assert.ok(false, `Error in CompileWarning: ${err}`);
