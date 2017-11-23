@@ -36,7 +36,8 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         }
         doc = editor.document;
     };
-    if (doc.languageId != "yara") {
+    // strict checking to make sure this one doc matches our yara signature
+    if (vscode.languages.match({language: "yara", scheme: "file"}, doc) < 10) {
         console.log(`Can't compile ${doc.fileName} - not a YARA file`);
         return new Promise((resolve, reject) => { null; });
     }
