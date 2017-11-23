@@ -34,12 +34,12 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
             console.log("Couldn't get the text editor");
             return new Promise((resolve, reject) => { null; });
         }
-        else if (editor.document.languageId != "yara") {
-            console.log(`Can't compile ${editor.document.fileName} - not a YARA file`);
-            return new Promise((resolve, reject) => { null; });
-        }
         doc = editor.document;
     };
+    if (doc.languageId != "yara") {
+        console.log(`Can't compile ${doc.fileName} - not a YARA file`);
+        return new Promise((resolve, reject) => { null; });
+    }
     if (!flags) {
         flags = [doc.fileName, ofile.toString()];
     }
@@ -169,14 +169,14 @@ export function updateSettings(context: vscode.ExtensionContext) {
 
 export function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension");
+    // perform our initial setup of config values & subscriptions
+    updateSettings(context);
     configWatcher = vscode.workspace.onDidChangeConfiguration(() => {updateSettings(context)});
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     diagCollection = vscode.languages.createDiagnosticCollection("yara");
     // start pushing things into our context to reuse later
     context.subscriptions.push(configWatcher);
     context.subscriptions.push(diagCollection);
-    // perform our initial setup of config values & subscriptions
-    updateSettings(context);
 };
 
 export function deactivate(context: vscode.ExtensionContext) {
