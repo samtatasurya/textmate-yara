@@ -12,28 +12,28 @@ import * as yara from "../src/extension";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
-suite("YARA: Commands", () => {
-    test("Compile Success", (done) => {
+suite("YARA: Commands", function() {
+    test("Compile Success", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
-        vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
+        vscode.workspace.openTextDocument(filepath).then(function(doc) {
+            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
                 let count: number = diagnostics.length;
                 console.log(`Found ${count} diagnostics. 0 expected`);
                 assert.equal(count, 0, `Found ${count} diagnostics. 0 expected`);
                 done();
-            }).catch((err) => {
+            }).catch(function(err) {
                 console.log(`[CompileSuccessError] ${err}`);
                 assert.ok(false, `Error in CompileSuccess: ${err}`);
             });
         });
     });
 
-    test("Compile Fail", (done) => {
+    test("Compile Fail", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_fail.yara");
-        vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
+        vscode.workspace.openTextDocument(filepath).then(function(doc) {
+            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
                 let count: number = 0;
                 for (var i = 0; i < diagnostics.length; i++) {
                     let d: vscode.Diagnostic = diagnostics[i];
@@ -42,18 +42,18 @@ suite("YARA: Commands", () => {
                 console.log(`Found ${count} errors. 2 expected`);
                 assert.equal(count, 2, `Found ${count} errors. 2 expected`);
                 done();
-            }).catch((err) => {
+            }).catch(function(err) {
                 console.log(`[CompileFailError] ${err}`);
                 assert.ok(false, `Error in CompileFail: ${err}`);
             });
         });
     });
 
-    test("Compile Warning", (done) => {
+    test("Compile Warning", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_warning.yara");
-        vscode.workspace.openTextDocument(filepath).then((doc) => {
-            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
+        vscode.workspace.openTextDocument(filepath).then(function(doc) {
+            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
                 let count: number = 0;
                 for (var i = 0; i < diagnostics.length; i++) {
                     let d: vscode.Diagnostic = diagnostics[i];
@@ -62,7 +62,7 @@ suite("YARA: Commands", () => {
                 console.log(`Found ${count} warnings. 1 expected`);
                 assert.equal(count, 1, `Found ${count} warnings. 1 expected`);
                 done();
-            }).catch((err) => {
+            }).catch(function(err) {
                 console.log(`[CompileWarningError] ${err}`);
                 assert.ok(false, `Error in CompileWarning: ${err}`);
             });
