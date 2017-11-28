@@ -88,25 +88,28 @@ suite("YARA: Commands", function() {
 });
 
 suite.skip("YARA: Configuration", function() {
-    test("installPath", function(done) {});
-    test("compileOnSave", function(done) {});
-    test("compileFlags", function(done) {});
-    test("commands", function(done) {});
+    test("command registration", function(done) {
+        // Only register commands when the "commands" value is true
+    });
+    test("installPath override", function(done) {
+        // User-defined installPath must override default YARA binaries set in $PATH
+    });
+    test("installPath empty", function(done) {
+        // If no installPath given or installPath is null assume YARA is in $PATH
+    });
+    test("installPath no-binaries", function(done) {
+        // If installPath doesn't lead to YARA binaries, do three things:
+        //  * Unregister command(s) from VSCode
+        //  * Set compileOnSave to false
+        //  * Warn user and present options: "OK" and "Don't Show Again"
+    });
+    test("compileOnSave only YARA", function(done) {
+        // Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
+    });
+    test("compileFlags improper flag", function(done) {
+        // If an improper flag is given, warn user and abort compilation
+    });
+    test("compileFlags change on-demand", function(done) {
+        // Change flags being run as soon as user changes setting - don't force window reload
+    });
 });
-
-/*
-    Scenarios that still need tests
-    * installPath:
-        * User-defined installPath must override default YARA binaries set in $PATH
-        * If no installPath given or installPath is null:
-            * Assume YARA is in $PATH
-        * If installPath doesn't lead to YARA binaries, do three things:
-            * Unregister command(s) from VSCode
-            * Set compileOnSave to false
-            * Warn user and present options: "OK" and "Don't Show Again"
-    * compileOnSave
-        * Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
-    * compileFlags
-        * If an improper flag is given, warn user and abort compilation
-        * Change flags being run as soon as user changes setting - don't force window reload
-*/
