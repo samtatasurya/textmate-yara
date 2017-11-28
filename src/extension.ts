@@ -10,7 +10,7 @@ let config: vscode.WorkspaceConfiguration;
 let statusBarItem: vscode.StatusBarItem;
 let diagCollection: vscode.DiagnosticCollection;
 let yarac: string;
-let yara: string;
+// let yara: string;    // TODO
 let configWatcher: vscode.Disposable = null;
 let saveSubscription: vscode.Disposable = null;
 let compileCommand: vscode.Disposable = null;
@@ -152,7 +152,7 @@ export function updateSettings(context: vscode.ExtensionContext) {
         else {
             // assume YARA binaries are in user's PATH. If not, we'll handle errors later
             yarac = "yarac";
-            yara = "yara";
+            // yara = "yara";
             console.log("No compiler install path found. Assuming compiler is available in $PATH");
         }
 
