@@ -16,8 +16,8 @@ suite("YARA: Commands", () => {
     test("Compile Success", (done) => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
-        vscode.workspace.openTextDocument(filepath).then(function(doc) {
-            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
                 let count: number = diagnostics.length;
                 console.log(`Found ${count} diagnostics. 0 expected`);
                 assert.equal(count, 0, `Found ${count} diagnostics. 0 expected`);
@@ -32,8 +32,8 @@ suite("YARA: Commands", () => {
     test("Compile Fail", (done) => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_fail.yara");
-        vscode.workspace.openTextDocument(filepath).then(function(doc) {
-            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
                 let count: number = 0;
                 for (var i = 0; i < diagnostics.length; i++) {
                     let d: vscode.Diagnostic = diagnostics[i];
@@ -52,8 +52,8 @@ suite("YARA: Commands", () => {
     test("Compile Warning", (done) => {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_warning.yara");
-        vscode.workspace.openTextDocument(filepath).then(function(doc) {
-            yara.compileRule(config, doc).then(function(diagnostics: vscode.Diagnostic[]) {
+        vscode.workspace.openTextDocument(filepath).then((doc) => {
+            yara.compileRule(config, doc).then((diagnostics: vscode.Diagnostic[]) => {
                 let count: number = 0;
                 for (var i = 0; i < diagnostics.length; i++) {
                     let d: vscode.Diagnostic = diagnostics[i];

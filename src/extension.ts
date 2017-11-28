@@ -27,7 +27,6 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
     let diagnostics: Array<vscode.Diagnostic> = [];
     let ofile_path: string = config.get("compiled").toString();
     let flags: string[]|null = config.get("compileFlags", null);
-    const ofile: vscode.Uri = vscode.Uri.file(ofile_path);
     if (!doc) {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -43,10 +42,10 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
         return new Promise((resolve, reject) => { null; });
     }
     if (!flags) {
-        flags = [doc.fileName, ofile.toString()];
+        flags = [doc.fileName, ofile_path];
     }
     else {
-        flags = flags.concat([doc.fileName, ofile.toString()]);
+        flags = flags.concat([doc.fileName, ofile_path]);
     }
     // run a sub-process and capture STDERR to see what errors we have
     return new Promise((resolve, reject) => {
