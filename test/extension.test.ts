@@ -13,6 +13,23 @@ import * as yara from "../src/extension";
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
 suite("YARA: Commands", function() {
+    // before("Set test state", function() {
+    //     let config = vscode.workspace.getConfiguration("yara");
+    //     if (config.get("commands")) {
+    //         // should match null and undefined
+    //         if (config.get("installPath") != null) {
+    //             let installPath: string = config.get("installPath");
+    //             console.log(`Setting compiler path to ${installPath}`);
+    //             // yara.yarac = path.join(installPath, "yarac");
+    //         }
+    //         else {
+    //             // assume YARA binaries are in user's PATH. If not, we'll handle errors later
+    //             // yara.yarac = "yarac";
+    //             console.log("No compiler install path found. Assuming compiler is available in $PATH");
+    //         }
+    //     }
+    // });
+
     test("Compile Success", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
@@ -70,6 +87,13 @@ suite("YARA: Commands", function() {
     });
 });
 
+suite.skip("YARA: Configuration", function() {
+    test("installPath", function(done) {});
+    test("compileOnSave", function(done) {});
+    test("compileFlags", function(done) {});
+    test("commands", function(done) {});
+});
+
 /*
     Scenarios that still need tests
     * installPath:
@@ -85,6 +109,4 @@ suite("YARA: Commands", function() {
     * compileFlags
         * If an improper flag is given, warn user and abort compilation
         * Change flags being run as soon as user changes setting - don't force window reload
-    * warnings.yara
-        * Push 1 diagnostic with severity = warning AND set statusbarmessage to "Compiled successfully"
 */
