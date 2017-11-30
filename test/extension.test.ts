@@ -15,7 +15,7 @@ let workspace = path.join(__dirname, "..", "..", "test/rules/");
 suite("YARA: Commands", function() {
     test("Compile Success", function(done) {
         // hacky way of ensuring the setup is loaded before trying this test
-        // before hooks haven't been working for me - need to follow up with them more
+        // setup hooks haven't been working for me - need to follow up with them more
         this.retries(2);
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");

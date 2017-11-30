@@ -34,10 +34,10 @@
     },
     "devDependencies": {
         "@types/mocha": "^2.2.44",
-        "@types/node": "^6.0.90",
+        "@types/node": "^6.0.92",
         "mocha": "^2.3.3",
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6"
+        "typescript": "^2.6.2",
+        "vscode": "^1.1.9"
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
