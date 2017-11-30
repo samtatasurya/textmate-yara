@@ -9,6 +9,7 @@ import * as vscode from "vscode";
 let config: vscode.WorkspaceConfiguration;
 let statusBarItem: vscode.StatusBarItem;
 let diagCollection: vscode.DiagnosticCollection;
+let ofile_path: string|null = null;
 let yarac: string;
 // let yara: string;    // TODO
 let configWatcher: vscode.Disposable = null;
@@ -24,9 +25,6 @@ let yaraSelector: vscode.DocumentSelector = {language: "yara", scheme: "file"};
     :doc: The current workspace document if null or a vscode.TextDocument object
 */
 export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vscode.TextDocument) {
-    let diagnostics: Array<vscode.Diagnostic> = [];
-    let ofile_path: string = config.get("compiled").toString();
-    let flags: string[]|null = config.get("compileFlags", null);
     if (!doc) {
         const editor: vscode.TextEditor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -38,15 +36,18 @@ export function compileRule(config: vscode.WorkspaceConfiguration, doc: null|vsc
     };
     // strict checking to make sure this one doc matches our yara signature
     if (vscode.languages.match(yaraSelector, doc) < 10) {
-        console.log(`Can't compile ${doc.fileName} - not a YARA file`);
         return new Promise((resolve, reject) => { null; });
     }
+    let flags: string[]|null = config.get("compileFlags", null);
+    let diagnostics: Array<vscode.Diagnostic> = [];
+
     if (!flags) {
         flags = [doc.fileName, ofile_path];
     }
     else {
         flags = flags.concat([doc.fileName, ofile_path]);
     }
+
     // run a sub-process and capture STDERR to see what errors we have
     return new Promise((resolve, reject) => {
         const result: proc.ChildProcess = proc.spawn(yarac, flags);
@@ -138,6 +139,17 @@ export function updateSettings(context: vscode.ExtensionContext) {
     // set up everything if the user wants to use the YARA commands
     if (config.get("commands")) {
         console.log("Enabling commands");
+        // make sure we have a working compilation target
+        try {
+            ofile_path = config.get("compiled").toString();
+        } catch (error) {
+            if (error instanceof TypeError) {
+                ofile_path = null;
+                vscode.window.showErrorMessage("Please specify a filepath for the 'compiled' option");
+                console.log("Please specify a filepath for the 'compiled' option");
+            }
+        }
+
         compileCommand = vscode.commands.registerTextEditorCommand("yara.CompileRule", () => {
             compileRule(config, null)
         });

@@ -29,7 +29,6 @@ suite("YARA: Commands", function() {
     //         }
     //     }
     // });
-
     test("Compile Success", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
@@ -45,7 +44,6 @@ suite("YARA: Commands", function() {
             });
         });
     });
-
     test("Compile Fail", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_fail.yara");
@@ -65,7 +63,6 @@ suite("YARA: Commands", function() {
             });
         });
     });
-
     test("Compile Warning", function(done) {
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_warning.yara");
