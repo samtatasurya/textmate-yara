@@ -129,11 +129,13 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
 */
 export function updateSettings(context: vscode.ExtensionContext) {
     console.log("Updating configuration settings");
-    let saveSubscription: vscode.Disposable = context.subscriptions["saveSubscription"];
-    let compileCommand: vscode.Disposable = context.subscriptions["compileCommand"];
     // reset the configuration
-    if (saveSubscription) { saveSubscription.dispose(); }
-    if (compileCommand) { compileCommand.dispose(); }
+    configWatcher = vscode.workspace.onDidChangeConfiguration(() => {updateSettings(context)});
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+    diagCollection = vscode.languages.createDiagnosticCollection("yara");
+    // start pushing things into our context to reuse later
+    context.subscriptions.push(configWatcher);
+    context.subscriptions.push(diagCollection);
 
     let config = vscode.workspace.getConfiguration("yara");
     // set up everything if the user wants to use the YARA commands
@@ -145,8 +147,9 @@ export function updateSettings(context: vscode.ExtensionContext) {
         } catch (error) {
             if (error instanceof TypeError) {
                 ofile_path = null;
-                vscode.window.showErrorMessage("Please specify a filepath for the 'compiled' option");
+                // vscode.window.showErrorMessage("Please specify a filepath for the 'compiled' option");
                 console.log("Please specify a filepath for the 'compiled' option");
+                return null;
             }
         }
 
@@ -184,12 +187,6 @@ export function activate(context: vscode.ExtensionContext) {
     console.log("Activating Yara extension");
     // perform our initial setup of config values & subscriptions
     updateSettings(context);
-    configWatcher = vscode.workspace.onDidChangeConfiguration(() => {updateSettings(context)});
-    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    diagCollection = vscode.languages.createDiagnosticCollection("yara");
-    // start pushing things into our context to reuse later
-    context.subscriptions.push(configWatcher);
-    context.subscriptions.push(diagCollection);
 };
 
 export function deactivate(context: vscode.ExtensionContext) {
