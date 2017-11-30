@@ -13,23 +13,10 @@ import * as yara from "../src/extension";
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
 suite("YARA: Commands", function() {
-    // before("Set test state", function() {
-    //     let config = vscode.workspace.getConfiguration("yara");
-    //     if (config.get("commands")) {
-    //         // should match null and undefined
-    //         if (config.get("installPath") != null) {
-    //             let installPath: string = config.get("installPath");
-    //             console.log(`Setting compiler path to ${installPath}`);
-    //             // yara.yarac = path.join(installPath, "yarac");
-    //         }
-    //         else {
-    //             // assume YARA binaries are in user's PATH. If not, we'll handle errors later
-    //             // yara.yarac = "yarac";
-    //             console.log("No compiler install path found. Assuming compiler is available in $PATH");
-    //         }
-    //     }
-    // });
     test("Compile Success", function(done) {
+        // hacky way of ensuring the setup is loaded before trying this test
+        // before hooks haven't been working for me - need to follow up with them more
+        this.retries(2);
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(doc) {

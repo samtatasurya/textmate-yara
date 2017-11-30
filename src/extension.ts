@@ -130,6 +130,9 @@ function convertStderrToDiagnostic(line: string, doc: vscode.TextDocument) {
 export function updateSettings(context: vscode.ExtensionContext) {
     console.log("Updating configuration settings");
     // reset the configuration
+    context.subscriptions.forEach(disposable => {
+        disposable.dispose();
+    });
     configWatcher = vscode.workspace.onDidChangeConfiguration(() => {updateSettings(context)});
     statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
     diagCollection = vscode.languages.createDiagnosticCollection("yara");
