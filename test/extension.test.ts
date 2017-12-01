@@ -12,11 +12,14 @@ import * as yara from "../src/extension";
 
 let workspace = path.join(__dirname, "..", "..", "test/rules/");
 
+
 suite("YARA: Commands", function() {
+    setup(function() {
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        // output doesn't matter. only that the extension is activated
+        ext.activate();
+    });
     test("Compile Success", function(done) {
-        // hacky way of ensuring the setup is loaded before trying this test
-        // setup hooks haven't been working for me - need to follow up with them more
-        this.retries(2);
         let config: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration("yara");
         let filepath: string = path.join(workspace, "compile_success.yara");
         vscode.workspace.openTextDocument(filepath).then(function(doc) {
