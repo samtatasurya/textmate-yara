@@ -77,26 +77,40 @@ suite("YARA: Commands", function() {
 suite.skip("YARA: Configuration", function() {
     test("command registration", function(done) {
         // Only register commands when the "commands" value is true
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("installPath override", function(done) {
         // User-defined installPath must override default YARA binaries set in $PATH
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("installPath empty", function(done) {
         // If no installPath given or installPath is null assume YARA is in $PATH
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("installPath no-binaries", function(done) {
         // If installPath doesn't lead to YARA binaries, do three things:
         //  * Unregister command(s) from VSCode
         //  * Set compileOnSave to false
         //  * Warn user and present options: "OK" and "Don't Show Again"
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("compileOnSave only YARA", function(done) {
         // Only YARA files get compiled on saves (e.g. no need to attempt JSON files)
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("compileFlags improper flag", function(done) {
         // If an improper flag is given, warn user and abort compilation
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
     test("compileFlags change on-demand", function(done) {
         // Change flags being run as soon as user changes setting - don't force window reload
+        let ext = vscode.extensions.getExtension("infosec-intern.yara");
+        ext.activate();
     });
 });
